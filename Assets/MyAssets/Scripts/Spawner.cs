@@ -6,14 +6,18 @@ public class Spawner : MonoBehaviour
 {
     public Transform playerTrans;
     public GameObject groundPrefab;
-    public Transform groundContainer;
-    public float groundLength = 100f;
-    public int groundCount = 10;
     public GameObject obstaclePrefab;
+    public Transform groundContainer;
     public Transform obstacleContainer;
+    public float groundLength = 100f;
     public float obstacleSpacing = 20f;
+    public float viewDistance = 300f;
+    public int groundCount = 10;
     public int obstacleCount = 100;
     public Transform[] lanes;
+
+    private List<GameObject> activeGrounds = new List<GameObject>();
+    private List<GameObject> activeObstacles = new List<GameObject>();
 
     private void Awake()
     {
@@ -21,11 +25,18 @@ public class Spawner : MonoBehaviour
         GenerateLevel();
     }
 
+    private void Update()
+    {
+        //Maybe only do this on some frames? every t seconds
+        EntityCulling();
+    }
+
     private void SpawnGround()
     {
         for (int i = 0; i < groundCount; i++)
         {
-            Instantiate(groundPrefab, Vector3.forward * i * groundLength, Quaternion.identity, groundContainer);
+            GameObject newGround = Instantiate(groundPrefab, Vector3.forward * i * groundLength, Quaternion.identity, groundContainer);
+            activeGrounds.Add(newGround);
         }
     }
 
@@ -41,7 +52,39 @@ public class Spawner : MonoBehaviour
     {
         Vector3 lanePosition = PickRandomLane().position;
         Vector3 spawnPosition = new Vector3(lanePosition.x, lanePosition.y, zDistance);
-        Instantiate(obstaclePrefab, spawnPosition, Quaternion.identity, obstacleContainer);
+        GameObject newObstacle = Instantiate(obstaclePrefab, spawnPosition, Quaternion.identity, obstacleContainer);
+        activeObstacles.Add(newObstacle);
+    }
+
+    private void EntityCulling()
+    {
+        foreach (GameObject ground in activeGrounds)
+        {
+            float zPos = ground.transform.position.z;
+            float deltaZToPlayer = Mathf.Abs(zPos - playerTrans.position.z);
+            if (deltaZToPlayer > viewDistance)
+            {
+                ground.SetActive(false);
+            }
+            else
+            {
+                ground.SetActive(true);
+            }
+        }
+
+        foreach (GameObject obstacle in activeObstacles)
+        {
+            float zPos = obstacle.transform.position.z;
+            float deltaZToPlayer = Mathf.Abs(zPos - playerTrans.position.z);
+            if (deltaZToPlayer > viewDistance)
+            {
+                obstacle.SetActive(false);
+            }
+            else
+            {
+                obstacle.SetActive(true);
+            }
+        }
     }
 
     private Transform PickRandomLane()
