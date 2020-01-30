@@ -8,14 +8,13 @@ public class SpawnerEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        base.OnInspectorGUI();
         DrawDefaultInspector();
 
         Spawner spawnerScript = (Spawner)target;
         if (GUILayout.Button("Generate Level"))
         {
             spawnerScript.ClearLevel();
-            spawnerScript.GenerateLevel();
+            spawnerScript.InitLevel();
         }
     }
 }

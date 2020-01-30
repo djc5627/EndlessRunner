@@ -12,40 +12,83 @@ public class Spawner : MonoBehaviour
     public float groundLength = 100f;
     public float obstacleSpacing = 20f;
     public float viewDistance = 300f;
-    public int groundCount = 10;
-    public int obstacleCount = 100;
     public Transform[] lanes;
 
-    private List<GameObject> activeGrounds = new List<GameObject>();
-    private List<GameObject> activeObstacles = new List<GameObject>();
+    private int initialGroundCount;
+    private int initialObstacleCount;
+    private int nextGroundIndex;
+    private int nextObstacleIndex;
+    private Vector3 playerStartPos;
+    private List<GameObject> spawnedGrounds = new List<GameObject>();
+    private List<GameObject> spawnedObstacles = new List<GameObject>();
 
-    private void Awake()
+
+    private void Start()
     {
+        playerStartPos = playerTrans.position;
         ClearLevel();
-        GenerateLevel();
+        InitLevel();
     }
 
     private void Update()
     {
         //Maybe only do this on some frames? every t seconds
         EntityCulling();
+        GenerateGrounds();
+        GenerateObstacles();
     }
 
-    private void SpawnGround()
+    //Spawn first chunks of grounds within view distance
+    private void InitSpawnGround()
     {
-        for (int i = 0; i < groundCount; i++)
+        initialGroundCount = (int) (viewDistance / groundLength);
+        for (int i = 0; i < initialGroundCount; i++)
         {
-            GameObject newGround = Instantiate(groundPrefab, Vector3.forward * i * groundLength, Quaternion.identity, groundContainer);
-            activeGrounds.Add(newGround);
+            float zPos = playerStartPos.z + i * groundLength;
+            SpawnGround(zPos);
+        }
+        nextGroundIndex = initialGroundCount;
+    }
+
+    //Spawn first chunks of obstacles within view distance
+    private void InitSpawnObstacles()
+    {
+        initialObstacleCount = (int)(viewDistance / obstacleSpacing);
+        for (int i = 0; i < initialObstacleCount; i++)
+        {
+            float zPos = playerStartPos.z + i * obstacleSpacing;
+            SpawnObstacle(zPos);
+        }
+        nextObstacleIndex = initialObstacleCount;
+    }
+
+    //Everytime player moves groundLength in Z, generate another ground
+    private void GenerateGrounds ()
+    {
+        float distanceToNextSpawn = groundLength * (nextGroundIndex - initialGroundCount);
+        if (playerTrans.position.z - playerStartPos.z > distanceToNextSpawn)
+        {
+            SpawnGround(playerStartPos.z + nextGroundIndex * groundLength);
+            nextGroundIndex++;
         }
     }
 
-    private void SpawnObstacles()
+    //Everytime player moves obstacle spacing in z, gen another obstacle.
+    private void GenerateObstacles()
     {
-        for (int i = 0; i < obstacleCount; i++)
+        float distanceToNextSpawn = obstacleSpacing * (nextObstacleIndex - initialObstacleCount);
+        if (playerTrans.position.z - playerStartPos.z > distanceToNextSpawn)
         {
-            SpawnObstacle(i * obstacleSpacing);
+            SpawnObstacle(playerStartPos.z + nextObstacleIndex * obstacleSpacing);
+            nextObstacleIndex++;
         }
+    }
+
+    private void SpawnGround(float zDistance)
+    {
+        Vector3 spawnPosition = Vector3.forward * zDistance;
+        GameObject newGround = Instantiate(groundPrefab, spawnPosition, Quaternion.identity, groundContainer);
+        spawnedGrounds.Add(newGround);
     }
 
     private void SpawnObstacle(float zDistance)
@@ -53,12 +96,13 @@ public class Spawner : MonoBehaviour
         Vector3 lanePosition = PickRandomLane().position;
         Vector3 spawnPosition = new Vector3(lanePosition.x, lanePosition.y, zDistance);
         GameObject newObstacle = Instantiate(obstaclePrefab, spawnPosition, Quaternion.identity, obstacleContainer);
-        activeObstacles.Add(newObstacle);
+        spawnedObstacles.Add(newObstacle);
     }
 
+    //Enable stuff ahead and disable stuff behind view dist
     private void EntityCulling()
     {
-        foreach (GameObject ground in activeGrounds)
+        foreach (GameObject ground in spawnedGrounds)
         {
             float zPos = ground.transform.position.z;
             float deltaZToPlayer = Mathf.Abs(zPos - playerTrans.position.z);
@@ -72,7 +116,7 @@ public class Spawner : MonoBehaviour
             }
         }
 
-        foreach (GameObject obstacle in activeObstacles)
+        foreach (GameObject obstacle in spawnedObstacles)
         {
             float zPos = obstacle.transform.position.z;
             float deltaZToPlayer = Mathf.Abs(zPos - playerTrans.position.z);
@@ -93,10 +137,10 @@ public class Spawner : MonoBehaviour
         return lanes[randomIndex];
     }
 
-    public void GenerateLevel()
+    public void InitLevel()
     {
-        SpawnGround();
-        SpawnObstacles();
+        InitSpawnGround();
+        InitSpawnObstacles();
     }
 
     public void ClearLevel()
