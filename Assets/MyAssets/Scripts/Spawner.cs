@@ -11,6 +11,7 @@ public class Spawner : MonoBehaviour
     public Transform obstacleContainer;
     public float groundLength = 100f;
     public float obstacleSpacing = 20f;
+    public float obstacleSafeZone = 100f;
     public float viewDistance = 300f;
     public Transform[] lanes;
 
@@ -57,7 +58,10 @@ public class Spawner : MonoBehaviour
         for (int i = 0; i < initialObstacleCount; i++)
         {
             float zPos = playerStartPos.z + i * obstacleSpacing;
-            SpawnObstacle(zPos);
+            if (zPos > obstacleSafeZone)
+            {
+                SpawnObstacle(zPos);
+            }
         }
         nextObstacleIndex = initialObstacleCount;
     }
