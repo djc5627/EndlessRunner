@@ -8,6 +8,7 @@ public class ElfController : MonoBehaviour
     public Animator anim;
     public NavMeshAgent agent;
     public BoxCollider elfCollider;
+    public ElfFlower elfFlower;
     public LayerMask groundCheckMask;
     public float groundCheckDistance = .1f;
     public float groundCheckOriginYOffset = .05f;
@@ -43,12 +44,18 @@ public class ElfController : MonoBehaviour
         if (Physics.BoxCast(origin, elfCollider.bounds.extents, Vector3.down, transform.rotation, groundCheckDistance, groundCheckMask))
         {
             reachedGround = true;
-            agent.enabled = true;
-            anim.SetTrigger("Landed");
+            OnLand();
         }
         else
         {
             reachedGround = false;
         }
+    }
+
+    private void OnLand()
+    {
+        agent.enabled = true;
+        anim.SetTrigger("Landed");
+        elfFlower.Detatch();
     }
 }
