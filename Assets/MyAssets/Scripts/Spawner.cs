@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Spawner : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Spawner : MonoBehaviour
     public GameObject obstaclePrefab;
     public Transform groundContainer;
     public Transform obstacleContainer;
+    public NavMeshSurface navSurface;
     public float groundLength = 100f;
     public float obstacleSpacing = 20f;
     public float obstacleSafeZone = 100f;
@@ -93,6 +95,7 @@ public class Spawner : MonoBehaviour
         Vector3 spawnPosition = Vector3.forward * zDistance;
         GameObject newGround = Instantiate(groundPrefab, spawnPosition, Quaternion.identity, groundContainer);
         spawnedGrounds.Add(newGround);
+        navSurface.BuildNavMesh();
     }
 
     private void SpawnObstacle(float zDistance)
