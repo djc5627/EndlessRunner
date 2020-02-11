@@ -60,6 +60,8 @@ public class Player : MonoBehaviour
     {
         float xSpeed = moveInput * strafeSpeed;
         playerRb.velocity = new Vector3(xSpeed, playerRb.velocity.y, forwardSpeed);
+
+        Vector3 velocity = new Vector3(xSpeed, 0f, forwardSpeed);
     }
 
     private void Shoot()

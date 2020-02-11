@@ -7,7 +7,6 @@ public class Spawner : MonoBehaviour
 {
     public Transform playerTrans;
     public GameObject groundPrefab;
-    public GameObject obstaclePrefab;
     public Transform groundContainer;
     public Transform obstacleContainer;
     public NavMeshSurface navSurface;
@@ -15,6 +14,7 @@ public class Spawner : MonoBehaviour
     public float obstacleSpacing = 20f;
     public float obstacleSafeZone = 100f;
     public float viewDistance = 300f;
+    public Obstacle[] obstacles;
     public Transform[] lanes;
 
     private int initialGroundCount;
@@ -24,6 +24,13 @@ public class Spawner : MonoBehaviour
     private Vector3 playerStartPos;
     private List<GameObject> spawnedGrounds = new List<GameObject>();
     private List<GameObject> spawnedObstacles = new List<GameObject>();
+
+    [System.Serializable]
+    public struct Obstacle
+    {
+        public GameObject obstacleObj;
+        public Vector3 spawnOffset;
+    }
 
 
     private void Start()
@@ -102,8 +109,16 @@ public class Spawner : MonoBehaviour
     {
         Vector3 lanePosition = PickRandomLane().position;
         Vector3 spawnPosition = new Vector3(lanePosition.x, lanePosition.y, zDistance);
-        GameObject newObstacle = Instantiate(obstaclePrefab, spawnPosition, Quaternion.identity, obstacleContainer);
+        Obstacle tempObstacle = PickRandomObstacle();
+        spawnPosition += tempObstacle.spawnOffset;
+        GameObject newObstacle = Instantiate(tempObstacle.obstacleObj, spawnPosition, Quaternion.LookRotation(Vector3.back, Vector3.up), obstacleContainer);
         spawnedObstacles.Add(newObstacle);
+    }
+
+    private Obstacle PickRandomObstacle()
+    {
+        int randomIndex = Random.Range(0, obstacles.Length);
+        return obstacles[randomIndex];
     }
 
     //Enable stuff ahead and disable stuff behind view dist
