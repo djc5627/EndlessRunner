@@ -7,6 +7,7 @@ public class Rocket : MonoBehaviour
     public GameObject explosionEffect;
     public LayerMask explosionMask;
     public SphereCollider refTrigger;
+    public float damage = 100f;
     public float explosionForce = 1000f;
     public float explosionRadius = 10f;
     public float explosionZOffset = 3f;
@@ -44,12 +45,26 @@ public class Rocket : MonoBehaviour
 
         foreach (Collider col in colliders)
         {
-            Rigidbody rb = col.gameObject.GetComponent<Rigidbody>();
-            if (rb != null && !affectedRigidbodies.Contains(rb))
+            //If this is not the move collider (a limb)
+            if (col.gameObject.layer != LayerMask.NameToLayer("EnemyMovCol"))
             {
-                rb.AddExplosionForce(explosionForce, origin + (Vector3.back * explosionZOffset), explosionRadius, upwardsModifier, ForceMode.Force);
-                affectedRigidbodies.Add(rb);
+                Rigidbody rb = col.gameObject.GetComponent<Rigidbody>();
+                if (rb != null && !affectedRigidbodies.Contains(rb))
+                {
+                    affectedRigidbodies.Add(rb);
+                }
             }
+            else
+            {
+                ElfController elfScript = col.GetComponent<ElfController>();
+                elfScript.TakeDamage(damage);
+            }
+        }
+
+        //Add the force after rigidbodies are registered and damage delt
+        foreach (Rigidbody rb in affectedRigidbodies)
+        {
+            rb.AddExplosionForce(explosionForce, origin + (Vector3.back * explosionZOffset), explosionRadius, upwardsModifier, ForceMode.Force);
         }
 
         GameObject tempEffect = Instantiate(explosionEffect, origin, Quaternion.identity);
