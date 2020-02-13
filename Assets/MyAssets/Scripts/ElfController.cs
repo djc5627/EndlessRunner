@@ -95,10 +95,13 @@ public class ElfController : MonoBehaviour
     private void OnDeath()
     {
         puppetMaster.state = PuppetMaster.State.Dead;
+        puppetMaster.Kill();
+        puppetMaster.muscleWeight = 0f;
         puppetMaster.pinWeight = 0f;
         elfCollider.enabled = false;
         agent.enabled = false;
         this.enabled = false;
+        
     }
 
     public void TakeDamage(float damage)

@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class Spawner : MonoBehaviour
 {
+    public bool useRandomSeed;
+    public int customSeed;
     public Transform playerTrans;
     public GameObject groundPrefab;
     public Transform groundContainer;
@@ -159,8 +161,24 @@ public class Spawner : MonoBehaviour
         return lanes[randomIndex];
     }
 
+    private void SetSeed()
+    {
+        int seed;
+        if (useRandomSeed)
+        {
+            seed = System.DateTime.Now.Millisecond;
+        }
+        else
+        {
+            seed = customSeed;
+        }
+
+        Random.InitState(seed);
+    }
+
     public void InitLevel()
     {
+        SetSeed();
         InitSpawnGround();
         InitSpawnObstacles();
     }
