@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System.IO;
 
 public class Spawner : MonoBehaviour
 {
@@ -50,6 +51,8 @@ public class Spawner : MonoBehaviour
         GenerateObstacles();
     }
 
+    #region Init
+
     //Spawn first chunks of grounds within view distance
     private void InitSpawnGround()
     {
@@ -77,6 +80,9 @@ public class Spawner : MonoBehaviour
         nextObstacleIndex = initialObstacleCount;
     }
 
+    #endregion
+
+    #region Generation
     //Everytime player moves groundLength in Z, generate another ground
     private void GenerateGrounds ()
     {
@@ -117,12 +123,6 @@ public class Spawner : MonoBehaviour
         spawnedObstacles.Add(newObstacle);
     }
 
-    private Obstacle PickRandomObstacle()
-    {
-        int randomIndex = Random.Range(0, obstacles.Length);
-        return obstacles[randomIndex];
-    }
-
     //Enable stuff ahead and disable stuff behind view dist
     private void EntityCulling()
     {
@@ -155,11 +155,25 @@ public class Spawner : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Helpers
+
+    private Obstacle PickRandomObstacle()
+    {
+        int randomIndex = Random.Range(0, obstacles.Length);
+        return obstacles[randomIndex];
+    }
+
     private Transform PickRandomLane()
     {
         int randomIndex = Random.Range(0, lanes.Length);
         return lanes[randomIndex];
     }
+
+    #endregion
+
+    #region Seed
 
     private void SetSeed()
     {
@@ -174,7 +188,25 @@ public class Spawner : MonoBehaviour
         }
 
         Random.InitState(seed);
+        LogSeed(seed);
     }
+
+    private void LogSeed(int seed)
+    {
+        string path = Application.dataPath + "/Seeds_Log.txt";
+        if (!File.Exists(path))
+        {
+            File.WriteAllText(path, "Procedural Generation Seed Log\n\nCreated: " + System.DateTime.Now + "\n\n\n");
+        }
+
+        string mode = Application.isPlaying ? "Play mode" : "Editor Mode";
+        string content = System.DateTime.Now + " || " + mode + " || Seed: " + seed + "\n";
+        File.AppendAllText(path, content);
+    }
+
+    #endregion
+
+    #region Public Functions
 
     public void InitLevel()
     {
@@ -210,6 +242,9 @@ public class Spawner : MonoBehaviour
         {
             DestroyImmediate(obstacle);
         }
+
+        #endregion
+
     }
 
 
