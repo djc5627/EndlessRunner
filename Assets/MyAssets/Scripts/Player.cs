@@ -42,20 +42,44 @@ public class Player : MonoBehaviour
     {
         playerRb = GetComponent<Rigidbody>();
         inputMaster = new InputMaster();
-        inputMaster.Player.MoveInput.performed += ctx => moveInput = ctx.ReadValue<float>();
+        //inputMaster.Player.MoveInput.performed += ctx => moveInput = ctx.ReadValue<float>();
         inputMaster.Player.Shoot.performed += ctx => Shoot();
         inputMaster.Player.Jump.performed += ctx => Jump();
     }
 
     private void Update()
     {
+        forwardSpeed = MIDIInput.GetKnob(1, 0f, 100f);
+        jumpForce = MIDIInput.GetKnob(2, 0f, 30f);
+        strafeSpeed = MIDIInput.GetKnob(3, 0f, 30f);
+        Physics.gravity = new Vector3(0f, MIDIInput.GetKnob(4, 10f, -50f), 0f);
+        shootForce = MIDIInput.GetKnob(5, 0f, 30000f);
+        moveInput = MIDIInput.GetKnob(7, -1f, 1f);
+
         SyncAnimatorVariables();
     }
 
     private void FixedUpdate()
     {
         CheckGrounded();
+        //NormalizeMoveInput();
         Move();
+    }
+
+    private void NormalizeMoveInput()
+    {
+        if (moveInput < Mathf.Epsilon && moveInput > -Mathf.Epsilon)
+        {
+            moveInput = 0f;
+        }
+        else if (moveInput > 0f)
+        {
+            moveInput = 1f;
+        }
+        else if (moveInput < 0f)
+        {
+            moveInput = -1f;
+        }
     }
 
     private void Move()

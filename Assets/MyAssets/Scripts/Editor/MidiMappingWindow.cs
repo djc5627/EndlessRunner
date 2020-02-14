@@ -7,8 +7,8 @@ public class MidiMappingWindow : EditorWindow
 {
     private static float min, max;
 
-    private static GameObject scriptObj;
-    private SerializedObject serializedObject;
+    private static GameObject targetObject;
+    private static GameObject midiSyncObj;
 
     [MenuItem("Window/MIDI Mappings")]
     public static void ShowWindow()
@@ -18,22 +18,28 @@ public class MidiMappingWindow : EditorWindow
 
     private void OnGUI()
     {
+        GUILayout.Label("MidiInputSync", EditorStyles.boldLabel);
+        midiSyncObj = (GameObject)EditorGUILayout.ObjectField("TargetObj", targetObject, typeof(GameObject), true);
+
         GUILayout.Label("Knob 1", EditorStyles.boldLabel);
+        targetObject = (GameObject) EditorGUILayout.ObjectField("TargetObj", targetObject, typeof(GameObject), true);
 
-        //serializedObject = EditorGUILayout.ObjectField
-        scriptObj = (GameObject) EditorGUILayout.ObjectField("TargetObj", scriptObj, typeof(GameObject), true);
-
-        if (scriptObj != null)
+        if (targetObject != null)
         {
-            foreach (Component component in scriptObj.GetComponents<Component>())
+            foreach (Component component in targetObject.GetComponents<Component>())
             {
-                serializedObject = new SerializedObject(component);
-                SerializedProperty prop = serializedObject.FindProperty("shootDelay");
-                if (prop != null) Debug.Log(prop.floatValue);
+                SerializedObject serializedComponent = new SerializedObject(component);
+                SerializedProperty prop = serializedComponent.FindProperty("forwardSpeed");
+                if (prop != null)
+                {
+                    //MIDIInput.LinkToKnob(prop);
+                    Debug.Log(prop.floatValue);
+
+                    //Component midiSyncScript = midiSyncObj.GetComponent<MidiInputSync>();
+                    //SerializedObject serializedMidiSync = new SerializedObject(midiSyncScript);
+                    //SerializedProperty knob1Prop = serializedComponent.FindProperty("knob1Prop");
+                }
             }
-            //serializedObject = new SerializedObject(scriptObj);
-            //SerializedProperty prop = serializedObject.FindProperty("shootDelay");
-            //Debug.Log(prop.floatValue);
         }
 
         min = EditorGUILayout.FloatField("Min", min);
