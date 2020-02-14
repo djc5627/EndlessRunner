@@ -18,6 +18,8 @@ public class Player : MonoBehaviour
     public float shootDelay = .5f;
     public float strafeSpeed = 10f;
     public float forwardSpeed = 20f;
+    public float acceleration = .01f;
+    public float deacceleration = .01f;
     public float jumpForce = 5f;
 
     private Rigidbody playerRb;
@@ -58,10 +60,23 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        float xSpeed = moveInput * strafeSpeed;
-        playerRb.velocity = new Vector3(xSpeed, playerRb.velocity.y, forwardSpeed);
+        float currentXSpeed = 0f;
+        float actualXSpeed = playerRb.velocity.x;
+        float targetXSpeed = moveInput * strafeSpeed;
+        float newXSpeed = 0f;
 
-        Vector3 velocity = new Vector3(xSpeed, 0f, forwardSpeed);
+        // if move input is basically zero, deaccellerate
+        if (moveInput < Mathf.Epsilon && moveInput > -Mathf.Epsilon)
+        {
+            newXSpeed = Mathf.SmoothDamp(actualXSpeed, targetXSpeed, ref currentXSpeed, deacceleration);
+        }
+        else
+        {
+            newXSpeed = Mathf.SmoothDamp(actualXSpeed, targetXSpeed, ref currentXSpeed, acceleration);
+        }
+
+
+        playerRb.velocity = new Vector3(newXSpeed, playerRb.velocity.y, forwardSpeed);
     }
 
     private void Shoot()
