@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     public Animator anim;
     public Transform firePoint;
     public GameObject rocket;
-    public BoxCollider playerCol;
+    public CharacterController charController;
     public LayerMask groundCheckMask;
     public float groundCheckDistance = .1f;
     public float groundCheckOriginYOffset = .05f;
@@ -20,13 +20,21 @@ public class Player : MonoBehaviour
     public float forwardSpeed = 20f;
     public float acceleration = .01f;
     public float deacceleration = .01f;
-    public float jumpForce = 5f;
+    public float timeToJumpApex = .2f;
+    public float maxJumpHeight = 10f;
+    public float fallMultiplier = 2f;
+    public float lowJumpTurnTime = .05f;
+    public float maxFallSpeed = 10f;
 
-    private Rigidbody playerRb;
     private float moveInput;
+    private float gravity;
+    private float jumpVelocity;
     private float lastJumpTime = Mathf.NegativeInfinity;
     private float lastShootTime = Mathf.NegativeInfinity;
+    private float releaseJumpTime = Mathf.NegativeInfinity;
     private bool isGrounded;
+    private bool hasRelasedJump = false;
+    private bool doJump = false;
 
     private void OnEnable()
     {
@@ -40,30 +48,44 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
-        playerRb = GetComponent<Rigidbody>();
         inputMaster = new InputMaster();
-        //inputMaster.Player.MoveInput.performed += ctx => moveInput = ctx.ReadValue<float>();
+        inputMaster.Player.MoveInput.performed += ctx => moveInput = ctx.ReadValue<float>();
         inputMaster.Player.Shoot.performed += ctx => Shoot();
-        inputMaster.Player.Jump.performed += ctx => Jump();
+        inputMaster.Player.Jump.performed += ctx => OnJump();
+        inputMaster.Player.JumpRelease.performed += ctx => OnJumpRelease();
+
+    }
+
+    private void Start()
+    {
+        gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
     }
 
     private void Update()
     {
-        forwardSpeed = MIDIInput.GetKnob(1, 0f, 100f);
-        jumpForce = MIDIInput.GetKnob(2, 0f, 30f);
-        strafeSpeed = MIDIInput.GetKnob(3, 0f, 30f);
-        Physics.gravity = new Vector3(0f, MIDIInput.GetKnob(4, 10f, -50f), 0f);
-        shootForce = MIDIInput.GetKnob(5, 0f, 30000f);
-        moveInput = MIDIInput.GetKnob(7, -1f, 1f);
+        // forwardSpeed = MIDIInput.GetKnob(1, 0f, 100f);
+        //jumpForce = MIDIInput.GetKnob(2, 0f, 30f);
+        //strafeSpeed = MIDIInput.GetKnob(3, 0f, 30f);
+        //Physics.gravity = new Vector3(0f, MIDIInput.GetKnob(4, 10f, -50f), 0f);
+        //shootForce = MIDIInput.GetKnob(5, 0f, 30000f);
+        //moveInput = MIDIInput.GetKnob(7, -1f, 1f);
 
-        SyncAnimatorVariables();
-    }
+        //acceleration = MIDIInput.GetKnob(1, .001f, .1f);
+        //deacceleration = MIDIInput.GetKnob(2, .001f, .1f);
+        //timeToJumpApex = MIDIInput.GetKnob(1, 0f, .5f);
+        //maxJumpHeight = MIDIInput.GetKnob(2, 0f, 10f);
+        //fallMultiplier = MIDIInput.GetKnob(3, 1f, 8f);
+        //lowJumpTurnTime = MIDIInput.GetKnob(4, .1f, .5f);
+        //maxFallSpeed = MIDIInput.GetKnob(5, 10f, 100f);
 
-    private void FixedUpdate()
-    {
+        //gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        //jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
+
         CheckGrounded();
-        //NormalizeMoveInput();
+        NormalizeMoveInput();
         Move();
+        SyncAnimatorVariables();
     }
 
     private void NormalizeMoveInput()
@@ -85,22 +107,48 @@ public class Player : MonoBehaviour
     private void Move()
     {
         float currentXSpeed = 0f;
-        float actualXSpeed = playerRb.velocity.x;
+        Vector3 actualVelocity = charController.velocity;
         float targetXSpeed = moveInput * strafeSpeed;
-        float newXSpeed = 0f;
+        Vector3 newVelocity = new Vector3(0f, actualVelocity.y, forwardSpeed);
 
+        //---------Horizontal Movement-----------
         // if move input is basically zero, deaccellerate
         if (moveInput < Mathf.Epsilon && moveInput > -Mathf.Epsilon)
         {
-            newXSpeed = Mathf.SmoothDamp(actualXSpeed, targetXSpeed, ref currentXSpeed, deacceleration);
+            newVelocity.x = Mathf.SmoothDamp(actualVelocity.x, targetXSpeed, ref currentXSpeed, deacceleration);
         }
         else
         {
-            newXSpeed = Mathf.SmoothDamp(actualXSpeed, targetXSpeed, ref currentXSpeed, acceleration);
+            newVelocity.x = Mathf.SmoothDamp(actualVelocity.x, targetXSpeed, ref currentXSpeed, acceleration);
+        }
+
+        //---------Vertical Movement-----------
+        if (doJump)
+        {
+            newVelocity.y = jumpVelocity;
+            doJump = false;
         }
 
 
-        playerRb.velocity = new Vector3(newXSpeed, playerRb.velocity.y, forwardSpeed);
+        if (actualVelocity.y <= 0) //Falling
+        {
+            newVelocity.y += gravity * fallMultiplier * Time.deltaTime;
+        }
+        else if (actualVelocity.y > 0 && hasRelasedJump)    //Short jump
+        {
+            float percent = (Time.time - releaseJumpTime) / lowJumpTurnTime;
+            newVelocity.y = Mathf.Lerp(newVelocity.y, 0f, percent);
+        }
+        else
+        {
+            newVelocity.y += gravity * Time.deltaTime;
+        }
+        if (newVelocity.y < -Mathf.Abs(maxFallSpeed))   //Cap Speed
+        {
+            newVelocity.y = -Mathf.Abs(maxFallSpeed);
+        }
+
+        charController.Move(newVelocity * Time.deltaTime);
     }
 
     private void Shoot()
@@ -116,14 +164,21 @@ public class Player : MonoBehaviour
         lastShootTime = Time.time;
     }
 
-    private void Jump()
+    private void OnJump()
     {
         if (!isGrounded) return;
 
         anim.SetTrigger("Jump");
-        playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        //playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        doJump = true;
         lastJumpTime = Time.time;
         isGrounded = false;
+    }
+
+    private void OnJumpRelease()
+    {
+        hasRelasedJump = true;
+        releaseJumpTime = Time.time;
     }
 
     private void CheckGrounded()
@@ -134,10 +189,15 @@ public class Player : MonoBehaviour
             return;
         }
 
-        Vector3 origin = playerCol.bounds.center + (Vector3.up * groundCheckOriginYOffset);
-        if (Physics.BoxCast(origin, playerCol.bounds.extents, Vector3.down, transform.rotation, groundCheckDistance, groundCheckMask))
+        RaycastHit hit;
+        //Vector3 origin = charController.bounds.center + (Vector3.up * groundCheckOriginYOffset);
+        float halfHeight = charController.height / 2f;
+        Vector3 point1 = charController.bounds.center + (Vector3.up * halfHeight) + Vector3.up * groundCheckOriginYOffset;
+        Vector3 point2 = charController.bounds.center - (Vector3.up * halfHeight) + Vector3.up * groundCheckOriginYOffset;
+        if (Physics.CapsuleCast(point1, point2, charController.radius, Vector3.down, out hit, groundCheckDistance, groundCheckMask))
         {
             isGrounded = true;
+            hasRelasedJump = false;
         }
         else
         {
@@ -148,11 +208,6 @@ public class Player : MonoBehaviour
     private void SyncAnimatorVariables()
     {
         anim.SetBool("isGrounded", isGrounded);
-    }
-
-    public void ResetForward()
-    {
-        playerRb.rotation = Quaternion.identity;
     }
 
     public void ResetLevel()

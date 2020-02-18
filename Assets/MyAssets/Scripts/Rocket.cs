@@ -18,7 +18,6 @@ public class Rocket : MonoBehaviour
     private void Awake()
     {
         lastPos = transform.position;
-        explosionForce = MIDIInput.GetKnob(6, 0f, 60000f);
     }
 
     private void FixedUpdate()
