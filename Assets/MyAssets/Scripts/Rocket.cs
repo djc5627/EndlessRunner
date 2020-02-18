@@ -7,6 +7,8 @@ public class Rocket : MonoBehaviour
     public GameObject explosionEffect;
     public LayerMask explosionMask;
     public SphereCollider refTrigger;
+    public AudioClip explosionSound;
+    public float explosionSoundScale = 1f;
     public float damage = 100f;
     public float explosionForce = 1000f;
     public float explosionRadius = 10f;
@@ -67,6 +69,7 @@ public class Rocket : MonoBehaviour
             rb.AddExplosionForce(explosionForce, origin + (Vector3.back * explosionZOffset), explosionRadius, upwardsModifier, ForceMode.Force);
         }
 
+        GlobalAudioPlayer.Instance.PlayClipAt(explosionSound, origin, explosionSoundScale);
         GameObject tempEffect = Instantiate(explosionEffect, origin, Quaternion.identity);
         Destroy(tempEffect, 5f);
         Destroy(gameObject);

@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Haptics;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
@@ -10,6 +12,8 @@ public class Player : MonoBehaviour
     public Transform firePoint;
     public GameObject rocketPrefab;
     public GameObject bulletPrefab;
+    public GameObject rocketLauncherObj;
+    public GameObject assaultRifleObj;
     public CharacterController charController;
     public LayerMask groundCheckMask;
     public float groundCheckDistance = .1f;
@@ -29,6 +33,7 @@ public class Player : MonoBehaviour
     public float lowJumpTurnTime = .05f;
     public float maxFallSpeed = 10f;
 
+    private InputDevice controller;
     private float moveInput;
     private float gravity;
     private float jumpVelocity;
@@ -55,9 +60,16 @@ public class Player : MonoBehaviour
     {
         inputMaster = new InputMaster();
         inputMaster.Player.MoveInput.performed += ctx => moveInput = ctx.ReadValue<float>();
-        inputMaster.Player.Shoot.performed += ctx => ShootRocket();
-        //inputMaster.Player.ShootSecondary.performed += ctx => ShootBullet();
-        inputMaster.Player.ShootSecondary_Press.performed += ctx => secondaryShootHeld = true;
+        inputMaster.Player.Shoot.performed += ctx =>
+        {
+            if (controller == null) controller = ctx.control.device;
+            ShootRocket();
+        };
+        inputMaster.Player.ShootSecondary_Press.performed += ctx =>
+        {
+            if (controller == null) controller = ctx.control.device;
+            secondaryShootHeld = true;
+        };
         inputMaster.Player.ShootSecondary_Release.performed += ctx => secondaryShootHeld = false;
         inputMaster.Player.Jump.performed += ctx => OnJump();
         inputMaster.Player.JumpRelease.performed += ctx => OnJumpRelease();
@@ -169,10 +181,16 @@ public class Player : MonoBehaviour
             return;
         }
 
+        //Rumble
+        RumbleManager.Instance.StartRumble(controller, .5f, .3f, .1f);
+
         GameObject tempRocket = Instantiate(rocketPrefab, firePoint.position, Quaternion.LookRotation(firePoint.forward));
         Rigidbody rocketRb = tempRocket.GetComponent<Rigidbody>();
         rocketRb.AddForce(firePoint.forward * shootForce_Rocket);
         lastShootTime_Rocket = Time.time;
+
+        rocketLauncherObj.SetActive(true);
+        assaultRifleObj.SetActive(false);
     }
 
     private void ShootBullet()
@@ -182,10 +200,16 @@ public class Player : MonoBehaviour
             return;
         }
 
+        //Rumble
+        RumbleManager.Instance.StartRumble(controller, .1f, .15f, .015f);
+
         GameObject tempBullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(firePoint.forward));
         Rigidbody bulletRb = tempBullet.GetComponent<Rigidbody>();
         bulletRb.AddForce(firePoint.forward * shootForce_Bullet);
         lastShootTime_Bullet = Time.time;
+
+        rocketLauncherObj.SetActive(false);
+        assaultRifleObj.SetActive(true);
     }
 
     private void OnJump()
