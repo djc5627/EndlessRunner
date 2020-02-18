@@ -8,14 +8,17 @@ public class Player : MonoBehaviour
     public InputMaster inputMaster;
     public Animator anim;
     public Transform firePoint;
-    public GameObject rocket;
+    public GameObject rocketPrefab;
+    public GameObject bulletPrefab;
     public CharacterController charController;
     public LayerMask groundCheckMask;
     public float groundCheckDistance = .1f;
     public float groundCheckOriginYOffset = .05f;
     public float groundCheckJumpDelay = .1f;
-    public float shootForce = 100f;
-    public float shootDelay = .5f;
+    public float shootForce_Rocket = 100f;
+    public float shootDelay_Rocket = .5f;
+    public float shootForce_Bullet = 100f;
+    public float shootDelay_Bullet = .5f;
     public float strafeSpeed = 10f;
     public float forwardSpeed = 20f;
     public float acceleration = .01f;
@@ -30,11 +33,13 @@ public class Player : MonoBehaviour
     private float gravity;
     private float jumpVelocity;
     private float lastJumpTime = Mathf.NegativeInfinity;
-    private float lastShootTime = Mathf.NegativeInfinity;
+    private float lastShootTime_Rocket = Mathf.NegativeInfinity;
+    private float lastShootTime_Bullet = Mathf.NegativeInfinity;
     private float releaseJumpTime = Mathf.NegativeInfinity;
     private bool isGrounded;
     private bool hasRelasedJump = false;
     private bool doJump = false;
+    private bool secondaryShootHeld = false;
 
     private void OnEnable()
     {
@@ -50,7 +55,10 @@ public class Player : MonoBehaviour
     {
         inputMaster = new InputMaster();
         inputMaster.Player.MoveInput.performed += ctx => moveInput = ctx.ReadValue<float>();
-        inputMaster.Player.Shoot.performed += ctx => Shoot();
+        inputMaster.Player.Shoot.performed += ctx => ShootRocket();
+        //inputMaster.Player.ShootSecondary.performed += ctx => ShootBullet();
+        inputMaster.Player.ShootSecondary_Press.performed += ctx => secondaryShootHeld = true;
+        inputMaster.Player.ShootSecondary_Release.performed += ctx => secondaryShootHeld = false;
         inputMaster.Player.Jump.performed += ctx => OnJump();
         inputMaster.Player.JumpRelease.performed += ctx => OnJumpRelease();
 
@@ -81,11 +89,14 @@ public class Player : MonoBehaviour
 
         //gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         //jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
-
         CheckGrounded();
         NormalizeMoveInput();
         Move();
         SyncAnimatorVariables();
+        if (secondaryShootHeld)
+        {
+            ShootBullet();
+        }
     }
 
     private void NormalizeMoveInput()
@@ -151,17 +162,30 @@ public class Player : MonoBehaviour
         charController.Move(newVelocity * Time.deltaTime);
     }
 
-    private void Shoot()
+    private void ShootRocket()
     {
-        if (lastShootTime + shootDelay > Time.time)
+        if (lastShootTime_Rocket + shootDelay_Rocket > Time.time)
         {
             return;
         }
 
-        GameObject tempRocket = Instantiate(rocket, firePoint.position, Quaternion.LookRotation(firePoint.forward));
+        GameObject tempRocket = Instantiate(rocketPrefab, firePoint.position, Quaternion.LookRotation(firePoint.forward));
         Rigidbody rocketRb = tempRocket.GetComponent<Rigidbody>();
-        rocketRb.AddForce(firePoint.forward * shootForce);
-        lastShootTime = Time.time;
+        rocketRb.AddForce(firePoint.forward * shootForce_Rocket);
+        lastShootTime_Rocket = Time.time;
+    }
+
+    private void ShootBullet()
+    {
+        if (lastShootTime_Bullet + shootDelay_Bullet > Time.time)
+        {
+            return;
+        }
+
+        GameObject tempBullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(firePoint.forward));
+        Rigidbody bulletRb = tempBullet.GetComponent<Rigidbody>();
+        bulletRb.AddForce(firePoint.forward * shootForce_Bullet);
+        lastShootTime_Bullet = Time.time;
     }
 
     private void OnJump()

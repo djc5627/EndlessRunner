@@ -48,7 +48,7 @@ public class Rocket : MonoBehaviour
             //If this is not the move collider (a limb)
             if (col.gameObject.layer != LayerMask.NameToLayer("EnemyMovCol"))
             {
-                Rigidbody rb = col.gameObject.GetComponent<Rigidbody>();
+                Rigidbody rb = col.attachedRigidbody;
                 if (rb != null && !affectedRigidbodies.Contains(rb))
                 {
                     affectedRigidbodies.Add(rb);

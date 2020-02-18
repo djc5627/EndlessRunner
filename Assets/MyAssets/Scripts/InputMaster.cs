@@ -35,6 +35,22 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": ""Press""
                 },
                 {
+                    ""name"": ""ShootSecondary_Press"",
+                    ""type"": ""Button"",
+                    ""id"": ""e818eae4-c587-49e0-8eea-c7c388fd61b5"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""ShootSecondary_Release"",
+                    ""type"": ""Button"",
+                    ""id"": ""31f06326-9c3a-4f99-9a63-2002ea07e5c2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(behavior=1)""
+                },
+                {
                     ""name"": ""Jump"",
                     ""type"": ""Button"",
                     ""id"": ""0abbe66e-166f-40f6-97e4-e3f3c647ec53"",
@@ -132,7 +148,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""21704beb-4acf-4df5-98c7-802ba1abf808"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
@@ -143,7 +159,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""d462fcc5-7aaa-40fc-a0f9-7c6e27802417"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -194,6 +210,50 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""JumpRelease"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6c9a5a73-2eb6-45be-8c2c-1c46d8613cf5"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""ShootSecondary_Press"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""523df1e3-ef9c-466a-878c-b2faadfd5a0d"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ShootSecondary_Press"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8b73ed8c-0de9-4319-8e47-9b33f40bc28c"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""ShootSecondary_Release"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9d688df2-9981-43b5-a5bf-84942c209c21"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ShootSecondary_Release"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -215,6 +275,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_MoveInput = m_Player.FindAction("MoveInput", throwIfNotFound: true);
         m_Player_Shoot = m_Player.FindAction("Shoot", throwIfNotFound: true);
+        m_Player_ShootSecondary_Press = m_Player.FindAction("ShootSecondary_Press", throwIfNotFound: true);
+        m_Player_ShootSecondary_Release = m_Player.FindAction("ShootSecondary_Release", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_JumpRelease = m_Player.FindAction("JumpRelease", throwIfNotFound: true);
     }
@@ -268,6 +330,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_MoveInput;
     private readonly InputAction m_Player_Shoot;
+    private readonly InputAction m_Player_ShootSecondary_Press;
+    private readonly InputAction m_Player_ShootSecondary_Release;
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_JumpRelease;
     public struct PlayerActions
@@ -276,6 +340,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public PlayerActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @MoveInput => m_Wrapper.m_Player_MoveInput;
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
+        public InputAction @ShootSecondary_Press => m_Wrapper.m_Player_ShootSecondary_Press;
+        public InputAction @ShootSecondary_Release => m_Wrapper.m_Player_ShootSecondary_Release;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @JumpRelease => m_Wrapper.m_Player_JumpRelease;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -293,6 +359,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Shoot.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
                 @Shoot.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
                 @Shoot.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
+                @ShootSecondary_Press.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootSecondary_Press;
+                @ShootSecondary_Press.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootSecondary_Press;
+                @ShootSecondary_Press.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootSecondary_Press;
+                @ShootSecondary_Release.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootSecondary_Release;
+                @ShootSecondary_Release.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootSecondary_Release;
+                @ShootSecondary_Release.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootSecondary_Release;
                 @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
@@ -309,6 +381,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Shoot.started += instance.OnShoot;
                 @Shoot.performed += instance.OnShoot;
                 @Shoot.canceled += instance.OnShoot;
+                @ShootSecondary_Press.started += instance.OnShootSecondary_Press;
+                @ShootSecondary_Press.performed += instance.OnShootSecondary_Press;
+                @ShootSecondary_Press.canceled += instance.OnShootSecondary_Press;
+                @ShootSecondary_Release.started += instance.OnShootSecondary_Release;
+                @ShootSecondary_Release.performed += instance.OnShootSecondary_Release;
+                @ShootSecondary_Release.canceled += instance.OnShootSecondary_Release;
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
@@ -341,6 +419,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
     {
         void OnMoveInput(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
+        void OnShootSecondary_Press(InputAction.CallbackContext context);
+        void OnShootSecondary_Release(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnJumpRelease(InputAction.CallbackContext context);
     }
