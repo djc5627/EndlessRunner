@@ -23,6 +23,10 @@ public class Player : MonoBehaviour
     public float shootDelay_Rocket = .5f;
     public float shootForce_Bullet = 100f;
     public float shootDelay_Bullet = .5f;
+    public AudioClip shootClip_Rocket;
+    public float shootClipScale_Rocket = 1f;
+    public AudioClip shootClip_Bullet;
+    public float shootClipScale_Bullet = 1f;
     public float strafeSpeed = 10f;
     public float forwardSpeed = 20f;
     public float acceleration = .01f;
@@ -189,6 +193,7 @@ public class Player : MonoBehaviour
         rocketRb.AddForce(firePoint.forward * shootForce_Rocket);
         lastShootTime_Rocket = Time.time;
 
+        GlobalAudioPlayer.Instance.PlayClipAt(shootClip_Rocket, transform.position, shootClipScale_Rocket);
         rocketLauncherObj.SetActive(true);
         assaultRifleObj.SetActive(false);
     }
@@ -208,6 +213,7 @@ public class Player : MonoBehaviour
         bulletRb.AddForce(firePoint.forward * shootForce_Bullet);
         lastShootTime_Bullet = Time.time;
 
+        GlobalAudioPlayer.Instance.PlayClipAt(shootClip_Bullet, transform.position, shootClipScale_Bullet);
         rocketLauncherObj.SetActive(false);
         assaultRifleObj.SetActive(true);
     }
