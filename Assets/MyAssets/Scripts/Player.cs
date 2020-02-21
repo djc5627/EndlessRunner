@@ -15,6 +15,8 @@ public class Player : MonoBehaviour
     public GameObject rocketLauncherObj;
     public GameObject assaultRifleObj;
     public CharacterController charController;
+    public float maxHealth = 10f;
+    public float deathBarrierYOffset = -50f;
     public LayerMask groundCheckMask;
     public float groundCheckDistance = .1f;
     public float groundCheckOriginYOffset = .05f;
@@ -38,6 +40,7 @@ public class Player : MonoBehaviour
     public float maxFallSpeed = 10f;
 
     private InputDevice controller;
+    private float currentHealth;
     private float moveInput;
     private float gravity;
     private float jumpVelocity;
@@ -62,6 +65,8 @@ public class Player : MonoBehaviour
 
     private void Awake()
     {
+        currentHealth = maxHealth;
+
         inputMaster = new InputMaster();
         inputMaster.Player.MoveInput.performed += ctx => moveInput = ctx.ReadValue<float>();
         inputMaster.Player.Shoot.performed += ctx =>
@@ -88,23 +93,6 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        // forwardSpeed = MIDIInput.GetKnob(1, 0f, 100f);
-        //jumpForce = MIDIInput.GetKnob(2, 0f, 30f);
-        //strafeSpeed = MIDIInput.GetKnob(3, 0f, 30f);
-        //Physics.gravity = new Vector3(0f, MIDIInput.GetKnob(4, 10f, -50f), 0f);
-        //shootForce = MIDIInput.GetKnob(5, 0f, 30000f);
-        //moveInput = MIDIInput.GetKnob(7, -1f, 1f);
-
-        //acceleration = MIDIInput.GetKnob(1, .001f, .1f);
-        //deacceleration = MIDIInput.GetKnob(2, .001f, .1f);
-        //timeToJumpApex = MIDIInput.GetKnob(1, 0f, .5f);
-        //maxJumpHeight = MIDIInput.GetKnob(2, 0f, 10f);
-        //fallMultiplier = MIDIInput.GetKnob(3, 1f, 8f);
-        //lowJumpTurnTime = MIDIInput.GetKnob(4, .1f, .5f);
-        //maxFallSpeed = MIDIInput.GetKnob(5, 10f, 100f);
-
-        //gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
-        //jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         CheckGrounded();
         NormalizeMoveInput();
         Move();
@@ -112,6 +100,15 @@ public class Player : MonoBehaviour
         if (secondaryShootHeld)
         {
             ShootBullet();
+        }
+        CheckDeathBarrier();
+    }
+
+    private void CheckDeathBarrier()
+    {
+        if (transform.position.y < deathBarrierYOffset)
+        {
+            Death();
         }
     }
 
@@ -264,8 +261,22 @@ public class Player : MonoBehaviour
         anim.SetBool("isGrounded", isGrounded);
     }
 
+    private void Death()
+    {
+        ResetLevel();
+    }
+
     public void ResetLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        if (currentHealth <= 0f)
+        {
+            Death();
+        }
     }
 }
