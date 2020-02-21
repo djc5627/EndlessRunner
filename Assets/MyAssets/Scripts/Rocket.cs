@@ -59,7 +59,7 @@ public class Rocket : MonoBehaviour
             else
             {
                 ElfController elfScript = col.GetComponent<ElfController>();
-                elfScript.TakeDamage(damage);
+                if (elfScript != null) elfScript.TakeDamage(damage);
             }
         }
 
