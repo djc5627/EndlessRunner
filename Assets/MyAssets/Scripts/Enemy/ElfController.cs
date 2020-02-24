@@ -4,9 +4,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using RootMotion.Dynamics;
 
-public class ElfController : MonoBehaviour
+public class ElfController : Enemy
 {
-    public float maxHealth = 100f;
     public Animator anim;
     public AudioSource audioSource;
     public NavMeshAgent agent;
@@ -25,14 +24,13 @@ public class ElfController : MonoBehaviour
     private bool reachedGround = false;
     private float lastSoundTime = Mathf.NegativeInfinity;
     private float nextClipTime;
-    private float currentHealth;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         agent.enabled = false;
         playerTrans = FindObjectOfType<Player>().transform;
         nextClipTime = Random.Range(timeToNextClipMin, timeToNextClipMax);
-        currentHealth = maxHealth;
     }
 
     private void Update()
@@ -92,7 +90,7 @@ public class ElfController : MonoBehaviour
         return clipArray[randIndex];
     }
 
-    private void OnDeath()
+    protected override void OnDeath()
     {
         puppetMaster.state = PuppetMaster.State.Dead;
         puppetMaster.Kill();
@@ -102,14 +100,5 @@ public class ElfController : MonoBehaviour
         agent.enabled = false;
         this.enabled = false;
         
-    }
-
-    public void TakeDamage(float damage)
-    {
-        currentHealth -= damage;
-        if (currentHealth <= 0)
-        {
-            OnDeath();
-        }
     }
 }
