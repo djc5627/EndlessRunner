@@ -99,6 +99,5 @@ public class ElfController : Enemy
         elfCollider.enabled = false;
         agent.enabled = false;
         this.enabled = false;
-        
     }
 }

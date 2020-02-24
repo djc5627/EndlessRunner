@@ -46,10 +46,10 @@ public class Bullet : MonoBehaviour
             Vector3 dir = (transform.position - lastPos).normalized;
             otherRb.AddForceAtPosition(dir * impactForce, hit.point);
         }
-        ElfController elfScript = hit.collider.attachedRigidbody.GetComponent<ElfController>();
-        if (elfScript != null)
+        EnemyLimbProxy enemyProxy = hit.collider.attachedRigidbody.GetComponent<EnemyLimbProxy>();
+        if (enemyProxy != null)
         {
-            elfScript.TakeDamage(damage);
+            enemyProxy.TakeDamage(damage);
         }
 
         //Audio
