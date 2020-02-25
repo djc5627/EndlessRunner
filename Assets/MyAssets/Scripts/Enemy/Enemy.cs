@@ -6,6 +6,11 @@ using RootMotion.Dynamics;
 public abstract class Enemy : MonoBehaviour
 {
     public float maxHealth = 100f;
+    public AudioClip deathClip;
+    public AudioSource audioSource;
+    public float deathClipScale = 1f;
+
+    private bool isDead = false;
 
     private float currentHealth;
 
@@ -14,7 +19,16 @@ public abstract class Enemy : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    protected abstract void OnDeath();
+    protected virtual void OnDeath()
+    {
+        if (isDead)
+        {
+            return;
+        }
+
+        audioSource.PlayOneShot(deathClip, deathClipScale);
+        isDead = true;
+    }
 
     public virtual void TakeDamage(float damage)
     {

@@ -7,7 +7,6 @@ using RootMotion.Dynamics;
 public class ElfController : Enemy
 {
     public Animator anim;
-    public AudioSource audioSource;
     public NavMeshAgent agent;
     public BoxCollider elfCollider;
     public ElfFlower elfFlower;
@@ -92,6 +91,7 @@ public class ElfController : Enemy
 
     protected override void OnDeath()
     {
+        base.OnDeath();
         puppetMaster.state = PuppetMaster.State.Dead;
         puppetMaster.Kill();
         puppetMaster.muscleWeight = 0f;

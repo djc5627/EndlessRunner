@@ -188,7 +188,12 @@ public class Spawner : MonoBehaviour
         }
 
         Random.InitState(seed);
-        LogSeed(seed);
+
+        //For now, dont log seed in build mode
+        if (Application.isEditor)
+        {
+            LogSeed(seed);
+        }
     }
 
     private void LogSeed(int seed)

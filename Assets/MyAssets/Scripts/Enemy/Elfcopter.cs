@@ -19,6 +19,6 @@ public class Elfcopter : Enemy
 
     protected override void OnDeath()
     {
-        //Do something here
+        base.OnDeath();
     }
 }
