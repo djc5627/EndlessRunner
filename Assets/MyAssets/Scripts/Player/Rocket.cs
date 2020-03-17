@@ -5,6 +5,7 @@ using UnityEngine;
 public class Rocket : MonoBehaviour
 {
     public GameObject explosionEffect;
+    public LayerMask collisionMask;
     public LayerMask explosionMask;
     public SphereCollider refTrigger;
     public AudioClip explosionSound;
@@ -40,7 +41,7 @@ public class Rocket : MonoBehaviour
         Vector3 lastToCurrentPos = (transform.position - lastPos).normalized;
 
         RaycastHit hit;
-        if (Physics.SphereCast(refTrigger.bounds.center, refTrigger.radius, lastToCurrentPos, out hit, lastToCurrentDistance, explosionMask)) {
+        if (Physics.SphereCast(refTrigger.bounds.center, refTrigger.radius, lastToCurrentPos, out hit, lastToCurrentDistance, collisionMask)) {
             Explode(hit.point);
             hasCollided = true;
         }

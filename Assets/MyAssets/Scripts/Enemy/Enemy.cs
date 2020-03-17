@@ -6,9 +6,12 @@ using RootMotion.Dynamics;
 public abstract class Enemy : MonoBehaviour
 {
     public float maxHealth = 100f;
+    public string deadLayerName = "DeadEnemyRagdoll";
+    public Transform ragdollRoot;
     public AudioClip deathClip;
     public AudioSource audioSource;
     public float deathClipScale = 1f;
+
 
     private bool isDead = false;
 
@@ -27,6 +30,7 @@ public abstract class Enemy : MonoBehaviour
         }
 
         audioSource.PlayOneShot(deathClip, deathClipScale);
+        ragdollRoot.ChangeLayerRecursively(deadLayerName);
         isDead = true;
     }
 
