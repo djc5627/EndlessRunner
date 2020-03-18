@@ -8,7 +8,7 @@ public class Obstacle : MonoBehaviour
     {
         if (col.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
-            Player playerScript = col.gameObject.GetComponent<Player>();
+            PlayerController playerScript = col.gameObject.GetComponent<PlayerController>();
             //if (playerScript != null) playerScript.ResetLevel();
         }
     }
