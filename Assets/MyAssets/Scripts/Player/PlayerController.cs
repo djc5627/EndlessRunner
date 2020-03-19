@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 {
     public InputMaster inputMaster;
     public PlayerMovementBase playerMovement;
+    public HealthBar healthBar;
     public Transform firePoint;
     public GameObject rocketPrefab;
     public GameObject bulletPrefab;
@@ -44,6 +45,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
 
         inputMaster = new InputMaster();
         inputMaster.Player.MoveInput.performed += ctx => playerMovement.OnMoveInput(ctx.ReadValue<float>());
@@ -135,6 +137,7 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
         if (currentHealth <= 0f)
         {
             Death();
