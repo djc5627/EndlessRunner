@@ -5,6 +5,8 @@ using RootMotion.Dynamics;
 
 public abstract class Enemy : MonoBehaviour
 {
+    public HealthBar healthBar;
+    public GameObject healthCanvas;
     public float maxHealth = 100f;
     public string deadLayerName = "DeadEnemyRagdoll";
     public Transform ragdollRoot;
@@ -20,6 +22,7 @@ public abstract class Enemy : MonoBehaviour
     protected virtual void Awake()
     {
         currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
     }
 
     protected virtual void OnDeath()
@@ -31,12 +34,14 @@ public abstract class Enemy : MonoBehaviour
 
         audioSource.PlayOneShot(deathClip, deathClipScale);
         ragdollRoot.ChangeLayerRecursively(deadLayerName);
+        healthCanvas.SetActive(false);
         isDead = true;
     }
 
     public virtual void TakeDamage(float damage)
     {
         currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
         if (currentHealth <= 0)
         {
             OnDeath();

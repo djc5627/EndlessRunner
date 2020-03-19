@@ -47,8 +47,13 @@ public class PlayerController : MonoBehaviour
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
 
+        //Movement
         inputMaster = new InputMaster();
         inputMaster.Player.MoveInput.performed += ctx => playerMovement.OnMoveInput(ctx.ReadValue<float>());
+        inputMaster.Player.Jump.performed += ctx => playerMovement.OnJump();
+        inputMaster.Player.JumpRelease.performed += ctx => playerMovement.OnJumpReleased();
+
+        //Combat
         inputMaster.Player.Shoot.performed += ctx =>
         {
             if (controller == null) controller = ctx.control.device;
@@ -60,8 +65,7 @@ public class PlayerController : MonoBehaviour
             secondaryShootHeld = true;
         };
         inputMaster.Player.ShootSecondary_Release.performed += ctx => secondaryShootHeld = false;
-        inputMaster.Player.Jump.performed += ctx => playerMovement.OnJump();
-        inputMaster.Player.JumpRelease.performed += ctx => playerMovement.OnJumpReleased();
+        
 
     }
 
