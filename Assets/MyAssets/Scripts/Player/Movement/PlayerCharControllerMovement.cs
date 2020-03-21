@@ -44,8 +44,9 @@ public class PlayerCharControllerMovement : PlayerMovementBase
 
         RaycastHit hit;
         float halfHeight = charController.height / 2f;
-        Vector3 point1 = charController.bounds.center + (Vector3.up * halfHeight) + Vector3.up * groundCheckOriginYOffset;
-        Vector3 point2 = charController.bounds.center - (Vector3.up * halfHeight) + Vector3.up * groundCheckOriginYOffset;
+        float distanceToPoints = halfHeight - charController.radius;
+        Vector3 point1 = charController.bounds.center + (Vector3.up * distanceToPoints) + Vector3.up * groundCheckOriginYOffset;
+        Vector3 point2 = charController.bounds.center - (Vector3.up * distanceToPoints) + Vector3.up * groundCheckOriginYOffset;
         if (Physics.CapsuleCast(point1, point2, charController.radius, Vector3.down, out hit, groundCheckDistance, groundCheckMask))
         {
             isGrounded = true;
