@@ -41,7 +41,7 @@ public class Rocket : MonoBehaviour
         Vector3 lastToCurrentPos = (transform.position - lastPos).normalized;
 
         RaycastHit hit;
-        if (Physics.SphereCast(refTrigger.bounds.center, refTrigger.radius, lastToCurrentPos, out hit, lastToCurrentDistance, collisionMask)) {
+        if (Physics.SphereCast(lastPos, refTrigger.radius, lastToCurrentPos, out hit, lastToCurrentDistance, collisionMask)) {
             Explode(hit.point);
             hasCollided = true;
         }

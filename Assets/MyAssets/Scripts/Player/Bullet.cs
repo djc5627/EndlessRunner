@@ -18,21 +18,25 @@ public class Bullet : MonoBehaviour
     private void Awake()
     {
         lastPos = transform.position;
+        //Debug.LogError("Awake: " + lastPos);
     }
 
     private void FixedUpdate()
     {
+        //Debug.LogError("Fixed Start: " + lastPos);
         CheckForCollision();
         lastPos = transform.position;
+        //Debug.LogError("Fixed End: " + lastPos);
     }
 
     private void CheckForCollision()
     {
+        //Debug.LogError("Current Pos: " + transform.position);
         float lastToCurrentDistance = (transform.position - lastPos).magnitude;
         Vector3 lastToCurrentPos = (transform.position - lastPos).normalized;
 
         RaycastHit hit;
-        if (Physics.SphereCast(refTrigger.bounds.center, refTrigger.radius, lastToCurrentPos, out hit, lastToCurrentDistance, collisionMask))
+        if (Physics.SphereCast(lastPos, refTrigger.radius, lastToCurrentPos, out hit, lastToCurrentDistance, collisionMask))
         {
             HandleImpact(hit);
         }
