@@ -14,6 +14,10 @@ public class ElfController : Enemy
     public LayerMask groundCheckMask;
     public float groundCheckDistance = .1f;
     public float groundCheckOriginYOffset = .05f;
+    public BoxCollider meleeCollider;
+    public LayerMask attackMask;
+    public float attackRadius = 3f;
+    public float meleeDamage = 20f;
     public float timeToNextClipMin = 3f;
     public float timeToNextClipMax = 5f;
     public float clipVolumeScale = 5f;
@@ -21,6 +25,7 @@ public class ElfController : Enemy
 
     private Transform playerTrans;
     private bool reachedGround = false;
+    private bool isAttacking = false;
     private float lastSoundTime = Mathf.NegativeInfinity;
     private float nextClipTime;
 
@@ -34,13 +39,14 @@ public class ElfController : Enemy
 
     private void Update()
     {
-        HandleSounds();
-
         if (reachedGround)
         {
-            //agent.SetDestination(playerTrans.position);
-            agent.SetDestination(transform.position + 10f * Vector3.back);
+            agent.SetDestination(playerTrans.position);
+            //agent.SetDestination(transform.position + 10f * Vector3.back);
         }
+
+        HandleSounds();
+        HandleAttacking();
     }
 
     private void FixedUpdate()
@@ -72,6 +78,23 @@ public class ElfController : Enemy
         elfFlower.Detatch();
     }
 
+    private void HandleAttacking()
+    {
+        if (isAttacking)
+        {
+            return;
+        }
+
+        Vector3 vectorToPlayer = playerTrans.position - transform.position;
+        vectorToPlayer.y = 0f;
+        float distanceToPlayer = vectorToPlayer.magnitude;
+
+        if (distanceToPlayer <= attackRadius)
+        {
+            anim.SetTrigger("Attack");
+        }
+    }
+
     private void HandleSounds()
     {
         if (lastSoundTime + nextClipTime < Time.time)
@@ -99,5 +122,33 @@ public class ElfController : Enemy
         elfCollider.enabled = false;
         agent.enabled = false;
         this.enabled = false;
+    }
+
+    public void StartAttacking()
+    {
+        agent.isStopped = true;
+        isAttacking = true;
+    }
+
+    public void StopAttacking()
+    {
+        agent.isStopped = false;
+        isAttacking = false;
+    }
+
+    public void ExecuteMeleeAttack()
+    {
+        Collider[] overlappingColliders =  Physics.OverlapBox(meleeCollider.bounds.center, meleeCollider.bounds.extents, meleeCollider.transform.rotation, attackMask);
+        List<PlayerController> playersHit = new List<PlayerController>();
+        foreach(Collider col in overlappingColliders)   //Get players in range
+        {
+            PlayerController playerScript = col.GetComponent<PlayerController>();
+            if (!playersHit.Contains(playerScript)) //Check if already hit player
+            {
+                playerScript.TakeDamage(meleeDamage);
+                playersHit.Add(playerScript);
+            }
+                
+        }
     }
 }
