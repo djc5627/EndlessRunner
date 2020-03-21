@@ -33,4 +33,9 @@ public class PlayerAnimController : MonoBehaviour
     {
         anim.SetTrigger("Jump");
     }
+
+    public void SetInvincibility(bool isInvincible)
+    {
+        anim.SetBool("isInvincible", isInvincible);
+    }
 }

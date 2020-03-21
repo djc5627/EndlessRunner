@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public GameObject rocketLauncherObj;
     public GameObject assaultRifleObj;
     public float maxHealth = 10f;
+    public float invicibilityTime = 1.5f;
     public float deathBarrierYOffset = -50f;
     public float shootForce_Rocket = 100f;
     public float shootDelay_Rocket = .5f;
@@ -30,7 +31,9 @@ public class PlayerController : MonoBehaviour
     private float currentHealth;
     private float lastShootTime_Rocket = Mathf.NegativeInfinity;
     private float lastShootTime_Bullet = Mathf.NegativeInfinity;
+    private float lastDamageTime = Mathf.NegativeInfinity;
     private bool secondaryShootHeld = false;
+    private bool isInvincible = false;
 
     private void OnEnable()
     {
@@ -78,6 +81,7 @@ public class PlayerController : MonoBehaviour
             ShootBullet();
         }
         CheckDeathBarrier();
+        HandleInvincibility();
     }
 
     private void CheckDeathBarrier()
@@ -140,11 +144,30 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
+        if (isInvincible)
+        {
+            return;
+        }
+
         currentHealth -= damage;
         healthBar.SetHealth(currentHealth);
+        lastDamageTime = Time.time;
         if (currentHealth <= 0f)
         {
             Death();
         }
+    }
+
+    private void HandleInvincibility()
+    {
+        if (lastDamageTime + invicibilityTime > Time.time)
+        {
+            isInvincible = true;
+        }
+        else
+        {
+            isInvincible = false;
+        }
+        PlayerAnimController.Instance.SetInvincibility(isInvincible);
     }
 }
