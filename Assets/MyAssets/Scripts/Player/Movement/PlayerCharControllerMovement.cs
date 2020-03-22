@@ -34,6 +34,12 @@ public class PlayerCharControllerMovement : PlayerMovementBase
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
     }
 
+    public override void Execute()
+    {
+        CheckGrounded();
+        Move();
+    }
+
     private void CheckGrounded()
     {
         //Delay after jump
@@ -98,10 +104,8 @@ public class PlayerCharControllerMovement : PlayerMovementBase
         releaseJumpTime = Time.time;
     }
 
-    public override void Move()
+    private void Move()
     {
-        CheckGrounded();
-
         float currentXSpeed = 0f;
         Vector3 actualVelocity = charController.velocity;
         float targetXSpeed = moveInput * strafeSpeed;

@@ -19,6 +19,7 @@ public class RumbleManager : MonoBehaviour
         {
             Destroy(this);
         }
+
     }
 
     private IEnumerator RumbleRoutine(IDualMotorRumble rumble, float lowFreq, float highFreq, float duration)
@@ -33,6 +34,17 @@ public class RumbleManager : MonoBehaviour
 
         rumble.ResetHaptics();
 
+    }
+
+    //If dont give device, just use current gamepad
+    public void StartRumble(float lowFreq, float highFreq, float duration)
+    {
+        if (Gamepad.current.device == null)
+        {
+            return;
+        }
+
+        StartRumble(Gamepad.current.device, lowFreq, highFreq, duration);
     }
 
     public void StartRumble(InputDevice device, float lowFreq, float highFreq, float duration)
