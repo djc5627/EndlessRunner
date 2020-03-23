@@ -39,7 +39,7 @@ public class RumbleManager : MonoBehaviour
     //If dont give device, just use current gamepad
     public void StartRumble(float lowFreq, float highFreq, float duration)
     {
-        if (Gamepad.current.device == null)
+        if (Gamepad.current == null || Gamepad.current.device == null)
         {
             return;
         }

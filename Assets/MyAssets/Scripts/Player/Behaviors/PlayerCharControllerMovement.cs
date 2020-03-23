@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCharControllerMovement : PlayerMovementBase
+public class PlayerCharControllerMovement : PlayerBehaviorBase
 {
     public CharacterController charController;
     public LayerMask groundCheckMask;
@@ -19,7 +19,6 @@ public class PlayerCharControllerMovement : PlayerMovementBase
     public float lowJumpTurnTime = .5f;
     public float maxFallSpeed = 44f;
 
-    private float moveInput;
     private float gravity;
     private float jumpVelocity;
     private float lastJumpTime = Mathf.NegativeInfinity;
@@ -27,6 +26,12 @@ public class PlayerCharControllerMovement : PlayerMovementBase
     private bool isGrounded;
     private bool hasRelasedJump = false;
     private bool doJump = false;
+
+    protected override void SubscribeToInputEvents()
+    {
+        playerInput.onJump_Pressed += OnJump_Pressed;
+        playerInput.onJump_Released += OnJump_Released;
+    }
 
     private void Start()
     {
@@ -38,6 +43,22 @@ public class PlayerCharControllerMovement : PlayerMovementBase
     {
         CheckGrounded();
         Move();
+    }
+
+    private void OnJump_Pressed()
+    {
+        if (!isGrounded) return;
+
+        playerAnimController.JumpTrigger();
+        doJump = true;
+        lastJumpTime = Time.time;
+        isGrounded = false;
+    }
+
+    private void OnJump_Released()
+    {
+        hasRelasedJump = true;
+        releaseJumpTime = Time.time;
     }
 
     private void CheckGrounded()
@@ -66,46 +87,9 @@ public class PlayerCharControllerMovement : PlayerMovementBase
         playerAnimController.SetIsGrounded(isGrounded);
     }
 
-    private void NormalizeMoveInput()
-    {
-        if (moveInput < Mathf.Epsilon && moveInput > -Mathf.Epsilon)
-        {
-            moveInput = 0f;
-        }
-        else if (moveInput > 0f)
-        {
-            moveInput = 1f;
-        }
-        else if (moveInput < 0f)
-        {
-            moveInput = -1f;
-        }
-    }
-
-    public override void OnMoveInput(float moveInput)
-    {
-        NormalizeMoveInput();
-        this.moveInput = moveInput;
-    }
-
-    public override void OnJump()
-    {
-        if (!isGrounded) return;
-
-        playerAnimController.JumpTrigger();
-        doJump = true;
-        lastJumpTime = Time.time;
-        isGrounded = false;
-    }
-
-    public override void OnJumpReleased()
-    {
-        hasRelasedJump = true;
-        releaseJumpTime = Time.time;
-    }
-
     private void Move()
     {
+        float moveInput = playerInput.GetRoundedMoveInput();
         float currentXSpeed = 0f;
         Vector3 actualVelocity = charController.velocity;
         float targetXSpeed = moveInput * strafeSpeed;

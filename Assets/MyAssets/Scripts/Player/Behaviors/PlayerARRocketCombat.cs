@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerARRocketCombat : PlayerCombatBase
+public class PlayerARRocketCombat : PlayerBehaviorBase
 {
     public Transform firePoint;
     public Transform projectileContainer;
@@ -30,8 +30,17 @@ public class PlayerARRocketCombat : PlayerCombatBase
         currentSpread = hipFireSpread;
     }
 
+    protected override void SubscribeToInputEvents()
+    {
+        //Subscribe here
+    }
+
     public override void Execute()
     {
+        bool aimDownSightsHeld = playerInput.GetIsAimDownSightHeld();
+        bool primaryFireHeld = playerInput.GetIsPrimaryFireHeld();
+        bool secondaryFireHeld = playerInput.GetIsSecondaryFireHeld();
+
         if (aimDownSightsHeld)
         {
             currentSpread = aimDownSightsSpread;

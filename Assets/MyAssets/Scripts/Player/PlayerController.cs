@@ -7,10 +7,9 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    public InputMaster inputMaster;
+    public PlayerInput playerInput;
     public PlayerAnimController playerAnimController;
-    public PlayerMovementBase playerMovement;
-    public PlayerCombatBase playerCombat;
+    public PlayerBehaviorBase[] playerBehaviors;
     public HealthBar healthBar;
     public float maxHealth = 10f;
     public float invicibilityTime = 1.5f;
@@ -20,15 +19,6 @@ public class PlayerController : MonoBehaviour
     private float lastDamageTime = Mathf.NegativeInfinity;
     private bool isInvincible = false;
 
-    private void OnEnable()
-    {
-        inputMaster.Enable();
-    }
-
-    private void OnDisable()
-    {
-        inputMaster.Disable();
-    }
 
     private void Awake()
     {
@@ -36,35 +26,23 @@ public class PlayerController : MonoBehaviour
         healthBar.SetMaxHealth(maxHealth);
 
         //Send references to behaviors
-        playerMovement.SetPlayerAnimController(playerAnimController);
-        playerCombat.SetPlayerAnimController(playerAnimController);
-
-        //Movement
-        inputMaster = new InputMaster();
-        inputMaster.Player.MoveInput.performed += ctx => playerMovement.OnMoveInput(ctx.ReadValue<float>());
-        inputMaster.Player.Jump_Press.performed += ctx => playerMovement.OnJump();
-        inputMaster.Player.Jump_Release.performed += ctx => playerMovement.OnJumpReleased();
-
-        //Combat
-        inputMaster.Player.ShootPrimary_Press.performed += ctx => playerCombat.OnPrimaryFire_Pressed();
-        inputMaster.Player.ShootPrimary_Release.performed += ctx => playerCombat.OnPrimaryFire_Released();
-        inputMaster.Player.ShootSecondary_Press.performed += ctx => playerCombat.OnSecondaryFire_Pressed();
-        inputMaster.Player.ShootSecondary_Release.performed += ctx => playerCombat.OnSecondaryFire_Released();
-
-        inputMaster.Player.AimDownSights_Press.performed += ctx => playerCombat.OnAimDownSights_Pressed();
-        inputMaster.Player.AimDownSights_Release.performed += ctx => playerCombat.OnAimDownSights_Released();
+        foreach (var behavior in playerBehaviors)
+        {
+            behavior.SetPlayerInput(playerInput);
+            behavior.SetPlayerAnimController(playerAnimController);
+        }
     }
 
     private void Update()
     {
-        playerMovement.Execute();
-        playerCombat.Execute();
+        //Execute each behavior (in order of assignment)
+        foreach (var behavior in playerBehaviors)
+        {
+            behavior.Execute();
+        }
 
-        
         CheckDeathBarrier();
         HandleInvincibility();
-
-        //Debug.Log(inputMaster.Player.AimDownSights.ReadValue<float>());
     }
 
     private void CheckDeathBarrier()
@@ -73,6 +51,19 @@ public class PlayerController : MonoBehaviour
         {
             Death();
         }
+    }
+
+    private void HandleInvincibility()
+    {
+        if (lastDamageTime + invicibilityTime > Time.time)
+        {
+            isInvincible = true;
+        }
+        else
+        {
+            isInvincible = false;
+        }
+        playerAnimController.SetInvincibility(isInvincible);
     }
 
     private void Death()
@@ -99,18 +90,5 @@ public class PlayerController : MonoBehaviour
         {
             Death();
         }
-    }
-
-    private void HandleInvincibility()
-    {
-        if (lastDamageTime + invicibilityTime > Time.time)
-        {
-            isInvincible = true;
-        }
-        else
-        {
-            isInvincible = false;
-        }
-        playerAnimController.SetInvincibility(isInvincible);
     }
 }
