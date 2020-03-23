@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public InputMaster inputMaster;
+    public PlayerAnimController playerAnimController;
     public PlayerMovementBase playerMovement;
     public PlayerCombatBase playerCombat;
     public HealthBar healthBar;
@@ -34,17 +35,24 @@ public class PlayerController : MonoBehaviour
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
 
+        //Send references to behaviors
+        playerMovement.SetPlayerAnimController(playerAnimController);
+        playerCombat.SetPlayerAnimController(playerAnimController);
+
         //Movement
         inputMaster = new InputMaster();
         inputMaster.Player.MoveInput.performed += ctx => playerMovement.OnMoveInput(ctx.ReadValue<float>());
-        inputMaster.Player.Jump.performed += ctx => playerMovement.OnJump();
-        inputMaster.Player.JumpRelease.performed += ctx => playerMovement.OnJumpReleased();
+        inputMaster.Player.Jump_Press.performed += ctx => playerMovement.OnJump();
+        inputMaster.Player.Jump_Release.performed += ctx => playerMovement.OnJumpReleased();
 
         //Combat
-        inputMaster.Player.ShootPrimary_Press.performed += ctx => playerCombat.OnPrimaryFirePressed();
-        inputMaster.Player.ShootPrimary_Release.performed += ctx => playerCombat.OnPrimaryFireReleased();
-        inputMaster.Player.ShootSecondary_Press.performed += ctx => playerCombat.OnSecondaryFirePressed();
-        inputMaster.Player.ShootSecondary_Release.performed += ctx => playerCombat.OnSecondaryFireReleased();
+        inputMaster.Player.ShootPrimary_Press.performed += ctx => playerCombat.OnPrimaryFire_Pressed();
+        inputMaster.Player.ShootPrimary_Release.performed += ctx => playerCombat.OnPrimaryFire_Released();
+        inputMaster.Player.ShootSecondary_Press.performed += ctx => playerCombat.OnSecondaryFire_Pressed();
+        inputMaster.Player.ShootSecondary_Release.performed += ctx => playerCombat.OnSecondaryFire_Released();
+
+        inputMaster.Player.AimDownSights_Press.performed += ctx => playerCombat.OnAimDownSights_Pressed();
+        inputMaster.Player.AimDownSights_Release.performed += ctx => playerCombat.OnAimDownSights_Released();
     }
 
     private void Update()
@@ -55,6 +63,8 @@ public class PlayerController : MonoBehaviour
         
         CheckDeathBarrier();
         HandleInvincibility();
+
+        //Debug.Log(inputMaster.Player.AimDownSights.ReadValue<float>());
     }
 
     private void CheckDeathBarrier()
@@ -64,8 +74,6 @@ public class PlayerController : MonoBehaviour
             Death();
         }
     }
-
-    
 
     private void Death()
     {
@@ -103,6 +111,6 @@ public class PlayerController : MonoBehaviour
         {
             isInvincible = false;
         }
-        PlayerAnimController.Instance.SetInvincibility(isInvincible);
+        playerAnimController.SetInvincibility(isInvincible);
     }
 }

@@ -59,7 +59,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": ""Press(behavior=1)""
                 },
                 {
-                    ""name"": ""Jump"",
+                    ""name"": ""Jump_Press"",
                     ""type"": ""Button"",
                     ""id"": ""0abbe66e-166f-40f6-97e4-e3f3c647ec53"",
                     ""expectedControlType"": """",
@@ -67,12 +67,28 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": ""Press""
                 },
                 {
-                    ""name"": ""JumpRelease"",
+                    ""name"": ""Jump_Release"",
                     ""type"": ""Button"",
                     ""id"": ""4c6389e8-eb28-4b57-b714-cca2e9059996"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=1)""
+                },
+                {
+                    ""name"": ""AimDownSights_Press"",
+                    ""type"": ""Button"",
+                    ""id"": ""e83205f9-d9d4-4334-85c6-e468c4e0630f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(pressPoint=0.125)""
+                },
+                {
+                    ""name"": ""AimDownSights_Release"",
+                    ""type"": ""Button"",
+                    ""id"": ""b7953070-6dae-4b50-9e5c-79040e1aad17"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(pressPoint=0.125,behavior=1)""
                 }
             ],
             ""bindings"": [
@@ -160,7 +176,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Jump"",
+                    ""action"": ""Jump_Press"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -171,7 +187,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Jump"",
+                    ""action"": ""Jump_Press"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -182,7 +198,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""JumpRelease"",
+                    ""action"": ""Jump_Release"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -193,7 +209,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""JumpRelease"",
+                    ""action"": ""Jump_Release"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -284,6 +300,28 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""ShootSecondary_Press"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e3298ffa-51c5-4fda-84d2-32a4f8e33bd6"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""AimDownSights_Press"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a51e6208-7a75-440d-b513-83d602966b12"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""AimDownSights_Release"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -308,8 +346,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_ShootPrimary_Release = m_Player.FindAction("ShootPrimary_Release", throwIfNotFound: true);
         m_Player_ShootSecondary_Press = m_Player.FindAction("ShootSecondary_Press", throwIfNotFound: true);
         m_Player_ShootSecondary_Release = m_Player.FindAction("ShootSecondary_Release", throwIfNotFound: true);
-        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
-        m_Player_JumpRelease = m_Player.FindAction("JumpRelease", throwIfNotFound: true);
+        m_Player_Jump_Press = m_Player.FindAction("Jump_Press", throwIfNotFound: true);
+        m_Player_Jump_Release = m_Player.FindAction("Jump_Release", throwIfNotFound: true);
+        m_Player_AimDownSights_Press = m_Player.FindAction("AimDownSights_Press", throwIfNotFound: true);
+        m_Player_AimDownSights_Release = m_Player.FindAction("AimDownSights_Release", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -364,8 +404,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_ShootPrimary_Release;
     private readonly InputAction m_Player_ShootSecondary_Press;
     private readonly InputAction m_Player_ShootSecondary_Release;
-    private readonly InputAction m_Player_Jump;
-    private readonly InputAction m_Player_JumpRelease;
+    private readonly InputAction m_Player_Jump_Press;
+    private readonly InputAction m_Player_Jump_Release;
+    private readonly InputAction m_Player_AimDownSights_Press;
+    private readonly InputAction m_Player_AimDownSights_Release;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -375,8 +417,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @ShootPrimary_Release => m_Wrapper.m_Player_ShootPrimary_Release;
         public InputAction @ShootSecondary_Press => m_Wrapper.m_Player_ShootSecondary_Press;
         public InputAction @ShootSecondary_Release => m_Wrapper.m_Player_ShootSecondary_Release;
-        public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputAction @JumpRelease => m_Wrapper.m_Player_JumpRelease;
+        public InputAction @Jump_Press => m_Wrapper.m_Player_Jump_Press;
+        public InputAction @Jump_Release => m_Wrapper.m_Player_Jump_Release;
+        public InputAction @AimDownSights_Press => m_Wrapper.m_Player_AimDownSights_Press;
+        public InputAction @AimDownSights_Release => m_Wrapper.m_Player_AimDownSights_Release;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -401,12 +445,18 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @ShootSecondary_Release.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootSecondary_Release;
                 @ShootSecondary_Release.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootSecondary_Release;
                 @ShootSecondary_Release.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootSecondary_Release;
-                @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                @JumpRelease.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJumpRelease;
-                @JumpRelease.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJumpRelease;
-                @JumpRelease.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJumpRelease;
+                @Jump_Press.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump_Press;
+                @Jump_Press.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump_Press;
+                @Jump_Press.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump_Press;
+                @Jump_Release.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump_Release;
+                @Jump_Release.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump_Release;
+                @Jump_Release.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump_Release;
+                @AimDownSights_Press.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAimDownSights_Press;
+                @AimDownSights_Press.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAimDownSights_Press;
+                @AimDownSights_Press.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAimDownSights_Press;
+                @AimDownSights_Release.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAimDownSights_Release;
+                @AimDownSights_Release.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAimDownSights_Release;
+                @AimDownSights_Release.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAimDownSights_Release;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -426,12 +476,18 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @ShootSecondary_Release.started += instance.OnShootSecondary_Release;
                 @ShootSecondary_Release.performed += instance.OnShootSecondary_Release;
                 @ShootSecondary_Release.canceled += instance.OnShootSecondary_Release;
-                @Jump.started += instance.OnJump;
-                @Jump.performed += instance.OnJump;
-                @Jump.canceled += instance.OnJump;
-                @JumpRelease.started += instance.OnJumpRelease;
-                @JumpRelease.performed += instance.OnJumpRelease;
-                @JumpRelease.canceled += instance.OnJumpRelease;
+                @Jump_Press.started += instance.OnJump_Press;
+                @Jump_Press.performed += instance.OnJump_Press;
+                @Jump_Press.canceled += instance.OnJump_Press;
+                @Jump_Release.started += instance.OnJump_Release;
+                @Jump_Release.performed += instance.OnJump_Release;
+                @Jump_Release.canceled += instance.OnJump_Release;
+                @AimDownSights_Press.started += instance.OnAimDownSights_Press;
+                @AimDownSights_Press.performed += instance.OnAimDownSights_Press;
+                @AimDownSights_Press.canceled += instance.OnAimDownSights_Press;
+                @AimDownSights_Release.started += instance.OnAimDownSights_Release;
+                @AimDownSights_Release.performed += instance.OnAimDownSights_Release;
+                @AimDownSights_Release.canceled += instance.OnAimDownSights_Release;
             }
         }
     }
@@ -461,7 +517,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnShootPrimary_Release(InputAction.CallbackContext context);
         void OnShootSecondary_Press(InputAction.CallbackContext context);
         void OnShootSecondary_Release(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
-        void OnJumpRelease(InputAction.CallbackContext context);
+        void OnJump_Press(InputAction.CallbackContext context);
+        void OnJump_Release(InputAction.CallbackContext context);
+        void OnAimDownSights_Press(InputAction.CallbackContext context);
+        void OnAimDownSights_Release(InputAction.CallbackContext context);
     }
 }

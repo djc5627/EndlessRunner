@@ -2,27 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Singelton class
-/// </summary>
 public class PlayerAnimController : MonoBehaviour
 {
-    public static PlayerAnimController Instance;
-
     public Animator anim;
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-            
-        else
-        {
-            Destroy(this);
-        }
-    }
 
     public void SetIsGrounded(bool isGrounded)
     {

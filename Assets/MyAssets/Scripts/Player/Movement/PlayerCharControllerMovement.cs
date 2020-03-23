@@ -63,7 +63,7 @@ public class PlayerCharControllerMovement : PlayerMovementBase
             isGrounded = false;
         }
 
-        PlayerAnimController.Instance.SetIsGrounded(isGrounded);
+        playerAnimController.SetIsGrounded(isGrounded);
     }
 
     private void NormalizeMoveInput()
@@ -92,7 +92,7 @@ public class PlayerCharControllerMovement : PlayerMovementBase
     {
         if (!isGrounded) return;
 
-        PlayerAnimController.Instance.JumpTrigger();
+        playerAnimController.JumpTrigger();
         doJump = true;
         lastJumpTime = Time.time;
         isGrounded = false;
