@@ -10,6 +10,7 @@ public class PlayerCharControllerMovement : PlayerBehaviorBase
     public float groundCheckOriginYOffset = .45f;
     public float groundCheckJumpDelay = .1f;
     public float strafeSpeed = 12f;
+    public float aimedStrafeSpeed = 6f;
     public float forwardSpeed = 20f;
     public float acceleration = .025f;
     public float deacceleration = .015f;
@@ -21,6 +22,7 @@ public class PlayerCharControllerMovement : PlayerBehaviorBase
 
     private float gravity;
     private float jumpVelocity;
+    private float currentStrafeSpeed;
     private float lastJumpTime = Mathf.NegativeInfinity;
     private float releaseJumpTime = Mathf.NegativeInfinity;
     private bool isGrounded;
@@ -37,10 +39,13 @@ public class PlayerCharControllerMovement : PlayerBehaviorBase
     {
         gravity = -(2 * maxJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
+
+        currentStrafeSpeed = strafeSpeed;
     }
 
     public override void Execute()
     {
+        UpdateStrafeSpeed();
         CheckGrounded();
         Move();
     }
@@ -59,6 +64,18 @@ public class PlayerCharControllerMovement : PlayerBehaviorBase
     {
         hasRelasedJump = true;
         releaseJumpTime = Time.time;
+    }
+
+    private void UpdateStrafeSpeed()
+    {
+        if (playerInput.GetIsAimDownSightHeld())
+        {
+            currentStrafeSpeed = aimedStrafeSpeed;
+        }
+        else
+        {
+            currentStrafeSpeed = strafeSpeed;
+        }
     }
 
     private void CheckGrounded()
@@ -92,7 +109,7 @@ public class PlayerCharControllerMovement : PlayerBehaviorBase
         float moveInput = playerInput.GetRoundedMoveInput();
         float currentXSpeed = 0f;
         Vector3 actualVelocity = charController.velocity;
-        float targetXSpeed = moveInput * strafeSpeed;
+        float targetXSpeed = moveInput * currentStrafeSpeed;
         Vector3 newVelocity = new Vector3(0f, actualVelocity.y, forwardSpeed);
 
         //---------Horizontal Movement-----------
@@ -112,7 +129,6 @@ public class PlayerCharControllerMovement : PlayerBehaviorBase
             newVelocity.y = jumpVelocity;
             doJump = false;
         }
-
 
         if (actualVelocity.y <= 0) //Falling
         {
