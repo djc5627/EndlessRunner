@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/MyAssets/Scripts/InputMaster.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/MyAssets/Scripts/Input/InputMaster.inputactions'
 
 using System;
 using System.Collections;
@@ -324,6 +324,52 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Menu"",
+            ""id"": ""618b44c0-98a3-4462-8d73-beefa4df95e4"",
+            ""actions"": [
+                {
+                    ""name"": ""JoinGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""f85fd01c-c5da-4f1e-b846-70e79f57841f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""LeaveGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""7e905190-e24e-42a3-8a44-8c7b6a7a0ad2"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""14ba7f1d-db71-4a70-9bef-17938a186dc7"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""JoinGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""dcedf6c0-6ecc-4470-b0c0-0d31309b0d53"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""LeaveGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -350,6 +396,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_Jump_Release = m_Player.FindAction("Jump_Release", throwIfNotFound: true);
         m_Player_AimDownSights_Press = m_Player.FindAction("AimDownSights_Press", throwIfNotFound: true);
         m_Player_AimDownSights_Release = m_Player.FindAction("AimDownSights_Release", throwIfNotFound: true);
+        // Menu
+        m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
+        m_Menu_JoinGame = m_Menu.FindAction("JoinGame", throwIfNotFound: true);
+        m_Menu_LeaveGame = m_Menu.FindAction("LeaveGame", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -492,6 +542,47 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public PlayerActions @Player => new PlayerActions(this);
+
+    // Menu
+    private readonly InputActionMap m_Menu;
+    private IMenuActions m_MenuActionsCallbackInterface;
+    private readonly InputAction m_Menu_JoinGame;
+    private readonly InputAction m_Menu_LeaveGame;
+    public struct MenuActions
+    {
+        private @InputMaster m_Wrapper;
+        public MenuActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @JoinGame => m_Wrapper.m_Menu_JoinGame;
+        public InputAction @LeaveGame => m_Wrapper.m_Menu_LeaveGame;
+        public InputActionMap Get() { return m_Wrapper.m_Menu; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(MenuActions set) { return set.Get(); }
+        public void SetCallbacks(IMenuActions instance)
+        {
+            if (m_Wrapper.m_MenuActionsCallbackInterface != null)
+            {
+                @JoinGame.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnJoinGame;
+                @JoinGame.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnJoinGame;
+                @JoinGame.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnJoinGame;
+                @LeaveGame.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnLeaveGame;
+                @LeaveGame.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnLeaveGame;
+                @LeaveGame.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnLeaveGame;
+            }
+            m_Wrapper.m_MenuActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @JoinGame.started += instance.OnJoinGame;
+                @JoinGame.performed += instance.OnJoinGame;
+                @JoinGame.canceled += instance.OnJoinGame;
+                @LeaveGame.started += instance.OnLeaveGame;
+                @LeaveGame.performed += instance.OnLeaveGame;
+                @LeaveGame.canceled += instance.OnLeaveGame;
+            }
+        }
+    }
+    public MenuActions @Menu => new MenuActions(this);
     private int m_KeyboardMouseSchemeIndex = -1;
     public InputControlScheme KeyboardMouseScheme
     {
@@ -521,5 +612,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnJump_Release(InputAction.CallbackContext context);
         void OnAimDownSights_Press(InputAction.CallbackContext context);
         void OnAimDownSights_Release(InputAction.CallbackContext context);
+    }
+    public interface IMenuActions
+    {
+        void OnJoinGame(InputAction.CallbackContext context);
+        void OnLeaveGame(InputAction.CallbackContext context);
     }
 }

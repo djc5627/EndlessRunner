@@ -5,11 +5,11 @@ using UnityEngine;
 public abstract class PlayerBehaviorBase : MonoBehaviour
 {
     protected PlayerAnimController playerAnimController;
-    protected PlayerInput playerInput;
+    protected PlayerInputController playerInput;
 
     protected abstract void SubscribeToInputEvents();
 
-    public virtual void SetPlayerInput(PlayerInput playerInput)
+    public virtual void SetPlayerInput(PlayerInputController playerInput)
     {
         this.playerInput = playerInput;
         SubscribeToInputEvents();

@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
-    public PlayerInput playerInput;
+    public PlayerInputController playerInput;
     public PlayerAnimController playerAnimController;
     public PlayerBehaviorBase[] playerBehaviors;
     public HealthBar healthBar;
