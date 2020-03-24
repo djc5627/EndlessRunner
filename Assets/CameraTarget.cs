@@ -9,6 +9,7 @@ public class CameraTarget : MonoBehaviour
 
     void Update()
     {
-        transform.position = new Vector3(target.position.x, targetYOffset, target.position.z);
+        //transform.position = new Vector3(target.position.x, targetYOffset, target.position.z);
+        transform.position = new Vector3(transform.position.x, targetYOffset, target.position.z);
     }
 }
