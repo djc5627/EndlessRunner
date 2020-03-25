@@ -35,6 +35,11 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
         currentSpread = hipFireSpread;
     }
 
+    private void Start()
+    {
+        SwitchToAR();
+    }
+
     protected override void SubscribeToInputEvents()
     {
         playerInput.onAimDownSights_Pressed += OnAimDownSights_Pressed;
@@ -57,6 +62,31 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
         }
     }
 
+    private void ShootBullet()
+    {
+        if (lastShootTime_Bullet + shootDelay_Bullet > Time.time)
+        {
+            return;
+        }
+
+        //Rumble
+        InputDevice device = InputDeviceManager.GetPlayerDevice(playerInput.GetPlayerNumber());
+        RumbleManager.Instance.StartRumble(device, .1f, .15f, .015f);
+
+        float spreadOffset = Random.Range(-currentSpread / 2f, currentSpread / 2f);
+        Quaternion spreadRotation = firePoint.rotation * Quaternion.Euler(0f, spreadOffset, 0f);
+
+        GameObject tempBullet = Instantiate(bulletPrefab, firePoint.position, spreadRotation, projectileContainer);
+        Rigidbody bulletRb = tempBullet.GetComponent<Rigidbody>();
+
+
+        bulletRb.AddForce(tempBullet.transform.forward * shootForce_Bullet);
+        lastShootTime_Bullet = Time.time;
+
+        GlobalAudioPlayer.Instance.PlayClipAt(shootClip_Bullet, transform.position, shootClipScale_Bullet);
+        SwitchToAR();
+    }
+
     private void ShootRocket()
     {
         if (lastShootTime_Rocket + shootDelay_Rocket > Time.time)
@@ -74,34 +104,21 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
         lastShootTime_Rocket = Time.time;
 
         GlobalAudioPlayer.Instance.PlayClipAt(shootClip_Rocket, transform.position, shootClipScale_Rocket);
-        rocketLauncherObj.SetActive(true);
-        assaultRifleObj.SetActive(false);
+        SwitchToRocket();
     }
 
-    private void ShootBullet()
+    private void SwitchToAR()
     {
-        if (lastShootTime_Bullet + shootDelay_Bullet > Time.time)
-        {
-            return;
-        }
-
-        //Rumble
-        InputDevice device = InputDeviceManager.GetPlayerDevice(playerInput.GetPlayerNumber());
-        RumbleManager.Instance.StartRumble(device, .1f, .15f, .015f);
-
-        float spreadOffset = Random.Range(-currentSpread / 2f, currentSpread / 2f);
-        Quaternion spreadRotation = firePoint.rotation * Quaternion.Euler(0f, spreadOffset, 0f);
-
-        GameObject tempBullet = Instantiate(bulletPrefab, firePoint.position, spreadRotation, projectileContainer);
-        Rigidbody bulletRb = tempBullet.GetComponent<Rigidbody>();        
-        
-
-        bulletRb.AddForce(tempBullet.transform.forward * shootForce_Bullet);
-        lastShootTime_Bullet = Time.time;
-
-        GlobalAudioPlayer.Instance.PlayClipAt(shootClip_Bullet, transform.position, shootClipScale_Bullet);
         rocketLauncherObj.SetActive(false);
         assaultRifleObj.SetActive(true);
+        playerAnimController.SetIsUsingRocket(false);
+    }
+
+    private void SwitchToRocket()
+    {
+        rocketLauncherObj.SetActive(true);
+        assaultRifleObj.SetActive(false);
+        playerAnimController.SetIsUsingRocket(true);
     }
 
     private void OnAimDownSights_Pressed()

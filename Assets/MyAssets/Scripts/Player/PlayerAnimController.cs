@@ -25,4 +25,9 @@ public class PlayerAnimController : MonoBehaviour
     {
         anim.SetFloat("ADSPercent", ADSPercent);
     }
+
+    public void SetIsUsingRocket(bool isUsingRocket)
+    {
+        anim.SetBool("isUsingRocket", isUsingRocket);
+    }
 }
