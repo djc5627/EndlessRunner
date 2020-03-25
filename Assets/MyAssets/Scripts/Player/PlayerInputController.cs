@@ -147,6 +147,11 @@ public class PlayerInputController: MonoBehaviour
 
     #region Public Getters
 
+    public int GetPlayerNumber()
+    {
+        return this.playerNumber;
+    }
+
     public float GetMoveInput()
     {
         return this.moveInput;

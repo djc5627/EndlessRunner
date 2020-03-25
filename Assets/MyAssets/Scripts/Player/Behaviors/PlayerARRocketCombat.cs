@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerARRocketCombat : PlayerBehaviorBase
 {
@@ -69,7 +70,8 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
         }
 
         //Rumble
-        RumbleManager.Instance.StartRumble(.5f, .3f, .1f);
+        InputDevice device = InputDeviceManager.GetPlayerDevice(playerInput.GetPlayerNumber());
+        RumbleManager.Instance.StartRumble(device, .5f, .3f, .1f);
 
         GameObject tempRocket = Instantiate(rocketPrefab, firePoint.position, Quaternion.LookRotation(firePoint.forward), projectileContainer);
         Rigidbody rocketRb = tempRocket.GetComponent<Rigidbody>();
@@ -89,7 +91,8 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
         }
 
         //Rumble
-        RumbleManager.Instance.StartRumble(.1f, .15f, .015f);
+        InputDevice device = InputDeviceManager.GetPlayerDevice(playerInput.GetPlayerNumber());
+        RumbleManager.Instance.StartRumble(device, .1f, .15f, .015f);
 
         float spreadOffset = Random.Range(-currentSpread / 2f, currentSpread / 2f);
         Quaternion spreadRotation = firePoint.rotation * Quaternion.Euler(0f, spreadOffset, 0f);
