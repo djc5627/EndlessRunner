@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/MyAssets/Scripts/Input/InputMaster.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/MyAssets/Scripts/InputSystem/InputMaster.inputactions'
 
 using System;
 using System.Collections;
@@ -344,6 +344,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""StartGame"",
+                    ""type"": ""Button"",
+                    ""id"": ""54c876b9-a698-4be4-a099-c45ca55593d4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
                 }
             ],
             ""bindings"": [
@@ -366,6 +374,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""LeaveGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e823f8c5-b005-4ec6-a030-4bccc4165607"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -400,6 +419,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_JoinGame = m_Menu.FindAction("JoinGame", throwIfNotFound: true);
         m_Menu_LeaveGame = m_Menu.FindAction("LeaveGame", throwIfNotFound: true);
+        m_Menu_StartGame = m_Menu.FindAction("StartGame", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -548,12 +568,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private IMenuActions m_MenuActionsCallbackInterface;
     private readonly InputAction m_Menu_JoinGame;
     private readonly InputAction m_Menu_LeaveGame;
+    private readonly InputAction m_Menu_StartGame;
     public struct MenuActions
     {
         private @InputMaster m_Wrapper;
         public MenuActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
         public InputAction @JoinGame => m_Wrapper.m_Menu_JoinGame;
         public InputAction @LeaveGame => m_Wrapper.m_Menu_LeaveGame;
+        public InputAction @StartGame => m_Wrapper.m_Menu_StartGame;
         public InputActionMap Get() { return m_Wrapper.m_Menu; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -569,6 +591,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @LeaveGame.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnLeaveGame;
                 @LeaveGame.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnLeaveGame;
                 @LeaveGame.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnLeaveGame;
+                @StartGame.started -= m_Wrapper.m_MenuActionsCallbackInterface.OnStartGame;
+                @StartGame.performed -= m_Wrapper.m_MenuActionsCallbackInterface.OnStartGame;
+                @StartGame.canceled -= m_Wrapper.m_MenuActionsCallbackInterface.OnStartGame;
             }
             m_Wrapper.m_MenuActionsCallbackInterface = instance;
             if (instance != null)
@@ -579,6 +604,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @LeaveGame.started += instance.OnLeaveGame;
                 @LeaveGame.performed += instance.OnLeaveGame;
                 @LeaveGame.canceled += instance.OnLeaveGame;
+                @StartGame.started += instance.OnStartGame;
+                @StartGame.performed += instance.OnStartGame;
+                @StartGame.canceled += instance.OnStartGame;
             }
         }
     }
@@ -617,5 +645,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
     {
         void OnJoinGame(InputAction.CallbackContext context);
         void OnLeaveGame(InputAction.CallbackContext context);
+        void OnStartGame(InputAction.CallbackContext context);
     }
 }

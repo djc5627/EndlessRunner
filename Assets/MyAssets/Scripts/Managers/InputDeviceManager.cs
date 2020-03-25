@@ -101,4 +101,14 @@ public static class InputDeviceManager
     {
         return GetPlayerIndex(device) + 1;
     }
+
+    public static int GetMaxPlayerCount()
+    {
+        return maxPlayers;
+    }
+
+    public static int GetCurrentPlayerCount()
+    {
+        return currentPlayerCount;
+    }
 }

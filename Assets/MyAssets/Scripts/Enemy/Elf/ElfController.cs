@@ -33,8 +33,12 @@ public class ElfController : Enemy
     {
         base.Awake();
         agent.enabled = false;
-        playerTrans = FindObjectOfType<PlayerController>().transform;
         nextClipTime = Random.Range(timeToNextClipMin, timeToNextClipMax);
+    }
+
+    private void Start()
+    {
+        playerTrans = FindObjectOfType<PlayerController>().transform;
     }
 
     private void Update()

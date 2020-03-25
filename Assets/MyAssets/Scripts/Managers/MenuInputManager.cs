@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEngine.InputSystem.InputAction;
 
 public class MenuInputManager : MonoBehaviour
@@ -23,6 +24,7 @@ public class MenuInputManager : MonoBehaviour
 
         inputMaster.Menu.JoinGame.performed += ctx => OnJoinGame(ctx);
         inputMaster.Menu.LeaveGame.performed += ctx => OnLeaveGame(ctx);
+        inputMaster.Menu.StartGame.performed += ctx => OnStartGame();
     }
 
     private void OnJoinGame(CallbackContext ctx)
@@ -41,5 +43,10 @@ public class MenuInputManager : MonoBehaviour
         {
             Debug.Log("Player " + playerNumber + " left game");
         }
+    }
+
+    private void OnStartGame()
+    {
+        SceneManager.LoadScene("Main");
     }
 }

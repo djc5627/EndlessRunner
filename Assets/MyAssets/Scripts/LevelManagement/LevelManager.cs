@@ -5,7 +5,6 @@ using UnityEngine.AI;
 
 public class LevelManager : MonoBehaviour
 {
-    public Transform playerTrans;
     public GameObject groundPrefab;
     public Transform groundContainer;
     public Transform obstacleContainer;
@@ -16,12 +15,14 @@ public class LevelManager : MonoBehaviour
 
     private int initialGroundCount;
     private int nextGroundIndex;
+    private Transform playerTrans;
     private Vector3 playerStartPos;
     private List<GameObject> spawnedGrounds = new List<GameObject>();
 
 
     private void Start()
     {
+        playerTrans = FindObjectOfType<PlayerController>().transform;
         playerStartPos = playerTrans.position;
         ClearLevel();
         InitSpawnGround(viewDistance);

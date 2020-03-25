@@ -7,8 +7,7 @@ using static UnityEngine.InputSystem.InputAction;
 public class PlayerInputController: MonoBehaviour
 {
     public InputMaster inputMaster;
-    public int playerNumber = 1;
-
+    
     public delegate void _OnJump_Pressed();
     public delegate void _OnJump_Released();
     public delegate void _OnPrimaryFire_Pressed();
@@ -27,6 +26,7 @@ public class PlayerInputController: MonoBehaviour
     public event _OnAimDownSights_Pressed onAimDownSights_Pressed;
     public event _OnAimDownSights_Released onAimDownSights_Released;
 
+    private int playerNumber;
     private float moveInput;
     private bool isJumpHeld = false;
     private bool isPrimaryFireHeld = false;
@@ -49,7 +49,7 @@ public class PlayerInputController: MonoBehaviour
 
         //Movement
         inputMaster.Player.MoveInput.performed += ctx => { if (IsThisPlayersDevice(ctx)) OnMoveInput(ctx.ReadValue<float>()); };
-        inputMaster.Player.Jump_Press.performed += ctx => { if (IsThisPlayersDevice(ctx)) OnJump_Press(); };
+        inputMaster.Player.Jump_Press.performed += ctx => { if (IsThisPlayersDevice(ctx)) OnJump_Press(ctx); };
         inputMaster.Player.Jump_Release.performed += ctx => { if (IsThisPlayersDevice(ctx)) OnJump_Release(); };
 
         //Combat
@@ -63,54 +63,54 @@ public class PlayerInputController: MonoBehaviour
 
     #region Input Receivers/Event Senders
 
-    public void OnMoveInput(float moveInput)
+    private void OnMoveInput(float moveInput)
     {
         this.moveInput = moveInput;
     }
 
-    public void OnJump_Press()
+    private void OnJump_Press(CallbackContext ctx)
     {
         isJumpHeld = true;
         if(onJump_Pressed != null) onJump_Pressed();
     }
 
-    public void OnJump_Release()
+    private void OnJump_Release()
     {
         isJumpHeld = false;
         if (onJump_Released != null) onJump_Released();
     }
 
-    public void OnAimDownSights_Press()
+    private void OnAimDownSights_Press()
     {
         isAimDownSightsHeld = true;
         if (onAimDownSights_Pressed != null) onAimDownSights_Pressed();
     }
 
-    public void OnAimDownSights_Release()
+    private void OnAimDownSights_Release()
     {
         isAimDownSightsHeld = false;
         if (onAimDownSights_Released != null) onAimDownSights_Released();
     }
 
-    public void OnPrimaryFire_Press()
+    private void OnPrimaryFire_Press()
     {
         isPrimaryFireHeld = true;
         if (onPrimaryFire_Pressed != null) onPrimaryFire_Pressed();
     }
 
-    public void OnPrimaryFire_Release()
+    private void OnPrimaryFire_Release()
     {
         isPrimaryFireHeld = false;
         if (onPrimaryFire_Released != null) onPrimaryFire_Released();
     }
 
-    public void OnSecondaryFire_Press()
+    private void OnSecondaryFire_Press()
     {
         isSecondaryFireHeld = true;
         if (onSecondaryFire_Pressed != null) onSecondaryFire_Pressed();
     }
 
-    public void OnSecondaryFire_Release()
+    private void OnSecondaryFire_Release()
     {
         isSecondaryFireHeld = false;
         if (onSecondaryFire_Released != null) onSecondaryFire_Released();
@@ -178,4 +178,9 @@ public class PlayerInputController: MonoBehaviour
     }
 
     #endregion
+
+    public void SetPlayerNumber(int playerNumber)
+    {
+        this.playerNumber = playerNumber;
+    }
 }
