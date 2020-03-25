@@ -17,7 +17,7 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
     public float shootDelay_Bullet = .5f;
     public float hipFireSpread = 3f;
     public float aimDownSightsSpread = 0f;
-    public float aimDownSightsTime = 1f;
+    public float aimDownSightsTime = .1f;
     public AudioClip shootClip_Rocket;
     public float shootClipScale_Rocket = 1f;
     public AudioClip shootClip_Bullet;
@@ -25,6 +25,8 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
 
     private Transform projectileContainer;
     private bool aimDownSightsHeld = false;
+    private int startADSTweenId;
+    private int stopADSTweenId;
     private float currentSpread;
     private float lastShootTime_Rocket = Mathf.NegativeInfinity;
     private float lastShootTime_Bullet = Mathf.NegativeInfinity;
@@ -60,6 +62,8 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
         {
             ShootRocket();
         }
+
+        UpdateAimAnim();
     }
 
     private void ShootBullet()
@@ -124,50 +128,32 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
     private void OnAimDownSights_Pressed()
     {
         aimDownSightsHeld = true;
-        StartCoroutine(AimDownSightsRoutine());
+
+        float percentToAimSpread = Mathf.Abs(currentSpread - hipFireSpread) / (aimDownSightsSpread - hipFireSpread);
+        float remainingTime = aimDownSightsTime * (1f - percentToAimSpread);
+
+        //Tween spread to ADS
+        LeanTween.cancel(stopADSTweenId);
+        startADSTweenId = LeanTween.value(this.gameObject, v => currentSpread = v, currentSpread, aimDownSightsSpread, remainingTime).id;
+        LeanTween.descr(startADSTweenId).setEaseInOutQuart();
     }
 
     private void OnAimDownSights_Released()
     {
         aimDownSightsHeld = false;
-        currentSpread = hipFireSpread;
-        playerAnimController.SetADSPercent(0f);
+
+        float percentToHipSpread = Mathf.Abs(currentSpread - aimDownSightsSpread) / (aimDownSightsSpread - hipFireSpread);
+        float remainingTime = aimDownSightsTime * (1f - percentToHipSpread);
+
+        //Tween spread to ADS
+        LeanTween.cancel(startADSTweenId);
+        stopADSTweenId = LeanTween.value(this.gameObject, v => currentSpread = v, currentSpread, hipFireSpread, remainingTime).id;
+        LeanTween.descr(stopADSTweenId).setEaseInOutQuart();
     }
 
-    private IEnumerator AimDownSightsRoutine()
+    private void UpdateAimAnim()
     {
-        Debug.Log("routine stat=");
-        //Start from current spread in case was part-way into the routine when started aiming
-        float aimDownSightsStartTime = Time.time;
-        float startSpread = currentSpread;
-        float percentToAimSpread = (currentSpread - hipFireSpread) / (aimDownSightsSpread - hipFireSpread);
-
-        //The start time if had started from hip fire (not some in-between)
-        float theoreticalStartTime = Time.time - (percentToAimSpread * aimDownSightsTime);
-
-        Debug.Log("current spread: " + currentSpread);
-        Debug.Log("hip fire spread: " + hipFireSpread);
-        Debug.Log("ADS spread: " + hipFireSpread);
-        Debug.Log("percent: " + percentToAimSpread);
-
-        //During Lerp
-        while (aimDownSightsHeld && theoreticalStartTime + aimDownSightsTime >= Time.time)
-        {
-            percentToAimSpread = (Time.time - theoreticalStartTime) / aimDownSightsTime;
-            currentSpread = Mathf.Lerp(hipFireSpread, aimDownSightsSpread, percentToAimSpread);
-            playerAnimController.SetADSPercent(percentToAimSpread);
-            Debug.Log(percentToAimSpread);
-            yield return null;
-        }
-
-        //After Lerp (even if cancelled by ADS not held)
-        if (aimDownSightsHeld)
-        {
-            currentSpread = aimDownSightsSpread;
-            playerAnimController.SetADSPercent(1f);
-        }
-
-        Debug.Log("routine end");
-
+        float aimPercent = (currentSpread - hipFireSpread) / (aimDownSightsSpread - hipFireSpread);
+        playerAnimController.SetADSPercent(aimPercent);
     }
 }
