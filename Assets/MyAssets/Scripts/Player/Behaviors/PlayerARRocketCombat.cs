@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 public class PlayerARRocketCombat : PlayerBehaviorBase
 {
     public Transform firePoint;
-    public Transform projectileContainer;
+    
     public GameObject rocketPrefab;
     public GameObject bulletPrefab;
     public GameObject rocketLauncherObj;
@@ -17,39 +17,34 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
     public float shootDelay_Bullet = .5f;
     public float hipFireSpread = 3f;
     public float aimDownSightsSpread = 0f;
+    public float aimDownSightsTime = 1f;
     public AudioClip shootClip_Rocket;
     public float shootClipScale_Rocket = 1f;
     public AudioClip shootClip_Bullet;
     public float shootClipScale_Bullet = 1f;
 
+    private Transform projectileContainer;
+    private bool aimDownSightsHeld = false;
     private float currentSpread;
     private float lastShootTime_Rocket = Mathf.NegativeInfinity;
     private float lastShootTime_Bullet = Mathf.NegativeInfinity;
 
     private void Awake()
     {
+        projectileContainer = GameObject.Find("{PlayerProjectiles}").transform;
         currentSpread = hipFireSpread;
     }
 
     protected override void SubscribeToInputEvents()
     {
-        //Subscribe here
+        playerInput.onAimDownSights_Pressed += OnAimDownSights_Pressed;
+        playerInput.onAimDownSights_Released += OnAimDownSights_Released;
     }
 
     public override void Execute()
     {
-        bool aimDownSightsHeld = playerInput.GetIsAimDownSightHeld();
         bool primaryFireHeld = playerInput.GetIsPrimaryFireHeld();
         bool secondaryFireHeld = playerInput.GetIsSecondaryFireHeld();
-
-        if (aimDownSightsHeld)
-        {
-            currentSpread = aimDownSightsSpread;
-        }
-        else
-        {
-            currentSpread = hipFireSpread;
-        }
 
         if (primaryFireHeld)
         {
@@ -107,5 +102,55 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
         GlobalAudioPlayer.Instance.PlayClipAt(shootClip_Bullet, transform.position, shootClipScale_Bullet);
         rocketLauncherObj.SetActive(false);
         assaultRifleObj.SetActive(true);
+    }
+
+    private void OnAimDownSights_Pressed()
+    {
+        aimDownSightsHeld = true;
+        StartCoroutine(AimDownSightsRoutine());
+    }
+
+    private void OnAimDownSights_Released()
+    {
+        aimDownSightsHeld = false;
+        currentSpread = hipFireSpread;
+        playerAnimController.SetADSPercent(0f);
+    }
+
+    private IEnumerator AimDownSightsRoutine()
+    {
+        Debug.Log("routine stat=");
+        //Start from current spread in case was part-way into the routine when started aiming
+        float aimDownSightsStartTime = Time.time;
+        float startSpread = currentSpread;
+        float percentToAimSpread = (currentSpread - hipFireSpread) / (aimDownSightsSpread - hipFireSpread);
+
+        //The start time if had started from hip fire (not some in-between)
+        float theoreticalStartTime = Time.time - (percentToAimSpread * aimDownSightsTime);
+
+        Debug.Log("current spread: " + currentSpread);
+        Debug.Log("hip fire spread: " + hipFireSpread);
+        Debug.Log("ADS spread: " + hipFireSpread);
+        Debug.Log("percent: " + percentToAimSpread);
+
+        //During Lerp
+        while (aimDownSightsHeld && theoreticalStartTime + aimDownSightsTime >= Time.time)
+        {
+            percentToAimSpread = (Time.time - theoreticalStartTime) / aimDownSightsTime;
+            currentSpread = Mathf.Lerp(hipFireSpread, aimDownSightsSpread, percentToAimSpread);
+            playerAnimController.SetADSPercent(percentToAimSpread);
+            Debug.Log(percentToAimSpread);
+            yield return null;
+        }
+
+        //After Lerp (even if cancelled by ADS not held)
+        if (aimDownSightsHeld)
+        {
+            currentSpread = aimDownSightsSpread;
+            playerAnimController.SetADSPercent(1f);
+        }
+
+        Debug.Log("routine end");
+
     }
 }

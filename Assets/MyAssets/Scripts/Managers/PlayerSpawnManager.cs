@@ -13,6 +13,7 @@ public class PlayerSpawnManager : MonoBehaviour
     public InputMaster inputMaster;
     public GameObject defaultPlayer;
     public GameObject playerPrefab;
+    public Transform playerContainer;
     public Transform[] playerSpawns;
 
     private void OnEnable()
@@ -53,7 +54,7 @@ public class PlayerSpawnManager : MonoBehaviour
         //If not current players, spawn one
         if (InputDeviceManager.GetCurrentPlayerCount() == 0)
         {
-            GameObject tempPlayer = Instantiate(playerPrefab, playerSpawns[0]);
+            GameObject tempPlayer = Instantiate(playerPrefab, playerSpawns[0].position, Quaternion.identity, playerContainer);
             PlayerInputController inputScript = tempPlayer.GetComponentInChildren<PlayerInputController>();
             inputScript.SetPlayerNumber(1);
         }
@@ -64,7 +65,7 @@ public class PlayerSpawnManager : MonoBehaviour
         {
             if (InputDeviceManager.GetPlayerDevice(i+1) != null)
             {
-                GameObject tempPlayer = Instantiate(playerPrefab, playerSpawns[i]);
+                GameObject tempPlayer = Instantiate(playerPrefab, playerSpawns[i].position, Quaternion.identity, playerContainer);
                 PlayerInputController inputScript = tempPlayer.GetComponentInChildren<PlayerInputController>();
                 inputScript.SetPlayerNumber(i + 1);
             }

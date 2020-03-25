@@ -20,4 +20,9 @@ public class PlayerAnimController : MonoBehaviour
     {
         anim.SetBool("isInvincible", isInvincible);
     }
+
+    public void SetADSPercent(float ADSPercent)
+    {
+        anim.SetFloat("ADSPercent", ADSPercent);
+    }
 }
