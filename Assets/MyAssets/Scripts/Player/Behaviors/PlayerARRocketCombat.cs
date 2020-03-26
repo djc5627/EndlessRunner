@@ -129,26 +129,26 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
     {
         aimDownSightsHeld = true;
 
-        float percentToAimSpread = Mathf.Abs(currentSpread - hipFireSpread) / (aimDownSightsSpread - hipFireSpread);
+        float percentToAimSpread = Mathf.Abs(currentSpread - hipFireSpread) / Mathf.Abs(aimDownSightsSpread - hipFireSpread);
         float remainingTime = aimDownSightsTime * (1f - percentToAimSpread);
 
         //Tween spread to ADS
         LeanTween.cancel(stopADSTweenId);
         startADSTweenId = LeanTween.value(this.gameObject, v => currentSpread = v, currentSpread, aimDownSightsSpread, remainingTime).id;
-        LeanTween.descr(startADSTweenId).setEaseInOutQuart();
+        LeanTween.descr(startADSTweenId).setEaseInOutQuad();
     }
 
     private void OnAimDownSights_Released()
     {
         aimDownSightsHeld = false;
 
-        float percentToHipSpread = Mathf.Abs(currentSpread - aimDownSightsSpread) / (aimDownSightsSpread - hipFireSpread);
+        float percentToHipSpread = Mathf.Abs(currentSpread - aimDownSightsSpread) / Mathf.Abs(aimDownSightsSpread - hipFireSpread);
         float remainingTime = aimDownSightsTime * (1f - percentToHipSpread);
 
         //Tween spread to ADS
         LeanTween.cancel(startADSTweenId);
         stopADSTweenId = LeanTween.value(this.gameObject, v => currentSpread = v, currentSpread, hipFireSpread, remainingTime).id;
-        LeanTween.descr(stopADSTweenId).setEaseInOutQuart();
+        LeanTween.descr(stopADSTweenId).setEaseInOutQuad();
     }
 
     private void UpdateAimAnim()
