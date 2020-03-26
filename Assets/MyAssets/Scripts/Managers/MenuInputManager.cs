@@ -6,25 +6,25 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class MenuInputManager : MonoBehaviour
 {
-    public InputMaster inputMaster;
+    public EndlessRunnerInputActions inputActions;
 
     private void OnEnable()
     {
-        inputMaster.Enable();
+        inputActions.Enable();
     }
 
     private void OnDisable()
     {
-        inputMaster.Disable();
+        inputActions.Disable();
     }
 
     private void Awake()
     {
-        inputMaster = new InputMaster();
+        inputActions = new EndlessRunnerInputActions();
 
-        inputMaster.Menu.JoinGame.performed += ctx => OnJoinGame(ctx);
-        inputMaster.Menu.LeaveGame.performed += ctx => OnLeaveGame(ctx);
-        inputMaster.Menu.StartGame.performed += ctx => OnStartGame();
+        inputActions.Menu.JoinGame.performed += ctx => OnJoinGame(ctx);
+        inputActions.Menu.LeaveGame.performed += ctx => OnLeaveGame(ctx);
+        inputActions.Menu.StartGame.performed += ctx => OnStartGame();
     }
 
     private void OnJoinGame(CallbackContext ctx)

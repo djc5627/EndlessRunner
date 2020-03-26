@@ -6,8 +6,6 @@ using static UnityEngine.InputSystem.InputAction;
 
 public class PlayerInputController: MonoBehaviour
 {
-    public InputMaster inputMaster;
-    
     public delegate void _OnJump_Pressed();
     public delegate void _OnJump_Released();
     public delegate void _OnPrimaryFire_Pressed();
@@ -26,49 +24,26 @@ public class PlayerInputController: MonoBehaviour
     public event _OnAimDownSights_Pressed onAimDownSights_Pressed;
     public event _OnAimDownSights_Released onAimDownSights_Released;
 
-    private int playerNumber;
+    private int playerIndex;
     private float moveInput;
     private bool isJumpHeld = false;
     private bool isPrimaryFireHeld = false;
     private bool isSecondaryFireHeld = false;
     private bool isAimDownSightsHeld = false;
 
-    private void OnEnable()
+    private void OnTest()
     {
-        inputMaster.Enable();
-    }
-
-    private void OnDisable()
-    {
-        inputMaster.Disable();
-    }
-
-    private void Awake()
-    {
-        inputMaster = new InputMaster();
-
-        //Movement
-        inputMaster.Player.MoveInput.performed += ctx => { if (IsThisPlayersDevice(ctx)) OnMoveInput(ctx.ReadValue<float>()); };
-        inputMaster.Player.Jump_Press.performed += ctx => { if (IsThisPlayersDevice(ctx)) OnJump_Press(ctx); };
-        inputMaster.Player.Jump_Release.performed += ctx => { if (IsThisPlayersDevice(ctx)) OnJump_Release(); };
-
-        //Combat
-        inputMaster.Player.ShootPrimary_Press.performed += ctx => { if (IsThisPlayersDevice(ctx)) OnPrimaryFire_Press(); };
-        inputMaster.Player.ShootPrimary_Release.performed += ctx => { if (IsThisPlayersDevice(ctx)) OnPrimaryFire_Release(); };
-        inputMaster.Player.ShootSecondary_Press.performed += ctx => { if (IsThisPlayersDevice(ctx)) OnSecondaryFire_Press(); };
-        inputMaster.Player.ShootSecondary_Release.performed += ctx => { if (IsThisPlayersDevice(ctx)) OnSecondaryFire_Release(); };
-        inputMaster.Player.AimDownSights_Press.performed += ctx => { if (IsThisPlayersDevice(ctx)) OnAimDownSights_Press(); };
-        inputMaster.Player.AimDownSights_Release.performed += ctx => { if (IsThisPlayersDevice(ctx)) OnAimDownSights_Release(); };
+        Debug.LogError("shiieet");
     }
 
     #region Input Receivers/Event Senders
 
-    private void OnMoveInput(float moveInput)
+    private void OnMoveInput(InputValue value)
     {
-        this.moveInput = moveInput;
+        this.moveInput = value.Get<float>();
     }
 
-    private void OnJump_Press(CallbackContext ctx)
+    private void OnJump_Press()
     {
         isJumpHeld = true;
         if(onJump_Pressed != null) onJump_Pressed();
@@ -92,25 +67,25 @@ public class PlayerInputController: MonoBehaviour
         if (onAimDownSights_Released != null) onAimDownSights_Released();
     }
 
-    private void OnPrimaryFire_Press()
+    private void OnShootPrimary_Press()
     {
         isPrimaryFireHeld = true;
         if (onPrimaryFire_Pressed != null) onPrimaryFire_Pressed();
     }
 
-    private void OnPrimaryFire_Release()
+    private void OnShootPrimary_Release()
     {
         isPrimaryFireHeld = false;
         if (onPrimaryFire_Released != null) onPrimaryFire_Released();
     }
 
-    private void OnSecondaryFire_Press()
+    private void OnShootSecondary_Press()
     {
         isSecondaryFireHeld = true;
         if (onSecondaryFire_Pressed != null) onSecondaryFire_Pressed();
     }
 
-    private void OnSecondaryFire_Release()
+    private void OnShootSecondary_Release()
     {
         isSecondaryFireHeld = false;
         if (onSecondaryFire_Released != null) onSecondaryFire_Released();
@@ -119,11 +94,6 @@ public class PlayerInputController: MonoBehaviour
     #endregion
 
     #region Helpers
-
-    private bool IsThisPlayersDevice(CallbackContext ctx)
-    {
-        return (ctx.control.device == InputDeviceManager.GetPlayerDevice(playerNumber)) ? true : false;
-    }
 
     private float RoundMoveInput(float moveInput)
     {
@@ -147,9 +117,9 @@ public class PlayerInputController: MonoBehaviour
 
     #region Public Getters
 
-    public int GetPlayerNumber()
+    public int GetPlayerIndex()
     {
-        return this.playerNumber;
+        return this.playerIndex;
     }
 
     public float GetMoveInput()
@@ -184,8 +154,8 @@ public class PlayerInputController: MonoBehaviour
 
     #endregion
 
-    public void SetPlayerNumber(int playerNumber)
+    public void SetPlayerIndex(int playerIndex)
     {
-        this.playerNumber = playerNumber;
+        this.playerIndex = playerIndex;
     }
 }

@@ -74,7 +74,7 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
         }
 
         //Rumble
-        InputDevice device = InputDeviceManager.GetPlayerDevice(playerInput.GetPlayerNumber());
+        InputDevice device = InputDeviceManager.GetPlayerDevice(playerInput.GetPlayerIndex());
         RumbleManager.Instance.StartRumble(device, .1f, .15f, .015f);
 
         float spreadOffset = Random.Range(-currentSpread / 2f, currentSpread / 2f);
@@ -99,7 +99,7 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
         }
 
         //Rumble
-        InputDevice device = InputDeviceManager.GetPlayerDevice(playerInput.GetPlayerNumber());
+        InputDevice device = InputDeviceManager.GetPlayerDevice(playerInput.GetPlayerIndex());
         RumbleManager.Instance.StartRumble(device, .5f, .3f, .1f);
 
         GameObject tempRocket = Instantiate(rocketPrefab, firePoint.position, Quaternion.LookRotation(firePoint.forward), projectileContainer);

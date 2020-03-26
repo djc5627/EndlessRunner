@@ -80,16 +80,30 @@ public static class InputDeviceManager
     /// <summary>
     /// Returns null if not found
     /// </summary>
-    /// <param name="playerNumber"></param>
+    /// <param name="playerIndex"></param>
     /// <returns></returns>
-    public static InputDevice GetPlayerDevice(int playerNumber)
+    public static InputDevice GetPlayerDevice(int playerIndex)
     {
-        if (playerNumber < 1 || playerNumber > maxPlayers)
+        if (playerIndex < 0 || playerIndex > maxPlayers - 1)
         {
             return null;
         }
 
-        return inputDevices[playerNumber - 1];
+        return inputDevices[playerIndex];
+    }
+
+    public static string GetPlayerDeviceName(int playerIndex)
+    {
+        InputDevice device = GetPlayerDevice(playerIndex);
+
+        if (device == null)
+        {
+            return null;
+        }
+        else
+        {
+            return device.name;
+        }
     }
 
     /// <summary>

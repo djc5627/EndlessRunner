@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/MyAssets/Scripts/InputSystem/InputMaster.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/MyAssets/Scripts/InputSystem/EndlessRunnerInputActions.inputactions'
 
 using System;
 using System.Collections;
@@ -6,86 +6,86 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public class @InputMaster : IInputActionCollection, IDisposable
+public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
 {
     public InputActionAsset asset { get; }
-    public @InputMaster()
+    public @EndlessRunnerInputActions()
     {
         asset = InputActionAsset.FromJson(@"{
-    ""name"": ""InputMaster"",
+    ""name"": ""EndlessRunnerInputActions"",
     ""maps"": [
         {
             ""name"": ""Player"",
-            ""id"": ""fbf29012-d489-450e-bba4-0aa21935cf40"",
+            ""id"": ""b85d5c37-8faa-4f70-93ea-3f2e8c254fcd"",
             ""actions"": [
                 {
                     ""name"": ""MoveInput"",
                     ""type"": ""PassThrough"",
-                    ""id"": ""58c37a33-347f-4139-b610-e3a6ef114cf6"",
+                    ""id"": ""93cca6fa-f827-4733-9ca1-1d37b4bc5797"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
                 },
                 {
                     ""name"": ""ShootPrimary_Press"",
-                    ""type"": ""Button"",
-                    ""id"": ""e818eae4-c587-49e0-8eea-c7c388fd61b5"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""f31f1eac-4cf6-4f92-82d1-4d979e71b1e9"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
                 },
                 {
                     ""name"": ""ShootPrimary_Release"",
-                    ""type"": ""Button"",
-                    ""id"": ""473e143d-5df9-4b7d-800c-ff67b7cadfb3"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""531f98d4-2f8e-4079-990c-1bf131f730e4"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=1)""
                 },
                 {
                     ""name"": ""ShootSecondary_Press"",
-                    ""type"": ""Button"",
-                    ""id"": ""31f06326-9c3a-4f99-9a63-2002ea07e5c2"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""20492e20-e24c-42ce-8559-20110128395e"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press""
                 },
                 {
                     ""name"": ""ShootSecondary_Release"",
-                    ""type"": ""Button"",
-                    ""id"": ""7fa03646-2609-4953-adc2-bfe82b3d7639"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""73ca9744-edca-4857-a47d-e49e4ee448b4"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=1)""
                 },
                 {
                     ""name"": ""Jump_Press"",
-                    ""type"": ""Button"",
-                    ""id"": ""0abbe66e-166f-40f6-97e4-e3f3c647ec53"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""15c67ba8-2694-4918-89ac-a4be1a07e6f3"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Press""
                 },
                 {
                     ""name"": ""Jump_Release"",
-                    ""type"": ""Button"",
-                    ""id"": ""4c6389e8-eb28-4b57-b714-cca2e9059996"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""d4be93f6-7f0c-4e72-ac8b-a9846f07d04f"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Press(behavior=1)""
                 },
                 {
                     ""name"": ""AimDownSights_Press"",
-                    ""type"": ""Button"",
-                    ""id"": ""e83205f9-d9d4-4334-85c6-e468c4e0630f"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""98269e4b-ad49-4b0b-a78b-a7ea5754282d"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(pressPoint=0.125)""
                 },
                 {
                     ""name"": ""AimDownSights_Release"",
-                    ""type"": ""Button"",
-                    ""id"": ""b7953070-6dae-4b50-9e5c-79040e1aad17"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""dbee6741-4e2e-4715-bab3-a88bc644da21"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(pressPoint=0.125,behavior=1)""
@@ -94,7 +94,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""90c01e9c-cb48-47e1-aaba-0dc9fa94e599"",
+                    ""id"": ""032670b9-6bcc-4b31-bc5b-122cd9b18c7d"",
                     ""path"": ""<Gamepad>/dpad/x"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -105,7 +105,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": ""WASD"",
-                    ""id"": ""9a42a828-b1f0-4a4b-8ac0-fc3d10b4ccb0"",
+                    ""id"": ""e70838a8-e1c9-45a2-b765-f9329cf5a4eb"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -113,32 +113,10 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""MoveInput"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""c3a79980-31fa-453b-ab21-f08a1d783d6a"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""MoveInput"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""81f0c725-27c2-48dc-9f58-2d645a05f879"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""MoveInput"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""Arrow Keys"",
-                    ""id"": ""47dd6e35-6b06-4cb0-965c-eea6a544c2ae"",
+                    ""id"": ""c8b1bb8c-cc98-454c-bdf7-54bc134f21d3"",
                     ""path"": ""1DAxis"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -148,173 +126,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": ""negative"",
-                    ""id"": ""c6dc4a41-2cf1-4e59-b575-8fbcdd45e38f"",
-                    ""path"": ""<Keyboard>/leftArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""MoveInput"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""a490fc67-5fd4-470c-882b-861687b825c7"",
-                    ""path"": ""<Keyboard>/rightArrow"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""MoveInput"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": """",
-                    ""id"": ""a9e24ecf-222c-4947-a6c0-1f1752b4bf57"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Jump_Press"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""1fea9335-e4da-4fb9-a547-b5369b9741a6"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Jump_Press"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""62c51c9c-8c55-4fb7-b1e5-e4736bb2eff8"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""Jump_Release"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a2c89b95-ba0c-465e-803d-dfdb81ca00db"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Jump_Release"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6c9a5a73-2eb6-45be-8c2c-1c46d8613cf5"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""ShootPrimary_Press"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""523df1e3-ef9c-466a-878c-b2faadfd5a0d"",
-                    ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""ShootPrimary_Press"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8b73ed8c-0de9-4319-8e47-9b33f40bc28c"",
-                    ""path"": ""<Mouse>/leftButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""ShootPrimary_Release"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9d688df2-9981-43b5-a5bf-84942c209c21"",
-                    ""path"": ""<Gamepad>/buttonWest"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""ShootPrimary_Release"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""6bb21959-1d3f-4a7e-be77-b7fff3ec5c18"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""ShootSecondary_Release"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""b74b4ec2-ca0c-444a-bdca-03b3b6c04e48"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""ShootSecondary_Release"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""37744a06-8773-464a-91f3-6d74978edc67"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard & Mouse"",
-                    ""action"": ""ShootSecondary_Press"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""fa9f133f-287e-4028-966e-a3d9ed9a7c68"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""ShootSecondary_Press"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e3298ffa-51c5-4fda-84d2-32a4f8e33bd6"",
-                    ""path"": ""<Gamepad>/leftTrigger"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""AimDownSights_Press"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""a51e6208-7a75-440d-b513-83d602966b12"",
+                    ""id"": ""38200756-d3f6-41a4-b44c-214a24aa0def"",
                     ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -322,17 +135,94 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""AimDownSights_Release"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1ccd85c8-1cf1-4eeb-8cb8-17e32ce0b1fe"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ShootPrimary_Press"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""26784d77-732b-441d-b5e0-aa6f46b12f83"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ShootPrimary_Release"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4f1bc33b-9f20-4562-8038-8cd33f956939"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ShootSecondary_Press"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4a8e5885-f255-4264-88a5-5daa266a8f13"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ShootSecondary_Release"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6be38042-43ca-4227-a178-4932980c28bd"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Jump_Press"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d4d75c07-b342-4268-baf1-fb9f64908c9b"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Jump_Release"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b33a2360-ae7d-407a-98a9-36fbfce81d26"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""AimDownSights_Press"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
         {
             ""name"": ""Menu"",
-            ""id"": ""618b44c0-98a3-4462-8d73-beefa4df95e4"",
+            ""id"": ""beff10ff-12bd-4879-a0b4-15f863749b27"",
             ""actions"": [
                 {
                     ""name"": ""JoinGame"",
                     ""type"": ""Button"",
-                    ""id"": ""f85fd01c-c5da-4f1e-b846-70e79f57841f"",
+                    ""id"": ""0bca8c8e-e2f1-4850-9d0d-6b75eea817e6"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Press""
@@ -340,7 +230,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": ""LeaveGame"",
                     ""type"": ""Button"",
-                    ""id"": ""7e905190-e24e-42a3-8a44-8c7b6a7a0ad2"",
+                    ""id"": ""e79aef9d-c05a-4d42-a399-21cb8e5d12b1"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Press""
@@ -348,7 +238,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": ""StartGame"",
                     ""type"": ""Button"",
-                    ""id"": ""54c876b9-a698-4be4-a099-c45ca55593d4"",
+                    ""id"": ""a90443a5-658a-4155-9d57-21bd22ce09e6"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": ""Press""
@@ -357,7 +247,18 @@ public class @InputMaster : IInputActionCollection, IDisposable
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""14ba7f1d-db71-4a70-9bef-17938a186dc7"",
+                    ""id"": ""1df90800-b7ce-4908-8309-6d9986aaee05"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""StartGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab0f7d73-09ff-4126-a96b-7c5a750ffc29"",
                     ""path"": ""<Gamepad>/start"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -368,23 +269,12 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""dcedf6c0-6ecc-4470-b0c0-0d31309b0d53"",
+                    ""id"": ""7b750b40-8245-4f86-b951-3028ab385041"",
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""LeaveGame"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""e823f8c5-b005-4ec6-a030-4bccc4165607"",
-                    ""path"": ""<Keyboard>/enter"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""StartGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -393,14 +283,15 @@ public class @InputMaster : IInputActionCollection, IDisposable
     ],
     ""controlSchemes"": [
         {
-            ""name"": ""Keyboard & Mouse"",
-            ""bindingGroup"": ""Keyboard & Mouse"",
-            ""devices"": []
-        },
-        {
             ""name"": ""Gamepad"",
             ""bindingGroup"": ""Gamepad"",
-            ""devices"": []
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
         }
     ]
 }");
@@ -480,8 +371,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_AimDownSights_Release;
     public struct PlayerActions
     {
-        private @InputMaster m_Wrapper;
-        public PlayerActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        private @EndlessRunnerInputActions m_Wrapper;
+        public PlayerActions(@EndlessRunnerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @MoveInput => m_Wrapper.m_Player_MoveInput;
         public InputAction @ShootPrimary_Press => m_Wrapper.m_Player_ShootPrimary_Press;
         public InputAction @ShootPrimary_Release => m_Wrapper.m_Player_ShootPrimary_Release;
@@ -571,8 +462,8 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Menu_StartGame;
     public struct MenuActions
     {
-        private @InputMaster m_Wrapper;
-        public MenuActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        private @EndlessRunnerInputActions m_Wrapper;
+        public MenuActions(@EndlessRunnerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @JoinGame => m_Wrapper.m_Menu_JoinGame;
         public InputAction @LeaveGame => m_Wrapper.m_Menu_LeaveGame;
         public InputAction @StartGame => m_Wrapper.m_Menu_StartGame;
@@ -611,15 +502,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public MenuActions @Menu => new MenuActions(this);
-    private int m_KeyboardMouseSchemeIndex = -1;
-    public InputControlScheme KeyboardMouseScheme
-    {
-        get
-        {
-            if (m_KeyboardMouseSchemeIndex == -1) m_KeyboardMouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard & Mouse");
-            return asset.controlSchemes[m_KeyboardMouseSchemeIndex];
-        }
-    }
     private int m_GamepadSchemeIndex = -1;
     public InputControlScheme GamepadScheme
     {
