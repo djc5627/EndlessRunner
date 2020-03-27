@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using static UnityEngine.InputSystem.InputAction;
 
-public class MenuInputManager : MonoBehaviour
+public class JoinMenuController : MonoBehaviour
 {
     public EndlessRunnerInputActions inputActions;
+
+    public GameObject[] playerProps;
 
     private void OnEnable()
     {
@@ -25,6 +27,12 @@ public class MenuInputManager : MonoBehaviour
         inputActions.Menu.JoinGame.performed += ctx => OnJoinGame(ctx);
         inputActions.Menu.LeaveGame.performed += ctx => OnLeaveGame(ctx);
         inputActions.Menu.StartGame.performed += ctx => OnStartGame();
+
+        //Hide props
+        foreach(var playerProp in playerProps)
+        {
+            playerProp.SetActive(false);
+        }
     }
 
     private void OnJoinGame(CallbackContext ctx)
@@ -32,6 +40,7 @@ public class MenuInputManager : MonoBehaviour
         if (InputDeviceManager.AddPlayer(ctx.control.device))
         {
             int playerNumber = InputDeviceManager.GetPlayerNumber(ctx.control.device);
+            playerProps[playerNumber-1].SetActive(true);
             Debug.Log("Player " + playerNumber + " joined game");
         }
     }
@@ -41,6 +50,7 @@ public class MenuInputManager : MonoBehaviour
         int playerNumber = InputDeviceManager.GetPlayerNumber(ctx.control.device);
         if (InputDeviceManager.RemovePlayer(ctx.control.device))
         {
+            playerProps[playerNumber - 1].SetActive(false);
             Debug.Log("Player " + playerNumber + " left game");
         }
     }

@@ -6,7 +6,8 @@ using UnityEngine.InputSystem;
 public class PlayerARRocketCombat : PlayerBehaviorBase
 {
     public Transform firePoint;
-    
+
+    public AudioSource playerAudioSource;
     public GameObject rocketPrefab;
     public GameObject bulletPrefab;
     public GameObject rocketLauncherObj;
@@ -87,7 +88,7 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
         bulletRb.AddForce(tempBullet.transform.forward * shootForce_Bullet);
         lastShootTime_Bullet = Time.time;
 
-        GlobalAudioPlayer.Instance.PlayClipAt(shootClip_Bullet, transform.position, shootClipScale_Bullet);
+        playerAudioSource.PlayOneShot(shootClip_Bullet, shootClipScale_Bullet);
         SwitchToAR();
     }
 
@@ -107,7 +108,7 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
         rocketRb.AddForce(firePoint.forward * shootForce_Rocket);
         lastShootTime_Rocket = Time.time;
 
-        GlobalAudioPlayer.Instance.PlayClipAt(shootClip_Rocket, transform.position, shootClipScale_Rocket);
+        playerAudioSource.PlayOneShot(shootClip_Rocket, shootClipScale_Rocket);
         SwitchToRocket();
     }
 
