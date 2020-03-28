@@ -62,6 +62,8 @@ public class PlayerCharControllerMovement : PlayerBehaviorBase
 
     private void OnJump_Released()
     {
+        if (hasRelasedJump) return;
+
         hasRelasedJump = true;
         releaseJumpTime = Time.time;
     }

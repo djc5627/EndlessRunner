@@ -24,7 +24,7 @@ public class PlayerInputController: MonoBehaviour
     public event _OnAimDownSights_Pressed onAimDownSights_Pressed;
     public event _OnAimDownSights_Released onAimDownSights_Released;
 
-    private int playerIndex;
+    private int playerIndex = -1;
     private float moveInput;
     private bool isJumpHeld = false;
     private bool isPrimaryFireHeld = false;

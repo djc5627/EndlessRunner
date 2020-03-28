@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     public float maxHealth = 10f;
     public float invicibilityTime = 1.5f;
     public float deathBarrierYOffset = -50f;
+    [SerializeField] public SkinnedMeshRenderer playerSkinRend;
+    public Material[] playerBodyMats;
     
     private float currentHealth;
     private float lastDamageTime = Mathf.NegativeInfinity;
@@ -31,6 +33,11 @@ public class PlayerController : MonoBehaviour
             behavior.SetPlayerInput(playerInput);
             behavior.SetPlayerAnimController(playerAnimController);
         }
+    }
+
+    private void Start()
+    {
+        SetBodyMaterial();
     }
 
     private void Update()
@@ -90,5 +97,17 @@ public class PlayerController : MonoBehaviour
         {
             Death();
         }
+    }
+
+    public void SetBodyMaterial()
+    {
+        int playerIndex = playerInput.GetPlayerIndex();
+        if (playerIndex != -1 && playerBodyMats[playerIndex] != null)
+        {
+            Material[] playerMats = playerSkinRend.materials;
+            playerMats[5] = playerBodyMats[playerIndex];
+            playerSkinRend.materials = playerMats;
+        }
+        
     }
 }
