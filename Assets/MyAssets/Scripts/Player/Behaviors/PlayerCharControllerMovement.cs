@@ -11,6 +11,7 @@ public class PlayerCharControllerMovement : PlayerBehaviorBase
     public float groundCheckJumpDelay = .1f;
     public float strafeSpeed = 12f;
     public float aimedStrafeSpeed = 6f;
+    public float aimDownSightsTime = .1f;
     public float forwardSpeed = 20f;
     public float acceleration = .025f;
     public float deacceleration = .015f;
@@ -20,6 +21,8 @@ public class PlayerCharControllerMovement : PlayerBehaviorBase
     public float lowJumpTurnTime = .5f;
     public float maxFallSpeed = 44f;
 
+    private int startADSTweenId;
+    private int stopADSTweenId;
     private float gravity;
     private float jumpVelocity;
     private float currentStrafeSpeed;
@@ -33,6 +36,8 @@ public class PlayerCharControllerMovement : PlayerBehaviorBase
     {
         playerInput.onJump_Pressed += OnJump_Pressed;
         playerInput.onJump_Released += OnJump_Released;
+        playerInput.onAimDownSights_Pressed += OnAimDownSights_Pressed;
+        playerInput.onAimDownSights_Released += OnAimDownSights_Released;
     }
 
     private void Start()
@@ -45,7 +50,6 @@ public class PlayerCharControllerMovement : PlayerBehaviorBase
 
     public override void Execute()
     {
-        UpdateStrafeSpeed();
         CheckGrounded();
         Move();
     }
@@ -68,16 +72,26 @@ public class PlayerCharControllerMovement : PlayerBehaviorBase
         releaseJumpTime = Time.time;
     }
 
-    private void UpdateStrafeSpeed()
+    private void OnAimDownSights_Pressed()
     {
-        if (playerInput.GetIsAimDownSightHeld())
-        {
-            currentStrafeSpeed = aimedStrafeSpeed;
-        }
-        else
-        {
-            currentStrafeSpeed = strafeSpeed;
-        }
+        float percentToAimSpread = Mathf.Abs(currentStrafeSpeed - strafeSpeed) / Mathf.Abs(aimedStrafeSpeed - strafeSpeed);
+        float remainingTime = aimDownSightsTime * (1f - percentToAimSpread);
+
+        //Tween spread to ADS
+        LeanTween.cancel(stopADSTweenId);
+        startADSTweenId = LeanTween.value(this.gameObject, v => currentStrafeSpeed = v, currentStrafeSpeed, aimedStrafeSpeed, remainingTime).id;
+        LeanTween.descr(startADSTweenId).setEaseInOutQuad();
+    }
+
+    private void OnAimDownSights_Released()
+    {
+        float percentToHipSpread = Mathf.Abs(currentStrafeSpeed - aimedStrafeSpeed) / Mathf.Abs(aimedStrafeSpeed - strafeSpeed);
+        float remainingTime = aimDownSightsTime * (1f - percentToHipSpread);
+
+        //Tween spread to ADS
+        LeanTween.cancel(startADSTweenId);
+        stopADSTweenId = LeanTween.value(this.gameObject, v => currentStrafeSpeed = v, currentStrafeSpeed, strafeSpeed, remainingTime).id;
+        LeanTween.descr(stopADSTweenId).setEaseInOutQuad();
     }
 
     private void CheckGrounded()

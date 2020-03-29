@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet : ProjectileBase
 {
-    public LayerMask collisionMask;
-    public SphereCollider refTrigger;
     public AudioClip impactSound_Flesh;
     public AudioClip impactSound_Object;
     public float impactSoundScale_Flesh = 1f;
@@ -13,36 +11,7 @@ public class Bullet : MonoBehaviour
     public float damage = 15f;
     public float impactForce = 200f;
 
-    private Vector3 lastPos;
-
-    private void Awake()
-    {
-        lastPos = transform.position;
-        //Debug.LogError("Awake: " + lastPos);
-    }
-
-    private void FixedUpdate()
-    {
-        //Debug.LogError("Fixed Start: " + lastPos);
-        CheckForCollision();
-        lastPos = transform.position;
-        //Debug.LogError("Fixed End: " + lastPos);
-    }
-
-    private void CheckForCollision()
-    {
-        //Debug.LogError("Current Pos: " + transform.position);
-        float lastToCurrentDistance = (transform.position - lastPos).magnitude;
-        Vector3 lastToCurrentPos = (transform.position - lastPos).normalized;
-
-        RaycastHit hit;
-        if (Physics.SphereCast(lastPos, refTrigger.radius, lastToCurrentPos, out hit, lastToCurrentDistance, collisionMask))
-        {
-            HandleImpact(hit);
-        }
-    }
-
-    private void HandleImpact(RaycastHit hit)
+    protected override void HandleCollision(RaycastHit hit)
     {
         Rigidbody otherRb = hit.collider.attachedRigidbody;
         if (otherRb != null)

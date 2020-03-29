@@ -25,7 +25,6 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
     public float shootClipScale_Bullet = 1f;
 
     private Transform projectileContainer;
-    private bool aimDownSightsHeld = false;
     private int startADSTweenId;
     private int stopADSTweenId;
     private float currentSpread;
@@ -128,8 +127,6 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
 
     private void OnAimDownSights_Pressed()
     {
-        aimDownSightsHeld = true;
-
         float percentToAimSpread = Mathf.Abs(currentSpread - hipFireSpread) / Mathf.Abs(aimDownSightsSpread - hipFireSpread);
         float remainingTime = aimDownSightsTime * (1f - percentToAimSpread);
 
@@ -141,8 +138,6 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
 
     private void OnAimDownSights_Released()
     {
-        aimDownSightsHeld = false;
-
         float percentToHipSpread = Mathf.Abs(currentSpread - aimDownSightsSpread) / Mathf.Abs(aimDownSightsSpread - hipFireSpread);
         float remainingTime = aimDownSightsTime * (1f - percentToHipSpread);
 

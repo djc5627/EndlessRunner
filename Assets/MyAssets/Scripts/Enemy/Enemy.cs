@@ -15,9 +15,8 @@ public abstract class Enemy : MonoBehaviour
     public float deathClipScale = 1f;
 
 
-    private bool isDead = false;
-
-    private float currentHealth;
+    protected bool isDead = false;
+    protected float currentHealth;
 
     protected virtual void Awake()
     {

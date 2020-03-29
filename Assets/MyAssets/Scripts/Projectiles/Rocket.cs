@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Rocket : MonoBehaviour
+public class Rocket : ProjectileBase
 {
     public GameObject explosionEffect;
-    public LayerMask collisionMask;
     public LayerMask explosionMask;
-    public SphereCollider refTrigger;
     public AudioClip explosionSound;
     public float explosionSoundScale = 1f;
     public float damage = 100f;
@@ -17,34 +15,10 @@ public class Rocket : MonoBehaviour
     public float explosionZOffset = 3f;
     public float upwardsModifier = 3f;
 
-    private Vector3 lastPos;
-    private bool hasCollided = false;
 
-    private void Awake()
+    protected override void HandleCollision(RaycastHit hit)
     {
-        lastPos = transform.position;
-    }
-
-    private void FixedUpdate()
-    {
-        if (!hasCollided)
-        {
-            CheckForCollision();
-            lastPos = transform.position;
-        }
-        
-    }
-
-    private void CheckForCollision()
-    {
-        float lastToCurrentDistance = (transform.position - lastPos).magnitude;
-        Vector3 lastToCurrentPos = (transform.position - lastPos).normalized;
-
-        RaycastHit hit;
-        if (Physics.SphereCast(lastPos, refTrigger.radius, lastToCurrentPos, out hit, lastToCurrentDistance, collisionMask)) {
-            Explode(hit.point);
-            hasCollided = true;
-        }
+        Explode(hit.point);
     }
 
     private void Explode(Vector3 origin)
