@@ -18,6 +18,5 @@ public static class ExtensionMethods
                 child.ChangeLayerRecursively(newLayer);
             }
         }
-        
     }
 }

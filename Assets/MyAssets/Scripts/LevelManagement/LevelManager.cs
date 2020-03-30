@@ -18,12 +18,14 @@ public class LevelManager : MonoBehaviour
     private Transform playerTrans;
     private Vector3 playerStartPos;
     private List<GameObject> spawnedGrounds = new List<GameObject>();
+    private List<GameObject> obstacles = new List<GameObject>();
 
 
     private void Start()
     {
         playerTrans = FindObjectOfType<PlayerController>().transform;
         playerStartPos = playerTrans.position;
+        InitObstacles();
         ClearLevel();
         InitSpawnGround(viewDistance);
     }
@@ -31,11 +33,21 @@ public class LevelManager : MonoBehaviour
     private void Update()
     {
         //Maybe only do this on some frames? every t seconds
-        EntityCulling();
+        GroundCulling();
+        ObstacleCulling();
         GenerateGrounds();
     }
 
     #region Init
+    
+    private void InitObstacles()
+    {
+        foreach (Transform child in obstacleContainer)
+        {
+            obstacles.Add(child.gameObject);
+            child.gameObject.SetActive(false);
+        }
+    }
 
     //Spawn first chunks of grounds within distance
     private void InitSpawnGround(float distance)
@@ -71,10 +83,10 @@ public class LevelManager : MonoBehaviour
         navSurface.BuildNavMesh();
     }
 
-    //Enable stuff ahead and disable stuff behind view dist
-    private void EntityCulling()
+    //Enable grounds view dist from player and disable otherwise
+    private void GroundCulling()
     {
-        foreach (GameObject ground in spawnedGrounds)
+        foreach (var ground in spawnedGrounds)
         {
             float zPos = ground.transform.position.z;
             float deltaZToPlayer = Mathf.Abs(zPos - playerTrans.position.z);
@@ -85,6 +97,24 @@ public class LevelManager : MonoBehaviour
             else
             {
                 ground.SetActive(true);
+            }
+        }
+    }
+
+    //Enable obstacles view dist from player and disable otherwise
+    private void ObstacleCulling()
+    {
+        foreach (var obstacle in obstacles)
+        {
+            float zPos = obstacle.transform.position.z;
+            float deltaZToPlayer = Mathf.Abs(zPos - playerTrans.position.z);
+            if (deltaZToPlayer > viewDistance)
+            {
+                obstacle.SetActive(false);
+            }
+            else
+            {
+                obstacle.SetActive(true);
             }
         }
     }

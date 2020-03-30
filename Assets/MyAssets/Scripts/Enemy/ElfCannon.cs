@@ -5,15 +5,19 @@ using RootMotion.Dynamics;
 
 public class ElfCannon : Enemy
 {
+    public AudioSource shootSource;
     public GameObject explosionEffect;
     public GameObject smokeParticles;
+    public GameObject cannonShootParticles;
     public Transform firePoint;
     public Transform ammoContainer;
     public GameObject ammo;
+    public AudioClip shootClip;
     public float viewDistance = 30f;
     public float shootDelay = 3f;
     public float shootForce = 1000f;
     public float maxTurnSpeed = 3f;
+    public float shootTurnDelay = .5f;
     public float deathExplodeForce = 5000f;
     public float deathExplodeRaidus = 3f;
     public float deathExplosionDelay = .05f;
@@ -29,7 +33,6 @@ public class ElfCannon : Enemy
         playerTrans = FindObjectOfType<PlayerController>().transform;
         puppetRbs = ragdollRoot.GetComponentsInChildren<Rigidbody>();
         puppetMaster = ragdollRoot.GetComponentInChildren<PuppetMaster>();
-        Debug.Log(puppetRbs.Length);
     }
 
     // Update is called once per frame
@@ -44,6 +47,14 @@ public class ElfCannon : Enemy
 
     private void AimAtPlayer()
     {
+        if (lastShootTime + shootTurnDelay > Time.time)
+        {
+            if (audioSource.isPlaying) audioSource.Stop();
+            return;
+        }
+
+        if (!audioSource.isPlaying) audioSource.Play();
+
         Vector3 vecToPlayer = playerTrans.position - transform.position;
         float distanceToPlayer = vecToPlayer.magnitude;
 
@@ -65,6 +76,8 @@ public class ElfCannon : Enemy
         GameObject tempAmmo = Instantiate(ammo, firePoint.position, Quaternion.identity, ammoContainer);
         Rigidbody ammoRb = tempAmmo.GetComponent<Rigidbody>();
         ammoRb.AddForce(firePoint.forward * shootForce);
+        Instantiate(cannonShootParticles, firePoint.position, firePoint.rotation);
+        shootSource.PlayOneShot(shootClip);
 
         lastShootTime = Time.time;
     }
@@ -83,6 +96,9 @@ public class ElfCannon : Enemy
     protected override void OnDeath()
     {
         base.OnDeath();
+        audioSource.Stop();
+        Instantiate(explosionEffect, transform.position, Quaternion.identity);
+        smokeParticles.SetActive(true);
         StartCoroutine(DeathExplosionRoutine());
         puppetMaster.state = PuppetMaster.State.Dead;
         puppetMaster.Kill();
