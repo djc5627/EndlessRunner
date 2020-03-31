@@ -33,7 +33,7 @@ public class PlayerARRocketCombat : PlayerBehaviorBase
 
     private void Awake()
     {
-        projectileContainer = GameObject.Find("{PlayerProjectiles}").transform;
+        projectileContainer = GameObject.Find("|PlayerProjectiles|").transform;
         currentSpread = hipFireSpread;
     }
 

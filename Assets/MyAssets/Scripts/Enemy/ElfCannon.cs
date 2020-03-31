@@ -14,7 +14,8 @@ public class ElfCannon : Enemy
     public Transform ammoContainer;
     public GameObject ammo;
     public AudioClip shootClip;
-    public float viewDistance = 30f;
+    public float viewDistance = 50f;
+    public float shootViewDistance = 30f;
     public float shootDelay = 3f;
     public float shootForce = 1000f;
     public float maxTurnSpeed = 3f;
@@ -27,6 +28,8 @@ public class ElfCannon : Enemy
     private Transform playerTrans;
     private Rigidbody[] puppetRbs;
     private float lastShootTime = Mathf.NegativeInfinity;
+    private bool isPlayerInViewDistance = false;
+    private bool isPlayerInShootDistance = false;
 
     // Start is called before the first frame update
     void Start()
@@ -39,10 +42,11 @@ public class ElfCannon : Enemy
     // Update is called once per frame
     void Update()
     {
+        CheckPlayerInSight();
         if (!isDead)
         {
-            AimAtPlayer();
-            HandleShooting();
+            if (isPlayerInViewDistance) AimAtPlayer();
+            if (isPlayerInShootDistance) HandleShooting();
         }
     }
 
@@ -81,6 +85,13 @@ public class ElfCannon : Enemy
         shootSource.PlayOneShot(shootClip);
 
         lastShootTime = Time.time;
+    }
+
+    private void CheckPlayerInSight()
+    {
+        float distanceToPlayer = (playerTrans.position - transform.position).magnitude;
+        isPlayerInViewDistance = (distanceToPlayer <= viewDistance) ? true : false;
+        isPlayerInShootDistance = (distanceToPlayer <= shootViewDistance) ? true : false;
     }
 
     private IEnumerator DeathExplosionRoutine()
