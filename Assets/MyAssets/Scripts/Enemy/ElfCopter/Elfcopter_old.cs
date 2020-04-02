@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Elfcopter : Enemy
+public class Elfcopter_old : Enemy
 {
     public Rigidbody copterRb;
     public float moveSpeed = 10f;

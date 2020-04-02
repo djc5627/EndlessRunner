@@ -24,7 +24,6 @@ public class ElfCannon : Enemy
     public float deathExplodeRaidus = 3f;
     public float deathExplosionDelay = .05f;
 
-    private PuppetMaster puppetMaster;
     private Transform playerTrans;
     private Rigidbody[] puppetRbs;
     private float lastShootTime = Mathf.NegativeInfinity;
@@ -32,11 +31,11 @@ public class ElfCannon : Enemy
     private bool isPlayerInShootDistance = false;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
+        base.Start();
         playerTrans = FindObjectOfType<PlayerController>().transform;
         puppetRbs = ragdollRoot.GetComponentsInChildren<Rigidbody>();
-        puppetMaster = ragdollRoot.GetComponentInChildren<PuppetMaster>();
     }
 
     // Update is called once per frame
@@ -113,9 +112,5 @@ public class ElfCannon : Enemy
         Instantiate(explosionEffect, transform.position, Quaternion.identity);
         smokeParticles.SetActive(true);
         StartCoroutine(DeathExplosionRoutine());
-        puppetMaster.state = PuppetMaster.State.Dead;
-        puppetMaster.Kill();
-        puppetMaster.muscleWeight = 0f;
-        puppetMaster.pinWeight = 0f;
     }
 }

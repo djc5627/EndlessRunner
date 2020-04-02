@@ -14,7 +14,7 @@ public abstract class Enemy : MonoBehaviour
     public AudioSource audioSource;
     public float deathClipScale = 1f;
 
-
+    protected PuppetMaster puppetMaster;
     protected bool isDead = false;
     protected float currentHealth;
 
@@ -22,6 +22,11 @@ public abstract class Enemy : MonoBehaviour
     {
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
+    }
+
+    protected virtual void Start()
+    {
+        puppetMaster = ragdollRoot.GetComponentInChildren<PuppetMaster>();
     }
 
     protected virtual void OnDeath()
@@ -33,6 +38,10 @@ public abstract class Enemy : MonoBehaviour
 
         audioSource.PlayOneShot(deathClip, deathClipScale);
         ragdollRoot.ChangeLayerRecursively(deadLayerName);
+        puppetMaster.state = PuppetMaster.State.Dead;
+        puppetMaster.Kill();
+        puppetMaster.muscleWeight = 0f;
+        puppetMaster.pinWeight = 0f;
         healthCanvas.SetActive(false);
         isDead = true;
     }

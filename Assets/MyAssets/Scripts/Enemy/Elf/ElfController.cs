@@ -10,7 +10,6 @@ public class ElfController : Enemy
     public NavMeshAgent agent;
     public BoxCollider elfCollider;
     public ElfFlower elfFlower;
-    public PuppetMaster puppetMaster;
     public LayerMask groundCheckMask;
     public float groundCheckDistance = .1f;
     public float groundCheckOriginYOffset = .05f;
@@ -36,8 +35,9 @@ public class ElfController : Enemy
         nextClipTime = Random.Range(timeToNextClipMin, timeToNextClipMax);
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         playerTrans = FindObjectOfType<PlayerController>().transform;
     }
 
@@ -46,7 +46,6 @@ public class ElfController : Enemy
         if (reachedGround)
         {
             agent.SetDestination(playerTrans.position);
-            //agent.SetDestination(transform.position + 10f * Vector3.back);
         }
 
         HandleSounds();
@@ -119,10 +118,6 @@ public class ElfController : Enemy
     protected override void OnDeath()
     {
         base.OnDeath();
-        puppetMaster.state = PuppetMaster.State.Dead;
-        puppetMaster.Kill();
-        puppetMaster.muscleWeight = 0f;
-        puppetMaster.pinWeight = 0f;
         elfCollider.enabled = false;
         agent.enabled = false;
         this.enabled = false;
