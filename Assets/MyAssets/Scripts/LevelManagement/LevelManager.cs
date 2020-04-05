@@ -40,12 +40,17 @@ public class LevelManager : MonoBehaviour
 
     #region Init
     
+    //Assumes the hierarchy is obstacle container, then one more level of containers
     private void InitObstacles()
     {
-        foreach (Transform child in obstacleContainer)
+        foreach (Transform childContainer in obstacleContainer)
         {
-            obstacles.Add(child.gameObject);
-            child.gameObject.SetActive(false);
+            foreach (Transform obstacle in childContainer)
+            {
+                obstacles.Add(obstacle.gameObject);
+                obstacle.gameObject.SetActive(false);
+            }
+            
         }
     }
 
