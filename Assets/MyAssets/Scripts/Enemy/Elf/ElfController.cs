@@ -125,13 +125,13 @@ public class ElfController : Enemy
 
     public void StartAttacking()
     {
-        agent.isStopped = true;
+        //agent.isStopped = true;
         isAttacking = true;
     }
 
     public void StopAttacking()
     {
-        agent.isStopped = false;
+        //agent.isStopped = false;
         isAttacking = false;
     }
 

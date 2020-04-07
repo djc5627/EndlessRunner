@@ -38,7 +38,8 @@ public class PlayerSpawnManager : MonoBehaviour
         if (InputDeviceManager.GetCurrentPlayerCount() == 0)
         {
             int playerIndex = 0;
-            GameObject tempPlayer = PlayerInput.Instantiate(playerPrefab, playerIndex, "Gamepad", -1, InputDeviceManager.GetPlayerDevice(playerIndex)).gameObject;
+            //GameObject tempPlayer = PlayerInput.Instantiate(playerPrefab, playerIndex, "Gamepad", -1, InputDeviceManager.GetPlayerDevice(playerIndex)).gameObject;
+            GameObject tempPlayer = PlayerInput.Instantiate(playerPrefab, playerIndex, "Gamepad", -1).gameObject;
             tempPlayer.gameObject.GetComponent<PlayerInputController>().SetPlayerIndex(playerIndex);
 
             Transform playerObj = tempPlayer.transform.root;
