@@ -7,11 +7,19 @@ using RootMotion.Dynamics;
 public class ElfCopterController : Enemy
 {
     public NavMeshAgent agent;
+    public Transform firePoint;
     public GameObject elfCopterObj;
     public GameObject elfCopterRagdollPrefab;
+    public Transform ammoContainer;
+    public GameObject ammo;
+    public float shootDelay = 3f;
+    public float shootForce = 1000f;
     public float followPlayerOffset = 10f;
+    public float shootViewDistance = 60f;
 
     private Transform playerTrans;
+    private float lastShootTime = Mathf.NegativeInfinity;
+    private bool isPlayerInShootDistance = false;
 
     protected override void Start()
     {
@@ -22,10 +30,12 @@ public class ElfCopterController : Enemy
 
     private void Update()
     {
+        CheckPlayerInSight();
         if (!isDead)
         {
             LookAtPlayer();
             PursuePlayer();
+            if (isPlayerInShootDistance) HandleShooting();
         }
         
     }
@@ -40,6 +50,28 @@ public class ElfCopterController : Enemy
     {
         Vector3 vecToPlayer = (playerTrans.position - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(vecToPlayer);
+    }
+
+    private void HandleShooting()
+    {
+        if (lastShootTime + shootDelay > Time.time)
+        {
+            return;
+        }
+
+        Vector3 vecToPlayer = (playerTrans.position - transform.position).normalized;
+        GameObject tempAmmo = Instantiate(ammo, firePoint.position, Quaternion.LookRotation(vecToPlayer), ammoContainer);
+        Rigidbody ammoRb = tempAmmo.GetComponent<Rigidbody>();
+        ammoRb.AddForce(vecToPlayer * shootForce);
+
+        lastShootTime = Time.time;
+    }
+
+    private void CheckPlayerInSight()
+    {
+        float distanceToPlayer = (playerTrans.position - transform.position).magnitude;
+        //isPlayerInViewDistance = (distanceToPlayer <= viewDistance) ? true : false;
+        isPlayerInShootDistance = (distanceToPlayer <= shootViewDistance) ? true : false;
     }
 
 
