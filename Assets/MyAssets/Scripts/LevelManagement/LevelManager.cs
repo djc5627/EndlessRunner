@@ -9,7 +9,6 @@ public class LevelManager : MonoBehaviour
     public GameObject groundPrefab;
     public Transform groundContainer;
     public Transform obstacleContainer;
-    public NavMeshSurface navSurface;
     public float terrainLength = 1000f;
     public float groundLength = 100f;
     public float terrainViewDistance = 2000f;
@@ -114,7 +113,6 @@ public class LevelManager : MonoBehaviour
         Vector3 spawnPosition = Vector3.forward * zDistance;
         GameObject newGround = Instantiate(groundPrefab, spawnPosition, Quaternion.identity, groundContainer);
         spawnedGrounds.Add(newGround);
-        navSurface.BuildNavMesh();
     }
 
     private void SpawnTerrain(float zDistance)
