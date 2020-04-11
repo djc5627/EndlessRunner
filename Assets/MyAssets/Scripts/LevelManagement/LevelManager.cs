@@ -5,8 +5,6 @@ using UnityEngine.AI;
 
 public class LevelManager : MonoBehaviour
 {
-    public GameObject terrainPrefab;
-    public GameObject groundPrefab;
     public Transform groundContainer;
     public Transform obstacleContainer;
     public float terrainLength = 1000f;
@@ -15,12 +13,13 @@ public class LevelManager : MonoBehaviour
     public float groundViewDistance = 300f;
     public float inspectorGenerateDistance = 1000f;
 
+    private ObjectPoolManager objectPoolManager;
+    private Transform playerTrans;
+    private Vector3 playerStartPos;
     private int initialGroundCount;
     private int initialTerrainCount;
     private int nextTerrainIndex;
     private int nextGroundIndex;
-    private Transform playerTrans;
-    private Vector3 playerStartPos;
     private List<GameObject> spawnedGrounds = new List<GameObject>();
     private List<GameObject> spawnedTerrains = new List<GameObject>();
     private List<GameObject> obstacles = new List<GameObject>();
@@ -28,6 +27,7 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
+        objectPoolManager = ObjectPoolManager.Instance;
         playerTrans = FindObjectOfType<PlayerController>().transform;
         playerStartPos = playerTrans.position;
         InitObstacles();
@@ -111,14 +111,16 @@ public class LevelManager : MonoBehaviour
     private void SpawnGround(float zDistance)
     {
         Vector3 spawnPosition = Vector3.forward * zDistance;
-        GameObject newGround = Instantiate(groundPrefab, spawnPosition, Quaternion.identity, groundContainer);
+        //GameObject newGround = Instantiate(groundPrefab, spawnPosition, Quaternion.identity, groundContainer);
+        GameObject newGround = objectPoolManager.SpawnFromPool("Ground", spawnPosition, Quaternion.identity, groundContainer);
         spawnedGrounds.Add(newGround);
     }
 
     private void SpawnTerrain(float zDistance)
     {
         Vector3 spawnPosition = Vector3.forward * zDistance;
-        GameObject newTerrain = Instantiate(terrainPrefab, spawnPosition, Quaternion.identity, groundContainer);
+        //GameObject newTerrain = Instantiate(terrainPrefab, spawnPosition, Quaternion.identity, groundContainer);
+        GameObject newTerrain = objectPoolManager.SpawnFromPool("Terrain", spawnPosition, Quaternion.identity, groundContainer);
         spawnedTerrains.Add(newTerrain);
     }
 
