@@ -133,11 +133,11 @@ public class LevelManager : MonoBehaviour
             float deltaZToPlayer = Mathf.Abs(zPos - playerTrans.position.z);
             if (deltaZToPlayer > groundViewDistance)
             {
-                ground.SetActive(false);
+                if (ground.activeSelf) ground.SetActive(false);
             }
             else
             {
-                ground.SetActive(true);
+                if (!ground.activeSelf) ground.SetActive(true);
             }
         }
     }
@@ -150,11 +150,11 @@ public class LevelManager : MonoBehaviour
             float deltaZToPlayer = Mathf.Abs(zPos - playerTrans.position.z);
             if (deltaZToPlayer > terrainViewDistance)
             {
-                terrain.SetActive(false);
+                if (terrain.activeSelf) terrain.SetActive(false);
             }
             else
             {
-                terrain.SetActive(true);
+                if (!terrain.activeSelf) terrain.SetActive(true);
             }
         }
     }
@@ -168,11 +168,11 @@ public class LevelManager : MonoBehaviour
             float deltaZToPlayer = Mathf.Abs(zPos - playerTrans.position.z);
             if (deltaZToPlayer > groundViewDistance)
             {
-                obstacle.SetActive(false);
+                if (obstacle.activeSelf) obstacle.SetActive(false);
             }
             else
             {
-                obstacle.SetActive(true);
+                if (!obstacle.activeSelf) obstacle.SetActive(true);
             }
         }
     }
