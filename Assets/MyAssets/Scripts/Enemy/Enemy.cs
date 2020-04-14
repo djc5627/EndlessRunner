@@ -6,17 +6,18 @@ using RootMotion.Dynamics;
 public abstract class Enemy : MonoBehaviour
 {
     public Collider moveCollider;
+    public Rigidbody moveRb;
     public Collider hurtCollider;
     public HealthBar healthBar;
     public GameObject healthCanvas;
     public float maxHealth = 100f;
     public AudioClip deathClip;
     public AudioSource audioSource;
+    public GameObject armatureRoot;
     public float deathClipScale = 1f;
     public float deathForce = 10000f;
-    public GameObject ragdollPrefab;
-    public SkinnedMeshRenderer rendToDisableOnDeath;
 
+    protected Rigidbody[] ragdollRbs;
     protected Transform playerTrans;
     protected bool isDead = false;
     protected float currentHealth;
@@ -25,6 +26,7 @@ public abstract class Enemy : MonoBehaviour
     {
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
+        ragdollRbs = armatureRoot.GetComponentsInChildren<Rigidbody>();
     }
 
     protected virtual void Start()
@@ -39,22 +41,26 @@ public abstract class Enemy : MonoBehaviour
             return;
         }
 
+        moveRb.isKinematic = true;
         moveCollider.enabled = false;
         hurtCollider.enabled = false;
-        if (ragdollPrefab != null)
-        {
-            GameObject ragdoll = Instantiate(ragdollPrefab, transform.position, transform.rotation);
-            ApplyDeathForce(ragdoll);
-        }
-        rendToDisableOnDeath.enabled = false;
         audioSource.PlayOneShot(deathClip, deathClipScale);
         healthCanvas.SetActive(false);
+        ActivateRagdoll();
+        ApplyDeathForce();
         isDead = true;
     }
 
-    protected void ApplyDeathForce(GameObject ragdollRoot)
+    protected void ActivateRagdoll()
     {
-        Rigidbody[] ragdollRbs = ragdollRoot.GetComponentsInChildren<Rigidbody>();
+        foreach (var rb in ragdollRbs)
+        {
+            rb.isKinematic = false;
+        }
+    }
+
+    protected void ApplyDeathForce()
+    {
         foreach (var rb in ragdollRbs)
         {
             Vector3 dir = (transform.position - playerTrans.position).normalized;

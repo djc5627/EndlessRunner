@@ -6,6 +6,7 @@ using RootMotion.Dynamics;
 
 public class ElfCopterController : Enemy
 {
+    public Animator copterElfAnim;
     public NavMeshAgent agent;
     public Transform firePoint;
     public GameObject elfCopterObj;
@@ -80,6 +81,7 @@ public class ElfCopterController : Enemy
             return;
         }
         base.OnDeath();
+        copterElfAnim.enabled = false;
         elfCopterObj.SetActive(false);
         Instantiate(elfCopterRagdollPrefab, transform.position, transform.rotation);
         agent.isStopped = true;

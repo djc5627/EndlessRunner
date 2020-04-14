@@ -6,6 +6,7 @@ using RootMotion.Dynamics;
 public class ElfCannon : Enemy
 {
     public Animator cannonAnim;
+    public Animator elfAnim;
     public AudioSource shootSource;
     public GameObject explosionEffect;
     public GameObject smokeParticles;
@@ -97,6 +98,7 @@ public class ElfCannon : Enemy
         }
         base.OnDeath();
         cannonAnim.SetTrigger("Death");
+        elfAnim.enabled = false;
         audioSource.Stop();
         Instantiate(explosionEffect, transform.position, Quaternion.identity);
         smokeParticles.SetActive(true);

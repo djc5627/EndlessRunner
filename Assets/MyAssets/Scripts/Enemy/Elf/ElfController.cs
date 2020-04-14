@@ -120,6 +120,7 @@ public class ElfController : Enemy
             return;
         }
         base.OnDeath();
+        anim.enabled = false;
         elfCollider.enabled = false;
         agent.enabled = false;
         this.enabled = false;
