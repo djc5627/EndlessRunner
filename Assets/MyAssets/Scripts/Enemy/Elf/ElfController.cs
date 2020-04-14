@@ -22,7 +22,6 @@ public class ElfController : Enemy
     public float clipVolumeScale = 5f;
     public AudioClip[] elfSounds;
 
-    private Transform playerTrans;
     private bool reachedGround = false;
     private bool isAttacking = false;
     private float lastSoundTime = Mathf.NegativeInfinity;
@@ -35,9 +34,9 @@ public class ElfController : Enemy
         nextClipTime = Random.Range(timeToNextClipMin, timeToNextClipMax);
     }
 
-    protected void Start()
+    protected override void Start()
     {
-        playerTrans = FindObjectOfType<PlayerController>().transform;
+        base.Start();
     }
 
     private void Update()
@@ -116,6 +115,10 @@ public class ElfController : Enemy
 
     protected override void OnDeath()
     {
+        if (isDead)
+        {
+            return;
+        }
         base.OnDeath();
         elfCollider.enabled = false;
         agent.enabled = false;

@@ -13,20 +13,14 @@ public class Bullet : ProjectileBase
 
     protected override void HandleCollision(RaycastHit hit)
     {
-        Rigidbody otherRb = hit.collider.attachedRigidbody;
-        if (otherRb != null)
-        {
-            Vector3 dir = (transform.position - lastPos).normalized;
-            otherRb.AddForceAtPosition(dir * impactForce, hit.point);
-        }
-        EnemyLimbProxy enemyProxy = hit.collider.attachedRigidbody.GetComponent<EnemyLimbProxy>();
+        EnemyLimbProxy enemyProxy = hit.collider.GetComponent<EnemyLimbProxy>();
         if (enemyProxy != null)
         {
             enemyProxy.TakeDamage(damage);
         }
 
         //Audio
-        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("EnemyMovCol") ||
+        if (hit.collider.gameObject.layer == LayerMask.NameToLayer("EnemyHurtCollider") ||
             hit.collider.gameObject.layer == LayerMask.NameToLayer("EnemyRagdoll"))
         {
             GlobalAudioPlayer.Instance.PlayClipAt(impactSound_Flesh, hit.point, impactSoundScale_Flesh);

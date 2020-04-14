@@ -17,13 +17,12 @@ public class ElfCopterController : Enemy
     public float followPlayerOffset = 10f;
     public float shootViewDistance = 60f;
 
-    private Transform playerTrans;
     private float lastShootTime = Mathf.NegativeInfinity;
     private bool isPlayerInShootDistance = false;
 
-    private void Start()
+    protected override void Start()
     {
-        playerTrans = FindObjectOfType<PlayerController>().transform;
+        base.Start();
         agent.updateRotation = false;
     }
 
@@ -76,6 +75,10 @@ public class ElfCopterController : Enemy
 
     protected override void OnDeath()
     {
+        if (isDead)
+        {
+            return;
+        }
         base.OnDeath();
         elfCopterObj.SetActive(false);
         Instantiate(elfCopterRagdollPrefab, transform.position, transform.rotation);

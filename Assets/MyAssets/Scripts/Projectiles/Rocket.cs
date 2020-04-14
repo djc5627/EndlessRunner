@@ -36,7 +36,8 @@ public class Rocket : ProjectileBase
                 affectedEnemies.Add(enemyProxy.enemyScript);
             }
             Rigidbody rb = col.attachedRigidbody;
-            if (rb != null && !affectedRigidbodies.Contains(rb))
+            //Dont add force to hurt colliders
+            if (rb != null && !affectedRigidbodies.Contains(rb) && col.gameObject.layer != LayerMask.NameToLayer("EnemyHurtCollider"))
             {
                 affectedRigidbodies.Add(rb);
             }
@@ -45,7 +46,7 @@ public class Rocket : ProjectileBase
         //Deal damage to all the enemies hit
         foreach (Enemy enemyScript in affectedEnemies)
         {
-            enemyScript.TakeDamage(damage);
+            if(enemyScript != null) enemyScript.TakeDamage(damage);
         }
 
         //Add the force with delay after rigidbodies are registered and damage delt

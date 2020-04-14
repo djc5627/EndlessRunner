@@ -24,15 +24,14 @@ public class ElfCannon : Enemy
     public float deathExplodeRaidus = 3f;
     public float deathExplosionDelay = .05f;
 
-    private Transform playerTrans;
     private float lastShootTime = Mathf.NegativeInfinity;
     private bool isPlayerInViewDistance = false;
     private bool isPlayerInShootDistance = false;
 
     // Start is called before the first frame update
-    protected void Start()
+    protected override void Start()
     {
-        playerTrans = FindObjectOfType<PlayerController>().transform;
+        base.Start();
     }
 
     // Update is called once per frame
@@ -92,6 +91,10 @@ public class ElfCannon : Enemy
 
     protected override void OnDeath()
     {
+        if (isDead)
+        {
+            return;
+        }
         base.OnDeath();
         cannonAnim.SetTrigger("Death");
         audioSource.Stop();
