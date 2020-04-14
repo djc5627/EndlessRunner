@@ -8,6 +8,6 @@ public class PlayerProp : MonoBehaviour
 
     void Update()
     {
-        transform.rotation *= Quaternion.Euler(0f, turnSpeed, 0f);
+        transform.rotation *= Quaternion.Euler(0f, turnSpeed * Time.deltaTime, 0f);
     }
 }
