@@ -21,9 +21,8 @@ public class ElfCopterController : Enemy
     private float lastShootTime = Mathf.NegativeInfinity;
     private bool isPlayerInShootDistance = false;
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         playerTrans = FindObjectOfType<PlayerController>().transform;
         agent.updateRotation = false;
     }

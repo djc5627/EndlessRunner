@@ -35,9 +35,8 @@ public class ElfController : Enemy
         nextClipTime = Random.Range(timeToNextClipMin, timeToNextClipMax);
     }
 
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
         playerTrans = FindObjectOfType<PlayerController>().transform;
     }
 

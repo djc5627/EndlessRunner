@@ -25,17 +25,14 @@ public class ElfCannon : Enemy
     public float deathExplosionDelay = .05f;
 
     private Transform playerTrans;
-    private Rigidbody[] puppetRbs;
     private float lastShootTime = Mathf.NegativeInfinity;
     private bool isPlayerInViewDistance = false;
     private bool isPlayerInShootDistance = false;
 
     // Start is called before the first frame update
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
         playerTrans = FindObjectOfType<PlayerController>().transform;
-        puppetRbs = ragdollRoot.GetComponentsInChildren<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -93,17 +90,6 @@ public class ElfCannon : Enemy
         isPlayerInShootDistance = (distanceToPlayer <= shootViewDistance) ? true : false;
     }
 
-    private IEnumerator DeathExplosionRoutine()
-    {
-        yield return new WaitForSeconds(deathExplosionDelay);
-        foreach (var limbRb in puppetRbs)
-        {
-            limbRb.AddExplosionForce(deathExplodeForce, transform.position, deathExplodeRaidus);
-        }
-        yield return null;
-
-    }
-
     protected override void OnDeath()
     {
         base.OnDeath();
@@ -111,6 +97,5 @@ public class ElfCannon : Enemy
         audioSource.Stop();
         Instantiate(explosionEffect, transform.position, Quaternion.identity);
         smokeParticles.SetActive(true);
-        StartCoroutine(DeathExplosionRoutine());
     }
 }
