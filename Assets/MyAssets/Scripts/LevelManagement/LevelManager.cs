@@ -22,7 +22,6 @@ public class LevelManager : MonoBehaviour
     private int nextGroundIndex;
     private List<GameObject> spawnedGrounds = new List<GameObject>();
     private List<GameObject> spawnedTerrains = new List<GameObject>();
-    private List<GameObject> obstacles = new List<GameObject>();
 
 
     private void Start()
@@ -30,7 +29,6 @@ public class LevelManager : MonoBehaviour
         objectPoolManager = ObjectPoolManager.Instance;
         playerTrans = FindObjectOfType<PlayerController>().transform;
         playerStartPos = playerTrans.position;
-        InitObstacles();
         ClearLevel();
         InitSpawnGround(groundViewDistance);
         InitSpawnTerrain(terrainViewDistance);
@@ -40,26 +38,11 @@ public class LevelManager : MonoBehaviour
     {
         //Maybe only do this on some frames? every t seconds
         GroundCulling();
-        ObstacleCulling();
         GenerateGrounds();
         GenerateTerrains();
     }
 
     #region Init
-    
-    //Assumes the hierarchy is obstacle container, then one more level of containers
-    private void InitObstacles()
-    {
-        foreach (Transform childContainer in obstacleContainer)
-        {
-            foreach (Transform obstacle in childContainer)
-            {
-                obstacles.Add(obstacle.gameObject);
-                obstacle.gameObject.SetActive(false);
-            }
-            
-        }
-    }
 
     //Spawn first chunks of grounds within distance
     private void InitSpawnGround(float distance)
@@ -155,24 +138,6 @@ public class LevelManager : MonoBehaviour
             else
             {
                 if (!terrain.activeSelf) terrain.SetActive(true);
-            }
-        }
-    }
-
-    //Enable obstacles view dist from player and disable otherwise
-    private void ObstacleCulling()
-    {
-        foreach (var obstacle in obstacles)
-        {
-            float zPos = obstacle.transform.position.z;
-            float deltaZToPlayer = Mathf.Abs(zPos - playerTrans.position.z);
-            if (deltaZToPlayer > groundViewDistance)
-            {
-                if (obstacle.activeSelf) obstacle.SetActive(false);
-            }
-            else
-            {
-                if (!obstacle.activeSelf) obstacle.SetActive(true);
             }
         }
     }
