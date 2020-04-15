@@ -10,6 +10,7 @@ public class ObstacleSpawnManager : MonoBehaviour
     public Transform obstacleContainer;
     public float spawnDelay = 3f;
     public float obstacleSpawnZOffset = 300f;
+    public float spawnAreaWidth = 20f;
     public Obstacle[] obstacles;
 
     private float lastSpawnTime = Mathf.NegativeInfinity;
@@ -51,9 +52,11 @@ public class ObstacleSpawnManager : MonoBehaviour
     private void SpawnObstacle()
     {
         Obstacle obstacleToSpawn = PickRandomObstacle();
-        Vector3 spawnPos = playerTrans.position + Vector3.forward * obstacleSpawnZOffset;
         Quaternion rot = Quaternion.LookRotation(Vector3.back, Vector2.up);
+        Vector3 spawnPos;
+        spawnPos.x = Random.Range(-spawnAreaWidth, spawnAreaWidth);
         spawnPos.y = obstacleToSpawn.spawnYOffset;
+        spawnPos.z = playerTrans.position.z + obstacleSpawnZOffset;
         Instantiate(obstacleToSpawn.obstacleObj, spawnPos, rot, obstacleContainer);
         lastSpawnTime = Time.time;
     }
