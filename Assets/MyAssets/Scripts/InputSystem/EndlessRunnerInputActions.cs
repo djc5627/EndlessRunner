@@ -27,6 +27,22 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""MeleeAttack_Press"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""40e457a1-8264-43d6-ac28-27d9a7216a48"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
+                    ""name"": ""RangedAttack_Press"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""c5883869-8362-4feb-b9b3-9168cf0c4a9f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press""
+                },
+                {
                     ""name"": ""ShootPrimary_Press"",
                     ""type"": ""PassThrough"",
                     ""id"": ""f31f1eac-4cf6-4f92-82d1-4d979e71b1e9"",
@@ -212,6 +228,28 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""AimDownSights_Press"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5b8a9995-c67f-402d-9195-9c6b2b95bbfe"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""MeleeAttack_Press"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8e7ff628-f099-4f7b-bc7b-1e14aa3b9fa6"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""RangedAttack_Press"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -298,6 +336,8 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_MoveInput = m_Player.FindAction("MoveInput", throwIfNotFound: true);
+        m_Player_MeleeAttack_Press = m_Player.FindAction("MeleeAttack_Press", throwIfNotFound: true);
+        m_Player_RangedAttack_Press = m_Player.FindAction("RangedAttack_Press", throwIfNotFound: true);
         m_Player_ShootPrimary_Press = m_Player.FindAction("ShootPrimary_Press", throwIfNotFound: true);
         m_Player_ShootPrimary_Release = m_Player.FindAction("ShootPrimary_Release", throwIfNotFound: true);
         m_Player_ShootSecondary_Press = m_Player.FindAction("ShootSecondary_Press", throwIfNotFound: true);
@@ -361,6 +401,8 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
     private readonly InputActionMap m_Player;
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_MoveInput;
+    private readonly InputAction m_Player_MeleeAttack_Press;
+    private readonly InputAction m_Player_RangedAttack_Press;
     private readonly InputAction m_Player_ShootPrimary_Press;
     private readonly InputAction m_Player_ShootPrimary_Release;
     private readonly InputAction m_Player_ShootSecondary_Press;
@@ -374,6 +416,8 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
         private @EndlessRunnerInputActions m_Wrapper;
         public PlayerActions(@EndlessRunnerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @MoveInput => m_Wrapper.m_Player_MoveInput;
+        public InputAction @MeleeAttack_Press => m_Wrapper.m_Player_MeleeAttack_Press;
+        public InputAction @RangedAttack_Press => m_Wrapper.m_Player_RangedAttack_Press;
         public InputAction @ShootPrimary_Press => m_Wrapper.m_Player_ShootPrimary_Press;
         public InputAction @ShootPrimary_Release => m_Wrapper.m_Player_ShootPrimary_Release;
         public InputAction @ShootSecondary_Press => m_Wrapper.m_Player_ShootSecondary_Press;
@@ -394,6 +438,12 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
                 @MoveInput.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMoveInput;
                 @MoveInput.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMoveInput;
                 @MoveInput.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMoveInput;
+                @MeleeAttack_Press.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMeleeAttack_Press;
+                @MeleeAttack_Press.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMeleeAttack_Press;
+                @MeleeAttack_Press.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMeleeAttack_Press;
+                @RangedAttack_Press.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRangedAttack_Press;
+                @RangedAttack_Press.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRangedAttack_Press;
+                @RangedAttack_Press.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRangedAttack_Press;
                 @ShootPrimary_Press.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootPrimary_Press;
                 @ShootPrimary_Press.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootPrimary_Press;
                 @ShootPrimary_Press.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootPrimary_Press;
@@ -425,6 +475,12 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
                 @MoveInput.started += instance.OnMoveInput;
                 @MoveInput.performed += instance.OnMoveInput;
                 @MoveInput.canceled += instance.OnMoveInput;
+                @MeleeAttack_Press.started += instance.OnMeleeAttack_Press;
+                @MeleeAttack_Press.performed += instance.OnMeleeAttack_Press;
+                @MeleeAttack_Press.canceled += instance.OnMeleeAttack_Press;
+                @RangedAttack_Press.started += instance.OnRangedAttack_Press;
+                @RangedAttack_Press.performed += instance.OnRangedAttack_Press;
+                @RangedAttack_Press.canceled += instance.OnRangedAttack_Press;
                 @ShootPrimary_Press.started += instance.OnShootPrimary_Press;
                 @ShootPrimary_Press.performed += instance.OnShootPrimary_Press;
                 @ShootPrimary_Press.canceled += instance.OnShootPrimary_Press;
@@ -514,6 +570,8 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
     public interface IPlayerActions
     {
         void OnMoveInput(InputAction.CallbackContext context);
+        void OnMeleeAttack_Press(InputAction.CallbackContext context);
+        void OnRangedAttack_Press(InputAction.CallbackContext context);
         void OnShootPrimary_Press(InputAction.CallbackContext context);
         void OnShootPrimary_Release(InputAction.CallbackContext context);
         void OnShootSecondary_Press(InputAction.CallbackContext context);

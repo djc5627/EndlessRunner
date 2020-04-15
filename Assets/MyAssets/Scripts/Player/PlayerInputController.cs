@@ -8,6 +8,8 @@ public class PlayerInputController: MonoBehaviour
 {
     public delegate void _OnJump_Pressed();
     public delegate void _OnJump_Released();
+    public delegate void _OnMeleeAttack_Pressed();
+    public delegate void _OnRangedAttack_Pressed();
     public delegate void _OnPrimaryFire_Pressed();
     public delegate void _OnPrimaryFire_Released();
     public delegate void _OnSecondaryFire_Pressed();
@@ -17,6 +19,8 @@ public class PlayerInputController: MonoBehaviour
 
     public event _OnJump_Pressed onJump_Pressed;
     public event _OnJump_Released onJump_Released;
+    public event _OnMeleeAttack_Pressed onMeleeAttack_Pressed;
+    public event _OnRangedAttack_Pressed onRangedAttack_Pressed;
     public event _OnPrimaryFire_Pressed onPrimaryFire_Pressed;
     public event _OnPrimaryFire_Released onPrimaryFire_Released;
     public event _OnSecondaryFire_Pressed onSecondaryFire_Pressed;
@@ -65,6 +69,16 @@ public class PlayerInputController: MonoBehaviour
     {
         isAimDownSightsHeld = false;
         if (onAimDownSights_Released != null) onAimDownSights_Released();
+    }
+
+    private void OnMeleeAttack_Press()
+    {
+        if (onMeleeAttack_Pressed != null) onMeleeAttack_Pressed();
+    }
+
+    private void OnRangedAttack_Press()
+    {
+        if (onRangedAttack_Pressed != null) onRangedAttack_Pressed();
     }
 
     private void OnShootPrimary_Press()
