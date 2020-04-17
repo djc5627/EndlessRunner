@@ -145,7 +145,7 @@ public class ElfController : Enemy
         foreach(Collider col in overlappingColliders)   //Get players in range
         {
             PlayerController playerScript = col.GetComponent<PlayerController>();
-            if (!playersHit.Contains(playerScript)) //Check if already hit player
+            if (playerScript != null && !playersHit.Contains(playerScript)) //Check if already hit player
             {
                 playerScript.TakeDamage(meleeDamage);
                 playersHit.Add(playerScript);
