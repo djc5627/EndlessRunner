@@ -30,4 +30,9 @@ public class PlayerAnimController : MonoBehaviour
     {
         anim.SetBool("isUsingRocket", isUsingRocket);
     }
+
+    public void MeleeAttackTrigger()
+    {
+        anim.SetTrigger("MeleeAttack");
+    }
 }

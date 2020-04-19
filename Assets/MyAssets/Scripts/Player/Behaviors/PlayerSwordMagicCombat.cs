@@ -7,6 +7,8 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
 {
     public Transform projectileContainer;
     public BoxCollider swordAttackCollider;
+    public GameObject swordObj;
+    public GameObject crossbowObj;
     public LayerMask swordAttackMask;
     public float swordDamage;
     public float swordDelay = .2f;
@@ -18,6 +20,10 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
     private float lastSwordSwingTime = Mathf.NegativeInfinity;
     private float lastCrossbowShootTime = Mathf.NegativeInfinity;
 
+    protected  void Start()
+    {
+        SwitchToCrossbow();
+    }
 
     protected override void SubscribeToInputEvents()
     {
@@ -48,6 +54,7 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
 
     private void SwingSword()
     {
+        SwitchToSword();
         Bounds swordColBounds = swordAttackCollider.bounds;
         Collider[] hitColliders = Physics.OverlapBox(swordColBounds.center, swordColBounds.extents, swordAttackCollider.transform.rotation, swordAttackMask);
         List<Enemy> affectedEnemies = new List<Enemy>();
@@ -67,11 +74,14 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
             if (enemyScript != null) enemyScript.TakeDamage(swordDamage);
         }
 
+        playerAnimController.MeleeAttackTrigger();
         lastSwordSwingTime = Time.time;
     }
 
     private void ShootCrossbow()
     {
+        SwitchToCrossbow();
+
         //Rumble
         InputDevice device = InputDeviceManager.GetPlayerDevice(playerInput.GetPlayerIndex());
         RumbleManager.Instance.StartRumble(device, .1f, .15f, .015f);
@@ -82,5 +92,17 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
 
         bulletRb.AddForce(tempBolt.transform.forward * crossbowShootForce);
         lastCrossbowShootTime = Time.time;
+    }
+
+    private void SwitchToSword()
+    {
+        crossbowObj.SetActive(false);
+        swordObj.SetActive(true);
+    }
+
+    private void SwitchToCrossbow()
+    {
+        crossbowObj.SetActive(true);
+        swordObj.SetActive(false);
     }
 }

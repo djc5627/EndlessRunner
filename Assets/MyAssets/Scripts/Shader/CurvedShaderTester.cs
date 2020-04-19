@@ -61,6 +61,12 @@ public class CurvedShaderTester : MonoBehaviour
             CheckBendVisible();
         }
         
+        Shader.SetGlobalVector("_BEND_ORIGIN", transform.position);
+        
+    }
+
+    private void UpdateBendOrigin()
+    {
         foreach (Material m in CurvedSurfaceMats)
         {
             m.SetVector("_BendOrigin", transform.position);
