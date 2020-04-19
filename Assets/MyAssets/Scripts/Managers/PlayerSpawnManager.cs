@@ -41,6 +41,7 @@ public class PlayerSpawnManager : MonoBehaviour
             //GameObject tempPlayer = PlayerInput.Instantiate(playerPrefab, playerIndex, "Gamepad", -1, InputDeviceManager.GetPlayerDevice(playerIndex)).gameObject;
             GameObject tempPlayer = PlayerInput.Instantiate(playerPrefab, playerIndex, "Gamepad", -1).gameObject;
             tempPlayer.gameObject.GetComponent<PlayerInputController>().SetPlayerIndex(playerIndex);
+            InputDeviceManager.AddPlayer(Gamepad.current);
 
             Transform playerObj = tempPlayer.transform.root;
             playerObj.position = playerSpawns[0].position;
