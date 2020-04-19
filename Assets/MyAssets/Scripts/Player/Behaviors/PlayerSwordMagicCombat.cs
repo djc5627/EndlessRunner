@@ -74,6 +74,13 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
             if (enemyScript != null) enemyScript.TakeDamage(swordDamage);
         }
 
+        //Rumble
+        if (affectedEnemies.Count > 0)
+        {
+            InputDevice device = InputDeviceManager.GetPlayerDevice(playerInput.GetPlayerIndex());
+            RumbleManager.Instance.StartRumble(device, 1f, 1f, .04f);
+        }
+
         playerAnimController.MeleeAttackTrigger();
         lastSwordSwingTime = Time.time;
     }
@@ -84,7 +91,7 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
 
         //Rumble
         InputDevice device = InputDeviceManager.GetPlayerDevice(playerInput.GetPlayerIndex());
-        RumbleManager.Instance.StartRumble(device, .1f, .15f, .015f);
+        RumbleManager.Instance.StartRumble(device, .8f, .8f, .03f);
 
         GameObject tempBolt = Instantiate(crossbowAmmoPrefab, crossbowFirepoint.position, Quaternion.LookRotation(Vector3.forward), projectileContainer);
         Rigidbody bulletRb = tempBolt.GetComponent<Rigidbody>();
