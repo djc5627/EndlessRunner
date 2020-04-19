@@ -28,39 +28,39 @@ public class PlayerSpawnManager : MonoBehaviour
         }
 
 
-        Destroy(defaultPlayer);
         SpawnPlayers();
     }
 
     private void SpawnPlayers()
     {
-        //If no current players, spawn one
-        if (InputDeviceManager.GetCurrentPlayerCount() == 0)
+        int playerCount = InputDeviceManager.GetCurrentPlayerCount();
+
+        //If no current players, use the default
+        if (playerCount == 0 && defaultPlayer != null)
         {
             int playerIndex = 0;
-            //GameObject tempPlayer = PlayerInput.Instantiate(playerPrefab, playerIndex, "Gamepad", -1, InputDeviceManager.GetPlayerDevice(playerIndex)).gameObject;
-            GameObject tempPlayer = PlayerInput.Instantiate(playerPrefab, playerIndex, "Gamepad", -1).gameObject;
-            tempPlayer.gameObject.GetComponent<PlayerInputController>().SetPlayerIndex(playerIndex);
-            InputDeviceManager.AddPlayer(Gamepad.current);
+            InputDeviceManager.AddPlayer(Gamepad.current.device);
 
-            Transform playerObj = tempPlayer.transform.root;
-            playerObj.position = playerSpawns[0].position;
-            playerObj.parent = playerContainer;
+            defaultPlayer.GetComponent<PlayerInputController>().SetPlayerIndex(playerIndex);
+
+            defaultPlayer.transform.position = playerSpawns[0].position;
         }
-
-
-        int maxPlayers = InputDeviceManager.GetMaxPlayerCount();
-        for (int i = 0; i < maxPlayers; i++)
+        else
         {
-            if (InputDeviceManager.GetPlayerDevice(i) != null)
+            if (defaultPlayer != null) Destroy(defaultPlayer);
+            int maxPlayers = InputDeviceManager.GetMaxPlayerCount();
+            for (int i = 0; i < maxPlayers; i++)
             {
-                int playerIndex = i;
-                GameObject tempPlayer = PlayerInput.Instantiate(playerPrefab, playerIndex, "Gamepad", -1, InputDeviceManager.GetPlayerDevice(playerIndex)).gameObject;
-                tempPlayer.gameObject.GetComponent<PlayerInputController>().SetPlayerIndex(playerIndex);
+                if (InputDeviceManager.GetPlayerDevice(i) != null)
+                {
+                    int playerIndex = i;
+                    GameObject tempPlayer = PlayerInput.Instantiate(playerPrefab, playerIndex, "Gamepad", -1, InputDeviceManager.GetPlayerDevice(playerIndex)).gameObject;
+                    tempPlayer.gameObject.GetComponent<PlayerInputController>().SetPlayerIndex(playerIndex);
 
-                Transform playerObj = tempPlayer.transform.root;
-                playerObj.position = playerSpawns[i].position;
-                playerObj.parent = playerContainer;
+                    Transform playerObj = tempPlayer.transform.root;
+                    playerObj.position = playerSpawns[i].position;
+                    playerObj.parent = playerContainer;
+                }
             }
         }
     }

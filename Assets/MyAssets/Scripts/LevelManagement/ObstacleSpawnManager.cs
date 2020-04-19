@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 using System.IO;
 
 public class ObstacleSpawnManager : MonoBehaviour
@@ -8,11 +9,12 @@ public class ObstacleSpawnManager : MonoBehaviour
     public bool useRandomSeed;
     public int customSeed;
     public Transform obstacleContainer;
+    public float creditsPerSecond = 1f;
     public float spawnDelay = 3f;
-    public float obstacleSpawnZOffset = 300f;
     public float spawnAreaWidth = 20f;
     public Obstacle[] obstacles;
 
+    private float currentCredits = 0f;
     private float lastSpawnTime = Mathf.NegativeInfinity;
     private Transform playerTrans;
     private Vector3 playerStartPos;
@@ -23,19 +25,28 @@ public class ObstacleSpawnManager : MonoBehaviour
     {
         public GameObject obstacleObj;
         public float spawnYOffset;
+        public float minZOffset;
+        public float maxZOffset;
+        public float cost;
     }
-
 
     private void Start()
     {
         playerTrans = FindObjectOfType<PlayerController>().transform;
         playerStartPos = playerTrans.position;
+        SortObstalcesByCost();
         SetSeed();
     }
 
     private void Update()
     {
         GenerateObstacles();
+        currentCredits += creditsPerSecond * Time.deltaTime;
+    }
+
+    private void SortObstalcesByCost()
+    {
+        obstacles = obstacles.OrderByDescending(o => o.cost).ToArray<Obstacle>();
     }
 
     private void GenerateObstacles()
@@ -45,19 +56,32 @@ public class ObstacleSpawnManager : MonoBehaviour
             return;
         }
 
-        SpawnObstacle();
+        SpawnMostExpensiveObstacle();
 
     }
 
-    private void SpawnObstacle()
+    private void SpawnMostExpensiveObstacle()
     {
-        Obstacle obstacleToSpawn = PickRandomObstacle();
+        //Assumes sorted by descending
+        foreach (var obstacle in obstacles)
+        {
+            if (currentCredits >= obstacle.cost)
+            {
+                SpawnObstacle(obstacle);
+                currentCredits -= obstacle.cost;
+            }
+        }
+    }
+
+    private void SpawnObstacle(Obstacle obstacle)
+    {
         Quaternion rot = Quaternion.LookRotation(Vector3.back, Vector2.up);
+        float zOffset = Random.Range(obstacle.minZOffset, obstacle.maxZOffset);
         Vector3 spawnPos;
         spawnPos.x = Random.Range(-spawnAreaWidth, spawnAreaWidth);
-        spawnPos.y = obstacleToSpawn.spawnYOffset;
-        spawnPos.z = playerTrans.position.z + obstacleSpawnZOffset;
-        Instantiate(obstacleToSpawn.obstacleObj, spawnPos, rot, obstacleContainer);
+        spawnPos.y = obstacle.spawnYOffset;
+        spawnPos.z = playerTrans.position.z + zOffset;
+        Instantiate(obstacle.obstacleObj, spawnPos, rot, obstacleContainer);
         lastSpawnTime = Time.time;
     }
 

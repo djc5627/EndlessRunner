@@ -41,6 +41,8 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
         if (lastSwordSwingTime + swordDelay <= Time.time)
         {
             SwingSword();
+            lastSwordSwingTime = Time.time;
+            Debug.Log("Sword was swung!");
         }
     }
 
@@ -67,6 +69,7 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
                 affectedEnemies.Add(enemyProxy.enemyScript);
             }
         }
+
 
         //Deal damage to all the enemies hit
         foreach (Enemy enemyScript in affectedEnemies)
