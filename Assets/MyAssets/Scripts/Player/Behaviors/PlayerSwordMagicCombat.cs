@@ -42,7 +42,6 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
         {
             SwingSword();
             lastSwordSwingTime = Time.time;
-            Debug.Log("Sword was swung!");
         }
     }
 

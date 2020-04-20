@@ -12,12 +12,14 @@ public class ObstacleSpawnManager : MonoBehaviour
     public float startCreditRate = 1f;
     public float creditTimeFactor = .05f;
     public float spawnDelay = 3f;
+    public int maxWaveSize = 4;
     public float spawnAreaWidth = 20f;
     public Obstacle[] obstacles;
 
+    private float cheapestObstacleCost;
     private float currentCredits = 0f;
     private float currentCreditRate;
-    private float lastSpawnTime = Mathf.NegativeInfinity;
+    private float lastWaveAttemptTime = Mathf.NegativeInfinity;
     private Transform playerTrans;
     private Vector3 playerStartPos;
     private List<GameObject> spawnedObstacles = new List<GameObject>();
@@ -43,7 +45,7 @@ public class ObstacleSpawnManager : MonoBehaviour
 
     private void Update()
     {
-        GenerateObstacles();
+        ObstacleSpawner();
         currentCredits += currentCreditRate * Time.deltaTime;
         currentCreditRate += Time.deltaTime * creditTimeFactor;
     }
@@ -51,17 +53,29 @@ public class ObstacleSpawnManager : MonoBehaviour
     private void SortObstalcesByCost()
     {
         obstacles = obstacles.OrderByDescending(o => o.cost).ToArray<Obstacle>();
+        cheapestObstacleCost = obstacles[obstacles.Length - 1].cost;
     }
 
-    private void GenerateObstacles()
+    private void ObstacleSpawner()
     {
-        if (lastSpawnTime + spawnDelay > Time.time)
+        if (lastWaveAttemptTime + spawnDelay > Time.time)
         {
             return;
         }
 
-        SpawnMostExpensiveObstacle();
+        StartCoroutine(SpawnWaveRoutine());
+        lastWaveAttemptTime = Time.time;
+    }
 
+    private IEnumerator SpawnWaveRoutine()
+    {
+        int spawnCount = 0;
+        while (currentCredits >= cheapestObstacleCost && spawnCount < maxWaveSize)
+        {
+            SpawnMostExpensiveObstacle();
+            spawnCount++;
+            yield return null;
+        }
     }
 
     private void SpawnMostExpensiveObstacle()
@@ -86,7 +100,6 @@ public class ObstacleSpawnManager : MonoBehaviour
         spawnPos.y = obstacle.spawnYOffset;
         spawnPos.z = playerTrans.position.z + zOffset;
         Instantiate(obstacle.obstacleObj, spawnPos, rot, obstacleContainer);
-        lastSpawnTime = Time.time;
     }
 
     
@@ -99,8 +112,10 @@ public class ObstacleSpawnManager : MonoBehaviour
 
     private void OnGUI()
     {
-        GUI.TextField(new Rect(10, 10, 200, 20),"Current Credits: " + (int) currentCredits);
-        GUI.TextField(new Rect(10, 40, 200, 20), "Credits/Second: " + (int) currentCreditRate);
+        GUI.TextField(new Rect(10, 10, 200, 20),"Next wave: " + (int) (spawnDelay - (Time.time-lastWaveAttemptTime)));
+        GUI.TextField(new Rect(10, 40, 200, 20),"Current Credits: " + currentCredits.ToString("F2"));
+        GUI.TextField(new Rect(10, 70, 200, 20), "Credits/Second: " + currentCreditRate.ToString("F2"));
+        GUI.TextField(new Rect(10, 100, 200, 20), "Cheapest Obstacle Cost: " + (int) cheapestObstacleCost);
     }
 
 
