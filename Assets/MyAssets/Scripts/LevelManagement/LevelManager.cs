@@ -7,10 +7,13 @@ public class LevelManager : MonoBehaviour
 {
     public Transform groundContainer;
     public Transform obstacleContainer;
+    public GameObject terrainPrefab;
+    public GameObject groundPrefab;
     public float terrainLength = 1000f;
     public float groundLength = 100f;
     public float terrainViewDistance = 2000f;
     public float groundViewDistance = 300f;
+    public float terrainYOffset = 1f;
     public float inspectorGenerateDistance = 1000f;
 
     private ObjectPoolManager objectPoolManager;
@@ -94,16 +97,37 @@ public class LevelManager : MonoBehaviour
     private void SpawnGround(float zDistance)
     {
         Vector3 spawnPosition = Vector3.forward * zDistance;
-        //GameObject newGround = Instantiate(groundPrefab, spawnPosition, Quaternion.identity, groundContainer);
-        GameObject newGround = objectPoolManager.SpawnFromPool("Ground", spawnPosition, Quaternion.identity, groundContainer);
+        GameObject newGround;
+
+        //If editor, dont get from pool
+        if (Application.isEditor)
+        {
+            newGround = Instantiate(groundPrefab, spawnPosition, Quaternion.identity, groundContainer);
+        }
+        else
+        {
+            newGround = objectPoolManager.SpawnFromPool("Ground", spawnPosition, Quaternion.identity, groundContainer);
+
+        }
         spawnedGrounds.Add(newGround);
     }
 
     private void SpawnTerrain(float zDistance)
     {
         Vector3 spawnPosition = Vector3.forward * zDistance;
-        //GameObject newTerrain = Instantiate(terrainPrefab, spawnPosition, Quaternion.identity, groundContainer);
-        GameObject newTerrain = objectPoolManager.SpawnFromPool("Terrain", spawnPosition, Quaternion.identity, groundContainer);
+        spawnPosition += Vector3.up * terrainYOffset;
+        GameObject newTerrain;
+
+        //If editor, dont get from pool
+        if (Application.isEditor)
+        {
+            newTerrain = Instantiate(terrainPrefab, spawnPosition, Quaternion.identity, groundContainer);
+        }
+        else
+        {
+            newTerrain = objectPoolManager.SpawnFromPool("Terrain", spawnPosition, Quaternion.identity, groundContainer);
+        }
+
         spawnedTerrains.Add(newTerrain);
     }
 

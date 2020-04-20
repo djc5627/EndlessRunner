@@ -21,6 +21,7 @@ public abstract class Enemy : MonoBehaviour
     protected Transform playerTrans;
     protected bool isDead = false;
     protected float currentHealth;
+    
 
     protected virtual void Awake()
     {

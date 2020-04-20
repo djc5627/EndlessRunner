@@ -20,12 +20,15 @@ public class ElfController : Enemy
     public float timeToNextClipMin = 3f;
     public float timeToNextClipMax = 5f;
     public float clipVolumeScale = 5f;
+    public float knockBackVelocity = 10f;
+    public float knockBackDuration = 1f;
     public AudioClip[] elfSounds;
 
     private bool reachedGround = false;
     private bool isAttacking = false;
     private float lastSoundTime = Mathf.NegativeInfinity;
     private float nextClipTime;
+    private float knockbackStartTime = Mathf.NegativeInfinity;
 
     protected override void Awake()
     {
@@ -113,6 +116,24 @@ public class ElfController : Enemy
         return clipArray[randIndex];
     }
 
+    private IEnumerator KnockbackRoutine()
+    {
+        anim.SetBool("isKnockedback", true);
+        agent.updateRotation = false;
+        knockbackStartTime = Time.time;
+        Vector3 dir = (transform.position - playerTrans.position).normalized;
+
+        while (knockbackStartTime + knockBackDuration > Time.time)
+        {
+            agent.velocity = dir * knockBackVelocity;
+            yield return null;
+        }
+
+        anim.SetBool("isKnockedback", false);
+        agent.velocity = Vector3.zero;
+        agent.updateRotation = true;
+    }
+
     protected override void OnDeath()
     {
         if (isDead)
@@ -124,6 +145,12 @@ public class ElfController : Enemy
         elfCollider.enabled = false;
         agent.enabled = false;
         this.enabled = false;
+    }
+
+    public override void TakeDamage(float damage)
+    {
+        base.TakeDamage(damage);
+        StartCoroutine(KnockbackRoutine());
     }
 
     public void StartAttacking()
