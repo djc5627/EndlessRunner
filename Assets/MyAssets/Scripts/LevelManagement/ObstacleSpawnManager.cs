@@ -9,12 +9,14 @@ public class ObstacleSpawnManager : MonoBehaviour
     public bool useRandomSeed;
     public int customSeed;
     public Transform obstacleContainer;
-    public float creditsPerSecond = 1f;
+    public float startCreditRate = 1f;
+    public float creditTimeFactor = .05f;
     public float spawnDelay = 3f;
     public float spawnAreaWidth = 20f;
     public Obstacle[] obstacles;
 
     private float currentCredits = 0f;
+    private float currentCreditRate;
     private float lastSpawnTime = Mathf.NegativeInfinity;
     private Transform playerTrans;
     private Vector3 playerStartPos;
@@ -34,6 +36,7 @@ public class ObstacleSpawnManager : MonoBehaviour
     {
         playerTrans = FindObjectOfType<PlayerController>().transform;
         playerStartPos = playerTrans.position;
+        currentCreditRate = startCreditRate;
         SortObstalcesByCost();
         SetSeed();
     }
@@ -41,7 +44,8 @@ public class ObstacleSpawnManager : MonoBehaviour
     private void Update()
     {
         GenerateObstacles();
-        currentCredits += creditsPerSecond * Time.deltaTime;
+        currentCredits += currentCreditRate * Time.deltaTime;
+        currentCreditRate += Time.deltaTime * creditTimeFactor;
     }
 
     private void SortObstalcesByCost()
@@ -91,6 +95,12 @@ public class ObstacleSpawnManager : MonoBehaviour
     {
         int randomIndex = Random.Range(0, obstacles.Length);
         return obstacles[randomIndex];
+    }
+
+    private void OnGUI()
+    {
+        GUI.TextField(new Rect(10, 10, 200, 20),"Current Credits: " + (int) currentCredits);
+        GUI.TextField(new Rect(10, 40, 200, 20), "Credits/Second: " + (int) currentCreditRate);
     }
 
 
