@@ -14,9 +14,11 @@ public class PlayerController : MonoBehaviour
     public float maxHealth = 10f;
     public float invicibilityTime = 1.5f;
     public float deathBarrierYOffset = -50f;
+    public AudioClip hurtSound;
     [SerializeField] public SkinnedMeshRenderer playerSkinRend;
     public Material[] playerBodyMats;
-    
+
+    private AudioSource audioSource;
     private float currentHealth;
     private float lastDamageTime = Mathf.NegativeInfinity;
     private bool isInvincible = false;
@@ -37,6 +39,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         SetBodyMaterial();
     }
 
@@ -93,6 +96,7 @@ public class PlayerController : MonoBehaviour
         currentHealth -= damage;
         healthBar.SetHealth(currentHealth);
         lastDamageTime = Time.time;
+        if (hurtSound != null) audioSource.PlayOneShot(hurtSound);
         if (currentHealth <= 0f)
         {
             Death();

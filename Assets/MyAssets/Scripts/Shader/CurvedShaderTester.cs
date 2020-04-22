@@ -4,7 +4,6 @@ using System.Linq;
 using System.Collections.Generic;
 
 [ExecuteInEditMode]
-
 public class CurvedShaderTester : MonoBehaviour
 {
     [Header("Shader Configuration")]
@@ -39,12 +38,14 @@ public class CurvedShaderTester : MonoBehaviour
         public Shader toShader;
     }
 
+#if UNITY_EDITOR
     void OnValidate()
     {
         CheckBendVisible();
         SetShaderParams();
     }
-    
+#endif
+
     void Start()
     {
         SetShaderParams();
@@ -56,11 +57,13 @@ public class CurvedShaderTester : MonoBehaviour
 
     void Update()
     {
+#if UNITY_EDITOR
         if (Application.isEditor)
         {
             CheckBendVisible();
         }
-        
+#endif
+
         Shader.SetGlobalVector("_BEND_ORIGIN", transform.position);
         
     }
@@ -72,7 +75,8 @@ public class CurvedShaderTester : MonoBehaviour
             m.SetVector("_BendOrigin", transform.position);
         }
     }
-    
+
+#if UNITY_EDITOR
     private void CheckBendVisible()
     {
         if (!Application.isPlaying)
@@ -82,7 +86,8 @@ public class CurvedShaderTester : MonoBehaviour
         }
         else ShowBend = true;
     }
-    
+#endif
+
     private void SetBendEnabled(float enabled)
     {
         foreach (Material m in CurvedSurfaceMats)
@@ -111,6 +116,7 @@ public class CurvedShaderTester : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     private List<Material> GetMaterialsWithShader(Shader shader)
     {
         List<Material> foundMaterials = new List<Material>();
@@ -126,6 +132,7 @@ public class CurvedShaderTester : MonoBehaviour
 
         return foundMaterials;
     }
+
 
     #region InspectorButtonFunctions
 
@@ -144,6 +151,7 @@ public class CurvedShaderTester : MonoBehaviour
         }
         Debug.Log("Found " + shaderCount + " shaders that are set for conversion!");
     }
+
 
     public void ConvertShaders()
     {
@@ -189,6 +197,8 @@ public class CurvedShaderTester : MonoBehaviour
         so.ApplyModifiedProperties();
         Debug.Log("Populated with " + prop.arraySize + " Shaders!");
     }
-
     #endregion
+#endif
+
+
 }

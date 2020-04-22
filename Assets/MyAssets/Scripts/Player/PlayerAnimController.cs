@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerAnimController : MonoBehaviour
 {
     public Animator anim;
+    public GameObject swordTrailObj;
 
     public void SetIsGrounded(bool isGrounded)
     {
@@ -34,5 +35,15 @@ public class PlayerAnimController : MonoBehaviour
     public void MeleeAttackTrigger()
     {
         anim.SetTrigger("MeleeAttack");
+    }
+
+    public void EnableSwordTrail()
+    {
+        if (swordTrailObj != null) swordTrailObj.SetActive(true);
+    }
+
+    public void DisableSwordTrail()
+    {
+        if (swordTrailObj != null) swordTrailObj.SetActive(false);
     }
 }

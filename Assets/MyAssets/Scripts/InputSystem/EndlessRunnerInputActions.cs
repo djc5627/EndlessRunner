@@ -131,6 +131,28 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
+                    ""name"": ""Negative"",
+                    ""id"": ""d9373d5c-a1f8-4ae7-beda-df73d839c783"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Positive"",
+                    ""id"": ""0d1e1732-ac6d-495c-8eea-a84afff3c1c9"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
                     ""name"": ""Arrow Keys"",
                     ""id"": ""c8b1bb8c-cc98-454c-bdf7-54bc134f21d3"",
                     ""path"": ""1DAxis"",
@@ -140,6 +162,28 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""MoveInput"",
                     ""isComposite"": true,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Negative"",
+                    ""id"": ""562dab48-7be8-4040-9e1e-83bab13307be"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Positive"",
+                    ""id"": ""ad257a9c-4b4b-4ebe-be7b-124ff1b13b93"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MoveInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": """",
@@ -209,11 +253,33 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""c256e710-5bed-49fa-aed5-5412531efafb"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard_Mouse"",
+                    ""action"": ""Jump_Press"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""d4d75c07-b342-4268-baf1-fb9f64908c9b"",
                     ""path"": ""<Gamepad>/buttonSouth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
+                    ""action"": ""Jump_Release"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3a8ad64f-090c-41cb-9b23-b6a5fbde28cf"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard_Mouse"",
                     ""action"": ""Jump_Release"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -242,11 +308,33 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""d0a2a25a-47a8-4523-8f56-265739bb085d"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard_Mouse"",
+                    ""action"": ""MeleeAttack_Press"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""8e7ff628-f099-4f7b-bc7b-1e14aa3b9fa6"",
                     ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
+                    ""action"": ""RangedAttack_Press"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""da73d102-36fe-415d-a89c-0338d1ee9eb4"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard_Mouse"",
                     ""action"": ""RangedAttack_Press"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -307,11 +395,33 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""fc7b3c2b-4acb-44cd-a290-8e57e1b1212c"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard_Mouse"",
+                    ""action"": ""JoinGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""7b750b40-8245-4f86-b951-3028ab385041"",
                     ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
+                    ""action"": ""LeaveGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d2540d99-b73e-465a-ac74-e81f224dfda6"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard_Mouse"",
                     ""action"": ""LeaveGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -326,6 +436,22 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
             ""devices"": [
                 {
                     ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Keyboard_Mouse"",
+            ""bindingGroup"": ""Keyboard_Mouse"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Mouse>"",
                     ""isOptional"": false,
                     ""isOR"": false
                 }
@@ -565,6 +691,15 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
         {
             if (m_GamepadSchemeIndex == -1) m_GamepadSchemeIndex = asset.FindControlSchemeIndex("Gamepad");
             return asset.controlSchemes[m_GamepadSchemeIndex];
+        }
+    }
+    private int m_Keyboard_MouseSchemeIndex = -1;
+    public InputControlScheme Keyboard_MouseScheme
+    {
+        get
+        {
+            if (m_Keyboard_MouseSchemeIndex == -1) m_Keyboard_MouseSchemeIndex = asset.FindControlSchemeIndex("Keyboard_Mouse");
+            return asset.controlSchemes[m_Keyboard_MouseSchemeIndex];
         }
     }
     public interface IPlayerActions

@@ -16,6 +16,7 @@ public abstract class Enemy : MonoBehaviour
     public GameObject armatureRoot;
     public float deathClipScale = 1f;
     public float deathForce = 10000f;
+    public Vector3 damageTextOffset = new Vector3(2f, 4f, 0f);
 
     protected Rigidbody[] ragdollRbs;
     protected Transform playerTrans;
@@ -74,6 +75,8 @@ public abstract class Enemy : MonoBehaviour
     {
         currentHealth -= damage;
         healthBar.SetHealth(currentHealth);
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + damageTextOffset);
+        GlobalUIManager.Instance.SpawnDamageText(screenPos, damage.ToString());
         if (currentHealth <= 0)
         {
             OnDeath();

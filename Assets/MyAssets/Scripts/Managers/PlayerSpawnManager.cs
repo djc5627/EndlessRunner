@@ -39,7 +39,7 @@ public class PlayerSpawnManager : MonoBehaviour
         if (playerCount == 0 && defaultPlayer != null)
         {
             int playerIndex = 0;
-            InputDeviceManager.AddPlayer(Gamepad.current.device);
+            if(Gamepad.current != null) InputDeviceManager.AddPlayer(Gamepad.current.device);
 
             defaultPlayer.GetComponent<PlayerInputController>().SetPlayerIndex(playerIndex);
 

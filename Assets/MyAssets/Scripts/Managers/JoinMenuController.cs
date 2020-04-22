@@ -9,6 +9,7 @@ public class JoinMenuController : MonoBehaviour
     public EndlessRunnerInputActions inputActions;
 
     public GameObject[] playerProps;
+    public GameObject[] playerTexts;
 
     private void OnEnable()
     {
@@ -28,10 +29,15 @@ public class JoinMenuController : MonoBehaviour
         inputActions.Menu.LeaveGame.performed += ctx => OnLeaveGame(ctx);
         inputActions.Menu.StartGame.performed += ctx => OnStartGame();
 
-        //Hide props
         foreach(var playerProp in playerProps)
         {
             playerProp.SetActive(false);
+            
+        }
+        
+        foreach(var playerText in playerTexts)
+        {
+            playerText.SetActive(true);
         }
     }
 
@@ -41,6 +47,7 @@ public class JoinMenuController : MonoBehaviour
         {
             int playerNumber = InputDeviceManager.GetPlayerNumber(ctx.control.device);
             playerProps[playerNumber-1].SetActive(true);
+            playerTexts[playerNumber - 1].SetActive(false);
             Debug.Log("Player " + playerNumber + " joined game");
         }
     }
@@ -51,6 +58,7 @@ public class JoinMenuController : MonoBehaviour
         if (InputDeviceManager.RemovePlayer(ctx.control.device))
         {
             playerProps[playerNumber - 1].SetActive(false);
+            playerTexts[playerNumber - 1].SetActive(true);
             Debug.Log("Player " + playerNumber + " left game");
         }
     }

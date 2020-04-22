@@ -115,7 +115,7 @@ public class ObstacleSpawnManager : MonoBehaviour
         GUI.TextField(new Rect(10, 10, 200, 20),"Next wave: " + (int) (spawnDelay - (Time.time-lastWaveAttemptTime)));
         GUI.TextField(new Rect(10, 40, 200, 20),"Current Credits: " + currentCredits.ToString("F2"));
         GUI.TextField(new Rect(10, 70, 200, 20), "Credits/Second: " + currentCreditRate.ToString("F2"));
-        GUI.TextField(new Rect(10, 100, 200, 20), "Cheapest Obstacle Cost: " + (int) cheapestObstacleCost);
+        GUI.TextField(new Rect(10, 100, 200, 20), "Cheapest Obstacle Cost: " + cheapestObstacleCost.ToString("F2"));
     }
 
 

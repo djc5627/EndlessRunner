@@ -9,6 +9,9 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
     public BoxCollider swordAttackCollider;
     public GameObject swordObj;
     public GameObject crossbowObj;
+    public GameObject swordTrail;
+    public GameObject slashParticlesPrefab;
+    public float slashParticlesYOffset = 3f;
     public LayerMask swordAttackMask;
     public float swordDamage;
     public float swordDelay = .2f;
@@ -16,12 +19,17 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
     public Transform crossbowFirepoint;
     public float crossbowShootForce = 2000f;
     public float crossbowShootDelay;
+    public AudioClip swordSwingSound;
+    public AudioClip swordImpactSound;
+    public AudioClip crossbowShootSound;
 
+    private AudioSource audioSource;
     private float lastSwordSwingTime = Mathf.NegativeInfinity;
     private float lastCrossbowShootTime = Mathf.NegativeInfinity;
 
     protected  void Start()
     {
+        audioSource = GetComponent<AudioSource>();
         SwitchToCrossbow();
     }
 
@@ -69,20 +77,25 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
             }
         }
 
-
         //Deal damage to all the enemies hit
         foreach (Enemy enemyScript in affectedEnemies)
         {
-            if (enemyScript != null) enemyScript.TakeDamage(swordDamage);
+            if (enemyScript != null)
+            {
+                enemyScript.TakeDamage(swordDamage);
+                Vector3 particlesLocation = enemyScript.gameObject.transform.position + Vector3.up * slashParticlesYOffset;
+                if (slashParticlesPrefab!= null) Instantiate(slashParticlesPrefab, particlesLocation, Quaternion.identity);
+            }
         }
 
-        //Rumble
         if (affectedEnemies.Count > 0)
         {
-            InputDevice device = InputDeviceManager.GetPlayerDevice(playerInput.GetPlayerIndex());
-            RumbleManager.Instance.StartRumble(device, 1f, 1f, .04f);
+            if (swordImpactSound != null) audioSource.PlayOneShot(swordImpactSound);
         }
-
+        else
+        {
+            if (swordSwingSound != null) audioSource.PlayOneShot(swordSwingSound);
+        }
         playerAnimController.MeleeAttackTrigger();
         lastSwordSwingTime = Time.time;
     }
@@ -90,10 +103,7 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
     private void ShootCrossbow()
     {
         SwitchToCrossbow();
-
-        //Rumble
-        InputDevice device = InputDeviceManager.GetPlayerDevice(playerInput.GetPlayerIndex());
-        RumbleManager.Instance.StartRumble(device, .8f, .8f, .03f);
+        if (crossbowShootSound != null) audioSource.PlayOneShot(crossbowShootSound);
 
         GameObject tempBolt = Instantiate(crossbowAmmoPrefab, crossbowFirepoint.position, Quaternion.LookRotation(Vector3.forward), projectileContainer);
         Rigidbody bulletRb = tempBolt.GetComponent<Rigidbody>();

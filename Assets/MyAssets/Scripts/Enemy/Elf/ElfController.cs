@@ -150,26 +150,26 @@ public class ElfController : Enemy
     public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage);
-        StartCoroutine(KnockbackRoutine());
+        if (reachedGround) StartCoroutine(KnockbackRoutine());
     }
+
+    #region Anim Events
 
     public void StartAttacking()
     {
-        //agent.isStopped = true;
         isAttacking = true;
     }
 
     public void StopAttacking()
     {
-        //agent.isStopped = false;
         isAttacking = false;
     }
 
     public void ExecuteMeleeAttack()
     {
-        Collider[] overlappingColliders =  Physics.OverlapBox(meleeCollider.bounds.center, meleeCollider.bounds.extents, meleeCollider.transform.rotation, attackMask);
+        Collider[] overlappingColliders = Physics.OverlapBox(meleeCollider.bounds.center, meleeCollider.bounds.extents, meleeCollider.transform.rotation, attackMask);
         List<PlayerController> playersHit = new List<PlayerController>();
-        foreach(Collider col in overlappingColliders)   //Get players in range
+        foreach (Collider col in overlappingColliders)   //Get players in range
         {
             PlayerController playerScript = col.GetComponent<PlayerController>();
             if (playerScript != null && !playersHit.Contains(playerScript)) //Check if already hit player
@@ -177,7 +177,11 @@ public class ElfController : Enemy
                 playerScript.TakeDamage(meleeDamage);
                 playersHit.Add(playerScript);
             }
-                
+
         }
     }
+
+    #endregion
+
+
 }
