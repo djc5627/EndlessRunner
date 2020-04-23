@@ -7,8 +7,7 @@ using System.Collections.Generic;
 public class CurvedShaderTester : MonoBehaviour
 {
     [Header("Shader Configuration")]
-    [SerializeField] Shader ToonBendShader;
-    [SerializeField] Shader TerrainBendShader;
+    [SerializeField] Shader[] BendShaders;
     [SerializeField] private Material[] CurvedSurfaceMats;
     [Tooltip("Editor option to only show the world bend when this object or its parent is selected.")]
     [SerializeField] private bool ShowOnlyWhenSelected = true;
@@ -184,8 +183,10 @@ public class CurvedShaderTester : MonoBehaviour
 
         List<Material> foundMats = new List<Material>();
 
-        if (ToonBendShader != null) foundMats.AddRange(GetMaterialsWithShader(ToonBendShader));
-        if (TerrainBendShader != null) foundMats.AddRange(GetMaterialsWithShader(TerrainBendShader));
+        foreach (var shader in BendShaders)
+        {
+            if (shader != null) foundMats.AddRange(GetMaterialsWithShader(shader));
+        }
 
         prop.arraySize = foundMats.Count;
 
@@ -195,7 +196,7 @@ public class CurvedShaderTester : MonoBehaviour
         }
 
         so.ApplyModifiedProperties();
-        Debug.Log("Populated with " + prop.arraySize + " Shaders!");
+        Debug.Log("Populated with " + prop.arraySize + " Materials!");
     }
     #endregion
 #endif

@@ -105,6 +105,14 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": ""Press(pressPoint=0.125,behavior=1)""
+                },
+                {
+                    ""name"": ""MagicSpell_1_Press"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""fb33f58c-ff2c-4f7d-970b-6c2ab0a4265a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Press(pressPoint=0.125)""
                 }
             ],
             ""bindings"": [
@@ -338,6 +346,28 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
                     ""action"": ""RangedAttack_Press"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f49c8b15-2bb1-4d11-b275-ac2b4aa9cade"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""MagicSpell_1_Press"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fe41c425-3e0b-49ce-b587-838603e6b85b"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard_Mouse"",
+                    ""action"": ""MagicSpell_1_Press"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -472,6 +502,7 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
         m_Player_Jump_Release = m_Player.FindAction("Jump_Release", throwIfNotFound: true);
         m_Player_AimDownSights_Press = m_Player.FindAction("AimDownSights_Press", throwIfNotFound: true);
         m_Player_AimDownSights_Release = m_Player.FindAction("AimDownSights_Release", throwIfNotFound: true);
+        m_Player_MagicSpell_1_Press = m_Player.FindAction("MagicSpell_1_Press", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_JoinGame = m_Menu.FindAction("JoinGame", throwIfNotFound: true);
@@ -537,6 +568,7 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Jump_Release;
     private readonly InputAction m_Player_AimDownSights_Press;
     private readonly InputAction m_Player_AimDownSights_Release;
+    private readonly InputAction m_Player_MagicSpell_1_Press;
     public struct PlayerActions
     {
         private @EndlessRunnerInputActions m_Wrapper;
@@ -552,6 +584,7 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
         public InputAction @Jump_Release => m_Wrapper.m_Player_Jump_Release;
         public InputAction @AimDownSights_Press => m_Wrapper.m_Player_AimDownSights_Press;
         public InputAction @AimDownSights_Release => m_Wrapper.m_Player_AimDownSights_Release;
+        public InputAction @MagicSpell_1_Press => m_Wrapper.m_Player_MagicSpell_1_Press;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -594,6 +627,9 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
                 @AimDownSights_Release.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAimDownSights_Release;
                 @AimDownSights_Release.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAimDownSights_Release;
                 @AimDownSights_Release.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAimDownSights_Release;
+                @MagicSpell_1_Press.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMagicSpell_1_Press;
+                @MagicSpell_1_Press.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMagicSpell_1_Press;
+                @MagicSpell_1_Press.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMagicSpell_1_Press;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -631,6 +667,9 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
                 @AimDownSights_Release.started += instance.OnAimDownSights_Release;
                 @AimDownSights_Release.performed += instance.OnAimDownSights_Release;
                 @AimDownSights_Release.canceled += instance.OnAimDownSights_Release;
+                @MagicSpell_1_Press.started += instance.OnMagicSpell_1_Press;
+                @MagicSpell_1_Press.performed += instance.OnMagicSpell_1_Press;
+                @MagicSpell_1_Press.canceled += instance.OnMagicSpell_1_Press;
             }
         }
     }
@@ -715,6 +754,7 @@ public class @EndlessRunnerInputActions : IInputActionCollection, IDisposable
         void OnJump_Release(InputAction.CallbackContext context);
         void OnAimDownSights_Press(InputAction.CallbackContext context);
         void OnAimDownSights_Release(InputAction.CallbackContext context);
+        void OnMagicSpell_1_Press(InputAction.CallbackContext context);
     }
     public interface IMenuActions
     {

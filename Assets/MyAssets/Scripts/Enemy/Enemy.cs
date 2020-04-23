@@ -21,6 +21,7 @@ public abstract class Enemy : MonoBehaviour
     protected Rigidbody[] ragdollRbs;
     protected Transform playerTrans;
     protected bool isDead = false;
+    protected bool isIgnited = false;
     protected float currentHealth;
     
 
@@ -71,15 +72,53 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    public virtual void TakeDamage(float damage)
+    protected abstract IEnumerator KnockbackRoutine();
+
+    protected IEnumerator IgniteRoutine(float totalDamge, float duration)
     {
+        int ticksPerSecond = 2;
+        float tickDuration = 1f / ticksPerSecond;
+        float damagePerTick = totalDamge / (duration * ticksPerSecond);
+        float igniteStartTime = Time.time;
+
+        TakeDamage(damagePerTick, Color.red, false);
+        float lastDamageTime = Time.time;
+
+        while (igniteStartTime + duration > Time.time)
+        {
+            isIgnited = true;
+            if (lastDamageTime + tickDuration <= Time.time)
+            {
+                int ticksPassed = (int) Mathf.Floor((Time.time - lastDamageTime)/ tickDuration);
+                for (int i = 0; i < ticksPassed; i++)
+                {
+                    TakeDamage(damagePerTick, Color.red, false);
+                    lastDamageTime = Time.time;
+                }
+            }
+            yield return null;
+        }
+
+        isIgnited = false;
+    }
+
+    public virtual void TakeDamage(float damage, Color? damageTextColor = null, bool hasKnockback = true)
+    {
+        if (isDead) return;
         currentHealth -= damage;
         healthBar.SetHealth(currentHealth);
+        if (hasKnockback) StartCoroutine(KnockbackRoutine());
         Vector3 screenPos = Camera.main.WorldToScreenPoint(transform.position + damageTextOffset);
-        GlobalUIManager.Instance.SpawnDamageText(screenPos, damage.ToString());
+        Color textColor = damageTextColor ?? Color.white;
+        GlobalUIManager.Instance.SpawnDamageText(screenPos, (int) damage, textColor);
         if (currentHealth <= 0)
         {
             OnDeath();
         }
+    }
+
+    public virtual void Ignite(float totalDamge, float duration)
+    {
+        StartCoroutine(IgniteRoutine(totalDamge, duration));
     }
 }

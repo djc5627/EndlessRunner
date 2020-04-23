@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerSwordMagicCombat : PlayerBehaviorBase
+public class PlayerSwordBowCombat : PlayerBehaviorBase
 {
     public Transform projectileContainer;
     public BoxCollider swordAttackCollider;
@@ -27,7 +27,7 @@ public class PlayerSwordMagicCombat : PlayerBehaviorBase
     private float lastSwordSwingTime = Mathf.NegativeInfinity;
     private float lastCrossbowShootTime = Mathf.NegativeInfinity;
 
-    protected  void Start()
+    private void Start()
     {
         audioSource = GetComponent<AudioSource>();
         SwitchToCrossbow();

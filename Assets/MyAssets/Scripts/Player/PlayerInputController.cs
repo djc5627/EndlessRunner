@@ -16,6 +16,7 @@ public class PlayerInputController: MonoBehaviour
     public delegate void _OnSecondaryFire_Released();
     public delegate void _OnAimDownSights_Pressed();
     public delegate void _OnAimDownSights_Released();
+    public delegate void _OnMagicSpell_1_Pressed();
 
     public event _OnJump_Pressed onJump_Pressed;
     public event _OnJump_Released onJump_Released;
@@ -27,6 +28,7 @@ public class PlayerInputController: MonoBehaviour
     public event _OnSecondaryFire_Released onSecondaryFire_Released;
     public event _OnAimDownSights_Pressed onAimDownSights_Pressed;
     public event _OnAimDownSights_Released onAimDownSights_Released;
+    public event _OnMagicSpell_1_Pressed onMagicSpell_1_Pressed;
 
     private int playerIndex = -1;
     private float moveInput;
@@ -103,6 +105,11 @@ public class PlayerInputController: MonoBehaviour
     {
         isSecondaryFireHeld = false;
         if (onSecondaryFire_Released != null) onSecondaryFire_Released();
+    }
+
+    private void OnMagicSpell_1_Press()
+    {
+        if (onMagicSpell_1_Pressed != null) onMagicSpell_1_Pressed();
     }
 
     #endregion

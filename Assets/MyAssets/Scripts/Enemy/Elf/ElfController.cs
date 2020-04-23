@@ -116,8 +116,9 @@ public class ElfController : Enemy
         return clipArray[randIndex];
     }
 
-    private IEnumerator KnockbackRoutine()
+    protected override IEnumerator KnockbackRoutine()
     {
+        if (!reachedGround) yield return null;
         anim.SetBool("isKnockedback", true);
         agent.updateRotation = false;
         knockbackStartTime = Time.time;
@@ -145,12 +146,6 @@ public class ElfController : Enemy
         elfCollider.enabled = false;
         agent.enabled = false;
         this.enabled = false;
-    }
-
-    public override void TakeDamage(float damage)
-    {
-        base.TakeDamage(damage);
-        if (reachedGround) StartCoroutine(KnockbackRoutine());
     }
 
     #region Anim Events

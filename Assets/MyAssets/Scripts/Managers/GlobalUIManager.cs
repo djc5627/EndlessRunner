@@ -29,13 +29,14 @@ public class GlobalUIManager : MonoBehaviour
         Cursor.visible = false;
     }
 
-    public void SpawnDamageText(Vector3 position, string text)
+    public void SpawnDamageText(Vector3 position, int damage, Color textColor)
     {
         GameObject textObj = Instantiate(textPrefab, canvasTrans);
         RectTransform textTrans = textObj.GetComponent<RectTransform>();
-        TextMeshProUGUI textmesh = textObj.GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI textMesh = textObj.GetComponent<TextMeshProUGUI>();
 
         textTrans.position = position;
-        textmesh.text = text;
+        textMesh.text = damage.ToString();
+        textMesh.color = textColor;
     }
 }

@@ -90,6 +90,11 @@ public class ElfCannon : Enemy
         isPlayerInShootDistance = (distanceToPlayer <= shootViewDistance) ? true : false;
     }
 
+    protected override IEnumerator KnockbackRoutine()
+    {
+        yield return null;
+    }
+
     protected override void OnDeath()
     {
         if (isDead)
