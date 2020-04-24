@@ -27,8 +27,9 @@ public class ElfCopterController : Enemy
         agent.updateRotation = false;
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         CheckPlayerInSight();
         if (!isDead)
         {

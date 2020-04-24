@@ -8,6 +8,12 @@ public class HealthBar : MonoBehaviour
     public Slider slider;
     public Gradient gradient;
     public Image fill;
+    public Image fireDebuffImage;
+
+    private void Start()
+    {
+        fireDebuffImage.enabled = false;
+    }
 
     public void SetMaxHealth(float maxHealth)
     {
@@ -22,5 +28,11 @@ public class HealthBar : MonoBehaviour
         slider.value = health;
 
         fill.color = gradient.Evaluate(slider.normalizedValue);
+    }
+
+    public void SetFireDebuff(bool isActive)
+    {
+        if (fireDebuffImage.enabled != isActive)
+            fireDebuffImage.enabled = isActive;
     }
 }

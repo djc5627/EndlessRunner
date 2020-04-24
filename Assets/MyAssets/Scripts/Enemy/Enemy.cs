@@ -37,6 +37,11 @@ public abstract class Enemy : MonoBehaviour
         playerTrans = FindObjectOfType<PlayerController>().transform;
     }
 
+    protected virtual void Update()
+    {
+        UpdateBuffUI();
+    }
+
     protected virtual void OnDeath()
     {
         if (isDead)
@@ -70,6 +75,11 @@ public abstract class Enemy : MonoBehaviour
             rb.AddForce(dir * deathForce);
             rb.AddForce(Vector3.up * deathForce/3f);
         }
+    }
+
+    protected void UpdateBuffUI()
+    {
+        healthBar.SetFireDebuff(isIgnited);
     }
 
     protected abstract IEnumerator KnockbackRoutine();
